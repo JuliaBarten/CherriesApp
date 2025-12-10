@@ -1,31 +1,62 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Cherry's</title>
-        <link rel="stylesheet" href="styles.css" />
-        <script src="script.js"></script>
-        <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
-        <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
-    </head>
 
-    <body>
-        <header>
-            <img alt="logo" src="images/logo_placeholder.jpg" class="logo" />
-        </header>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cherry's</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <script src="js/script.js"></script>
+    <script src="js/make.js" type="module"></script>
+    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
+    <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+</head>
 
-        <!--menu-->
-        <footer>
-            <div class="navbar">
-                <a href="index.html">inspiratie</a>
-                <a href="favorites.html">favs</a>
-                <a href="make.html">make</a>
-                <a href="friends.html">friends</a>
-                <a href="profile.html">profile</a>
+<body>
+    <!-- app - frame  -->
+    <header>
+        <img alt="logo" src="images/icons/logooptie.png" class="logo" />
+    </header>
+
+    <footer>
+        <div class="navbar">
+            <img href="index.html" class="navbar-icon" src="images/icons/garen.png" alt="inspiratie">
+            <img href="favorites.html" class="navbar-icon" src="images/icons/fav_aan.png" alt="favorieten">
+            <img href="make.html" class="navbar-icon" src="images/icons/naaimachine.png" alt="make">
+            <img href="friends.html" class="navbar-icon" src="images/icons/friends.png" alt="friends">
+            <img href="profile.html" class="navbar-icon" src="images/icons/avatar_placeholder.png" alt="profile">
+        </div>
+    </footer>
+
+    <!-- upload form -->
+    <form class="make-form" onSubmit={handleUploadImage}>
+        <button class="add-picture"> <input type="file" aria-label="makeImages" name="imageInput" id="makePictures" required /> </button>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">titel</span>
+            <input type="text" aria-label="titel" id="titel" name="titel" required>
+            <div class="input-group mb-3" required>
+                <span class="input-group-text" id="basic-addon1">omschrijving</span>
+                <input type="text" aria-label="omschrijving" id="omschrijving" name="omschrijving">
+                <div aria-label="niveauMake">
+                <input type="radio" id="n1" name="niveau" value="1">
+                <label for="1"><img alt="heart" src="images/icons/fav_uit.png" class="niveau-icon-choice" /></label>
+                <input type="radio" id="n2" name="niveau" value="2">
+                <label for="2"><img alt="heart" src="images/icons/fav_uit.png" class="niveau-icon-choice" /></label>
+                <input type="radio" id="n3" name="niveau" value="3">
+                <label for="3"><img alt="heart" src="images/icons/fav_uit.png" class="niveau-icon-choice" /></label>
+                <input type="radio" id="n4" name="niveau" value="4">
+                <label for="4"><img alt="heart" src="images/icons/fav_uit.png" class="niveau-icon-choice" /></label>
+                <input type="radio" id="n5" name="niveau" value="5">
+                <label for="5"><img alt="heart" src="images/icons/fav_uit.png" class="niveau-icon-choice" /></label>
             </div>
-        </footer>
+            </div>
+<!-- Source - https://stackoverflow.com/a -->
 
-        <main></main>
-    </body>
+<input id="duration-input" type="text" aria-label="duur" required pattern="[0-9]{2}:[0-9]{2}" value="00:00" title="Write a duration in the format hh:mm" required>
+
+<p id="output"></p>
+            <button>Upload</button>
+    </form>
+</body>
+
 </html>

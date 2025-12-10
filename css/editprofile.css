@@ -1,0 +1,14 @@
+body {
+    background-color: #eebde1;
+    overflow: hidden;
+    stroke: none;
+}
+
+.aanmaakform {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+}
+

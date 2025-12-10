@@ -1,0 +1,105 @@
+/*contenduitlijning*/
+.fotolijst {
+    padding: 0;
+    margin-top: 45px;
+    box-sizing: border-box;
+}
+
+.boxes-con {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+    grid-auto-flow: row dense;
+    grid-template-rows: masonry;
+}
+
+.boxes {
+    width: 45%;
+    height: auto;
+    grid-row: auto / auto;
+    border-radius: 5px;
+    box-shadow: 3px 3px 3px rgba(136, 89, 89, 0.37);
+    break-inside: auto;
+}
+
+.boxes:nth-child(odd) {
+    width: 100%;
+    grid-row: auto / auto;
+    height: auto;
+}
+
+.boxes:nth-child(even) {
+    width: 100%;
+    grid-row: auto / auto;
+    height: auto;
+}
+
+
+/* filtermenu */
+
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 11px;
+    padding: 9px;
+    grid-template-rows: masonry;
+}
+
+.filterbutton {
+    background-color: #ec4a68;
+    stroke: none;
+    width: 100%;
+    height: fit-content;
+    margin: auto;
+}
+
+.filtermenu {
+    height: 45px;
+    background-color: #fff0fb;
+    align-content: center;
+    position: fixed;
+    margin-top: 83px;
+
+}
+
+#filterblok {
+    height: fit-content;
+    width: 43%;
+    background-color: #ec4a68;
+    margin-right: 53%;
+    margin-top: 25%;
+    position: relative;
+}
+
+#sorteerblok {
+    height: fit-content;
+    width: 43%;
+    background-color: #ec4a68;
+    margin-left: 53%;
+    margin-top: 25%;
+}
+
+#startpunt-check {
+    height: fit-content;
+    width: 43%;
+    background-color: #ec4a68;
+    margin-right: 53%;
+    margin-top: 25%;
+}
+
+#materiaal-check {
+    height: fit-content;
+    width: 43%;
+    background-color: #ec4a68;
+    margin-right: 53%;
+    margin-top: 25%;
+}
+
+#niveau-check {
+    height: fit-content;
+    width: 43%;
+    background-color: #ec4a68;
+    margin-right: 53%;
+    margin-top: 25%;
+}

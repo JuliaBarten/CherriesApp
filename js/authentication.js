@@ -22,8 +22,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
-//firebase initieren
 
+
+//firebase initieren
 function loginFunc() {
 
   let email = document.getElementById("persEmail").value;
@@ -32,4 +33,5 @@ function loginFunc() {
   console.log (email);
 };
 
-document.getElementById("submitLogin").onclick = loginFunc;
+document.getElementById("submitLogin").onclick = loginFunc
+

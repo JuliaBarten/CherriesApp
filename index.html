@@ -1,105 +1,109 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Cherry's</title>
-        <link rel="stylesheet" href="styles.css" />
-        <script src="script.js"></script>
-        <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
-        <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
-    </head>
 
-    <body>
-        <!--filtermenu-->
-        <div popover id="filterblok">
-            <button popovertarget="startpunt-check" popovertargetaction="toggle" class="dropdown-item" href="#">
-                Startpunt
-            </button>
-            <button popovertarget="materiaal-check" popovertargetaction="toggle" class="dropdown-item" href="#">
-                Materiaal
-            </button>
-            <button popovertarget="niveau-check" popovertargetaction="toggle" class="dropdown-item" href="#">
-                Niveau
-            </button>
-            <button popovertarget="filterblok" popovertargetaction="hide" class="dropdown-item" href="#">
-                OpslaanF
-            </button>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cherry's</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/fotowall.css" />
+    <script src="js/script.js"></script>
+    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
+    <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+   <!-- app - frame  -->
+    <header>
+        <img alt="logo" src="images/icons/logooptie.png" class="logo" />
+    </header>
+
+    <footer>
+        <div class="navbar">
+            <img href="index.html" type="button" class="nav-link navbar-icon" src="images/icons/garen.png" alt="inspiratie">
+            <img href="favorites.html" type="button" class="nav-link navbar-icon" src="images/icons/fav_aan.png" alt="favorieten">
+            <img href="make.html"  type="button" class="nav-link navbar-icon" src="images/icons/naaimachine.png" alt="make">
+            <img href="friends.html"  type="button" class="nav-link navbar-icon"  src="images/icons/friends.png" alt="friends">
+            <img href="profile.html"  type="button" class="nav-link navbar-icon" src="images/icons/avatar_placeholder.png" alt="profile">
+        </div>
+    </footer>
+
+    <main>
+        <!--Blok voor filteren en solteren-->
+        <div class="container filtermenu">
+            <button popovertarget="filterblok" popovertargetaction="toggle" class="filterbutton">filteren</button>
+            <button popovertarget="sorteerblok" popovertargetaction="toggle" class="filterbutton">sorteren</button>
         </div>
 
-        <div popover id="startpunt-check">
-            <input type="checkbox" id="T-shirt" name="T-shirt" value="T-shirt" />
-            <label for="Startpunt1">T-shirt</label>
-            <br />
-            <input type="checkbox" id="Breiwerk" name="Breiwerk" value="Breiwerk" />
-            <label for="Startpunt1">Breiwerk</label>
-            <br />
-            <input type="checkbox" id="Broek" name="Broek" value="Broek" />
-            <label for="Startpunt1">Broek</label>
-            <br />
-            <input type="checkbox" id="stof" name="stof" value="stof" />
-            <label for="Startpunt1">stof</label>
-            <br />
-            <button popovertarget="startpunt-check" popovertargetaction="hide" class="dropdown-item" href="#">
-                OpslaanST
-            </button>
+         <!--filtermenu-->
+    <div popover id="filterblok">
+        <button popovertarget="startpunt-check" popovertargetaction="toggle" class="dropdown-item" href="#">
+            Startpunt
+        </button>
+        <button popovertarget="materiaal-check" popovertargetaction="toggle" class="dropdown-item" href="#">
+            Materiaal
+        </button>
+        <button popovertarget="niveau-check" popovertargetaction="toggle" class="dropdown-item" href="#">
+            Niveau
+        </button>
+        <button popovertarget="filterblok" popovertargetaction="hide" class="dropdown-item" href="#">
+            OpslaanF
+        </button>
+    </div>
+
+    <div popover id="startpunt-check">
+        <input type="checkbox" id="T-shirt" name="T-shirt" value="T-shirt" />
+        <label for="Startpunt1">T-shirt</label>
+        <br />
+        <input type="checkbox" id="Breiwerk" name="Breiwerk" value="Breiwerk" />
+        <label for="Startpunt1">Breiwerk</label>
+        <br />
+        <input type="checkbox" id="Broek" name="Broek" value="Broek" />
+        <label for="Startpunt1">Broek</label>
+        <br />
+        <input type="checkbox" id="stof" name="stof" value="stof" />
+        <label for="Startpunt1">stof</label>
+        <br />
+        <button popovertarget="startpunt-check" popovertargetaction="hide" class="dropdown-item" href="#">
+            OpslaanST
+        </button>
+    </div>
+
+    <div popover id="materiaal-check">
+        materiaal
+        <button popovertarget="materiaal-check" popovertargetaction="hide" class="dropdown-item" href="#">
+            OpslaanMa
+        </button>
+    </div>
+    <div popover id="niveau-check">
+        niveau
+        <button popovertarget="niveau-check" popovertargetaction="hide" class="dropdown-item" href="#">
+            OpslaanNi
+        </button>
+    </div>
+
+    <!--sorteermenu-->
+    <div popover id="sorteerblok">
+        <button popovertarget="sorteerblok" popovertargetaction="hide" class="dropdown-item" href="#">
+            OpslaanSo
+        </button>
+    </div>
+
+
+        <!--kledingfoto's-->
+        <div class="container fotolijst boxes-con">
+            <img src="images/kledingrek.jpeg" class="rounded-4 boxes contend-fotos" alt="foto1" />
+            <img src="images/colage.jpeg" class="rounded-4 boxes contend-fotos" alt="foto2" />
+            <img src="images/kledingrek.jpeg" class="rounded-4 boxes contend-fotos" alt="foto1" />
+            <img src="images/image00004.jpeg" class="rounded-4 boxes contend-fotos" alt="foto3" />
+            <img src="images/kledingrek.jpeg" class="rounded-4 boxes contend-fotos" alt="foto1" />
+            <img src="images/colage.jpeg" class="rounded-4 boxes contend-fotos" alt="foto2" />
+            <img src="images/image00004.jpeg" class="rounded-4 boxes contend-fotos" alt="foto3" />
+            <img src="images/colage.jpeg" class="rounded-4 boxes contend-fotos" alt="foto2" />
+            <img src="images/kledingrek.jpeg" class="rounded-4 boxes contend-fotos" alt="foto1" />
+            <img src="images/colage.jpeg" class="rounded-4 boxes contend-fotos" alt="foto2" />
         </div>
+    </main>
+</body>
 
-        <div popover id="materiaal-check">
-            materiaal
-            <button popovertarget="materiaal-check" popovertargetaction="hide" class="dropdown-item" href="#">
-                OpslaanMa
-            </button>
-        </div>
-        <div popover id="niveau-check">
-            niveau
-            <button popovertarget="niveau-check" popovertargetaction="hide" class="dropdown-item" href="#">
-                OpslaanNi
-            </button>
-        </div>
-
-        <!--sorteermenu-->
-        <div popover id="sorteerblok">
-            <button popovertarget="sorteerblok" popovertargetaction="hide" class="dropdown-item" href="#">
-                OpslaanSo
-            </button>
-        </div>
-
-        <header>
-            <img alt="logo" src="images/logo_placeholder.jpg" class="logo" />
-        </header>
-
-        <!--menu-->
-        <footer>
-            <div class="navbar">
-                <a href="index.html">inspiratie</a>
-                <a href="favorites.html">favs</a>
-                <a href="make.html">make</a>
-                <a href="friends.html">friends</a>
-                <a href="profile.html">profile</a>
-            </div>
-        </footer>
-
-        <main>
-            <!--filtermenu-->
-            <div class="container filtermenu">
-                <button popovertarget="filterblok" popovertargetaction="toggle" class="filterbutton">filteren</button>
-                <button popovertarget="sorteerblok" popovertargetaction="toggle" class="filterbutton">sorteren</button>
-            </div>
-
-            <!--kledingfoto's-->
-            <div class="container fotolijst boxes-con">
-                <img src="images/kledingrek.jpeg" class="rounded-4 boxes contend-fotos" alt="foto1" />
-                <img src="images/colage.jpeg" class="rounded-4 boxes contend-fotos" alt="foto2" />
-                <img src="images/kledingrek.jpeg" class="rounded-4 boxes contend-fotos" alt="foto1" />
-                <img src="images/image00004.jpeg" class="rounded-4 boxes contend-fotos" alt="foto3" />
-                <img src="images/kledingrek.jpeg" class="rounded-4 boxes contend-fotos" alt="foto1" />
-                <img src="images/colage.jpeg" class="rounded-4 boxes contend-fotos" alt="foto2" />
-                <img src="images/image00004.jpeg" class="rounded-4 boxes contend-fotos" alt="foto3" />
-                <img src="images/colage.jpeg" class="rounded-4 boxes contend-fotos" alt="foto2" />
-                <img src="images/kledingrek.jpeg" class="rounded-4 boxes contend-fotos" alt="foto1" />
-                <img src="images/colage.jpeg" class="rounded-4 boxes contend-fotos" alt="foto2" />
-            </div>
-        </main>
-    </body>
 </html>
