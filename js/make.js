@@ -1,95 +1,136 @@
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-import { getFirestore } from "firebase/firestore";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-import { getAuth, createMakeWithInformation } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-import { getStorage } from 'firebase/storage';
+import { auth, db, storage } from "../firebase-init.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBFpfyYMfgAlyozywN27mkCM8NODcUntOA",
-  authDomain: "cherrysapp-de82f.firebaseapp.com",
-  projectId: "cherrysapp-de82f",
-  storageBucket: "cherrysapp-de82f.firebasestorage.app",
-  messagingSenderId: "662896896244",
-  appId: "1:662896896244:web:4a7d8adf1364e3229c16a1",
-  measurementId: "G-YLY36ZVKKV"
-}; 
+/* ======================
+   STAPPEN TOEVOEGEN (UI)
+====================== */
 
+const stepsContainer = document.getElementById("stepsContainer");
+const addStepBtn = document.getElementById("addStepBtn");
 
+let stepCount = 0;
 
-// >> inside firebase config file
+addStepBtn.addEventListener("click", () => {
+  stepCount++;
 
-// init storage service
-const Storage = getStorage(app)
-export { Storage }
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { Storage } from "../../firebase.config"; // NB: define your own path
+  const stepDiv = document.createElement("div");
+  stepDiv.classList.add("step");
 
+  stepDiv.innerHTML = `
+    <h5>Stap ${stepCount}</h5>
+    <input type="file" accept="image/*" class="step-image" required />
+    <input type="text" class="step-description" placeholder="Beschrijving" required />
+    <hr>
+  `;
 
-import { getAuth, updateProfile } from "firebase/auth";
-const auth = getAuth();
-updateProfile(auth.currentUser, {
-  displayName: "Jane Q. User", photoURL: "https://example.com/jane-q-user/profile.jpg"
-}).then(() => {
-  // Profile updated!
-  // ...
-}).catch((error) => {
-  // An error occurred
-  // ...
+  stepsContainer.appendChild(stepDiv);
 });
 
+/* ======================
+   FORM SUBMIT
+====================== */
 
-const handleUploadImage = async e => {
-    // prevent deafult form submit
-    e.preventDefault()
+const form = document.getElementById("tutorialForm");
 
-    // get imageInput element inside form
-    const imageInput = e.target.imageInput
-    // imageInput is an array of files. we choose the fist file (which is image file)
-    const imageFile = imageInput.files[0]
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    // validate: show alert if no image is selected
-    if (!imageFile) {
-        alert('please, select a image!')
-        return
+  const user = auth.currentUser;
+  if (!user) {
+    alert("Je moet ingelogd zijn");
+    return;
+  }
+
+  const title = document.getElementById("titel").value;
+  const description = document.getElementById("omschrijving").value;
+  const level = document.querySelector('input[name="niveau"]:checked').value;
+  const duration = document.getElementById("duration-input").value;
+  const imageFile = document.getElementById("mainImage").files[0];
+
+  // materialen
+  const materialElements = document.querySelectorAll(
+    '#materials input[type="checkbox"]:checked'
+  );
+
+  const materials = Array.from(materialElements).map(cb => cb.value);
+
+  const materialsContainer = document.getElementById("materials");
+
+  async function loadMaterials() {
+    const snapshot = await getDocs(collection(db, "Materialen"));
+
+    snapshot.forEach(doc => {
+      const material = doc.data();
+
+      const label = document.createElement("label");
+      label.innerHTML = `
+      <input type="checkbox" value="${material.name}">
+      ${material.name}
+    `;
+
+      materialsContainer.appendChild(label);
+      materialsContainer.appendChild(document.createElement("br"));
+    });
+  }
+
+  loadMaterials();
+
+
+  /* 1. Hoofdfoto uploaden */
+  try {
+    const imageRef = ref(
+      storage,
+      `tutorials/${user.uid}/${Date.now()}_main.jpg`
+    );
+
+    await uploadBytes(imageRef, imageFile);
+    const imageUrl = await getDownloadURL(imageRef);
+
+    /* 2. Tutorial opslaan */
+    const tutorialRef = await addDoc(collection(db, "tutorials"), {
+      title,
+      description,
+      level: Number(level),
+      duration,
+      materials,
+      mainImageUrl: imageUrl,
+      authorId: user.uid,
+      authorUsername: user.displayName || "Onbekend",
+      createdAt: serverTimestamp()
+    });
+
+    /* 3. Stappen uploaden */
+    const stepElements = document.querySelectorAll(".step");
+
+    for (let i = 0; i < stepElements.length; i++) {
+      const step = stepElements[i];
+      const stepImage = step.querySelector(".step-image").files[0];
+      const stepText = step.querySelector(".step-description").value;
+
+      const stepImageRef = ref(
+        storage,
+        `tutorials/${tutorialRef.id}/steps/step_${i + 1}.jpg`
+      );
+
+      await uploadBytes(stepImageRef, stepImage);
+      const stepImageUrl = await getDownloadURL(stepImageRef);
+
+      await addDoc(collection(db, "tutorials", tutorialRef.id, "steps"), {
+        stepNumber: i + 1,
+        description: stepText,
+        imageUrl: stepImageUrl
+      });
     }
 
-    // create file path ref for firebase storage. 
-    // if image filename is "eagle.jpg"; then the path would be "images/eagle.jpg"
-    const filePathRef = ref(currentUser, posts, `images/${imageFile.name}`)
+    alert("Tutorial succesvol geüpload!");
+    form.reset();
+    stepsContainer.innerHTML = "";
+    stepCount = 0;
 
-    // upload the image file into firebse storage 
-    const uploadResult = await uploadBytes(filePathRef, imageFile)
-
-    // finally get image url which can be used to access image from your website
-    const imageUrl = await getDownloadURL(filePathRef)
-
-    // [ TODO: put your code here whatever you want to do with the "imageUrl" ]
-
-    let images = document.getElementById("makePictures").value;
-    let titel = document.getElementById("titel").value;
-    let omschrijving = document.getElementById("omschrijving").value;
-    let niveau = document.getElementById("niveauMake");
-    let time = document.getElementById("duur").value;
-     createMakeWithInformation(images, titel, omschrijving, niveau, time).then(() => console.log("jeej")).catch((e) => console.log(e))
-     console.log (make);
-
-    // reset form (optional)
-    e.target.reset()
-}
-
-
-{
-    let durationIn = document.getElementById("duration-input");
-    let resultP = document.getElementById("output");
-
-    durationIn.addEventListener("change", function (e) {
-        resultP.textContent = "";
-        durationIn.checkValidity();
-    });
-
-    durationIn.addEventListener("invalid", function (e) {
-        resultP.textContent = "Invalid input";
-    });
-}
+  } catch (error) {
+    console.error(error);
+    alert("Er ging iets mis bij het uploaden");
+  }
+});

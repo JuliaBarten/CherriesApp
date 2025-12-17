@@ -6,104 +6,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Cherry's</title>
     <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/fotowall.css" />
     <script src="js/script.js"></script>
     <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
     <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
-   <!-- app - frame  -->
+  
+    <!---------------------   app - frame  --------------------->
     <header>
         <img alt="logo" src="images/icons/logooptie.png" class="logo" />
     </header>
 
-    <footer>
-        <div class="navbar">
-            <img href="index.html" type="button" class="nav-link navbar-icon" src="images/icons/garen.png" alt="inspiratie">
-            <img href="favorites.html" type="button" class="nav-link navbar-icon" src="images/icons/fav_aan.png" alt="favorieten">
-            <img href="make.html"  type="button" class="nav-link navbar-icon" src="images/icons/naaimachine.png" alt="make">
-            <img href="friends.html"  type="button" class="nav-link navbar-icon"  src="images/icons/friends.png" alt="friends">
-            <img href="profile.html"  type="button" class="nav-link navbar-icon" src="images/icons/avatar_placeholder.png" alt="profile">
-        </div>
-    </footer>
+
+<footer class="fixed-bottom">
+  <div class="d-flex justify-content-around py-2">
+    <a href="index.html" class="text-center nav-item">
+      <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
+  
+    </a>
+    <a href="favorites.html" class="text-center nav-item">
+      <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
+    </a>
+    <a href="make.html" class="text-center nav-item">
+      <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
+    </a>
+    <a href="friends.html" class="text-center nav-item">
+      <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
+    </a>
+    <a href="profile.html" class="text-center nav-item">
+      <img src="images/icons/avatar_placeholder.png" class="navbar-icon" alt="profile">
+    </a>
+  </div>
+</footer>
+
 
     <main>
-        <!--Blok voor filteren en solteren-->
-        <div class="container filtermenu">
-            <button popovertarget="filterblok" popovertargetaction="toggle" class="filterbutton">filteren</button>
-            <button popovertarget="sorteerblok" popovertargetaction="toggle" class="filterbutton">sorteren</button>
+        <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-outline-secondary" data-bs-toggle="offcanvas" data-bs-target="#filterCanvas">
+                Filteren
+            </button>
+
+            <select id="sortSelect" class="form-select w-auto">
+                <option value="new">Nieuw → oud</option>
+                <option value="old">Oud → nieuw</option>
+                <option value="timeAsc">Tijd ↑</option>
+                <option value="timeDesc">Tijd ↓</option>
+            </select>
         </div>
 
-         <!--filtermenu-->
-    <div popover id="filterblok">
-        <button popovertarget="startpunt-check" popovertargetaction="toggle" class="dropdown-item" href="#">
-            Startpunt
-        </button>
-        <button popovertarget="materiaal-check" popovertargetaction="toggle" class="dropdown-item" href="#">
-            Materiaal
-        </button>
-        <button popovertarget="niveau-check" popovertargetaction="toggle" class="dropdown-item" href="#">
-            Niveau
-        </button>
-        <button popovertarget="filterblok" popovertargetaction="hide" class="dropdown-item" href="#">
-            OpslaanF
-        </button>
-    </div>
+        <div class="offcanvas offcanvas-start" id="filterCanvas">
+            <div class="offcanvas-header">
+                <h5>Filters</h5>
+                <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+            </div>
 
-    <div popover id="startpunt-check">
-        <input type="checkbox" id="T-shirt" name="T-shirt" value="T-shirt" />
-        <label for="Startpunt1">T-shirt</label>
-        <br />
-        <input type="checkbox" id="Breiwerk" name="Breiwerk" value="Breiwerk" />
-        <label for="Startpunt1">Breiwerk</label>
-        <br />
-        <input type="checkbox" id="Broek" name="Broek" value="Broek" />
-        <label for="Startpunt1">Broek</label>
-        <br />
-        <input type="checkbox" id="stof" name="stof" value="stof" />
-        <label for="Startpunt1">stof</label>
-        <br />
-        <button popovertarget="startpunt-check" popovertargetaction="hide" class="dropdown-item" href="#">
-            OpslaanST
-        </button>
-    </div>
+            <div class="offcanvas-body">
+                <h6>Soort</h6>
+                <select id="filterGarment" class="form-select mb-3">
+                    <option value="">Alles</option>
+                    <option value="broek">Broek</option>
+                    <option value="shirt">Shirt</option>
+                    <option value="rok">Rok</option>
+                </select>
 
-    <div popover id="materiaal-check">
-        materiaal
-        <button popovertarget="materiaal-check" popovertargetaction="hide" class="dropdown-item" href="#">
-            OpslaanMa
-        </button>
-    </div>
-    <div popover id="niveau-check">
-        niveau
-        <button popovertarget="niveau-check" popovertargetaction="hide" class="dropdown-item" href="#">
-            OpslaanNi
-        </button>
-    </div>
+                <h6>Niveau</h6>
+                <select id="filterLevel" class="form-select mb-3">
+                    <option value="">Alle niveaus</option>
+                    <option value="myLevelOnly">Mijn niveau</option>
+                    <option value="myLevelOrLower">Mijn niveau en lager</option>
+                </select>
 
-    <!--sorteermenu-->
-    <div popover id="sorteerblok">
-        <button popovertarget="sorteerblok" popovertargetaction="hide" class="dropdown-item" href="#">
-            OpslaanSo
-        </button>
-    </div>
 
+                <h6>Materialen die ik heb</h6>
+                <div id="filterMaterials"></div>
+
+                <button class="btn btn-primary mt-3" id="applyFilters">
+                    Toepassen
+                </button>
+            </div>
+        </div>
 
         <!--kledingfoto's-->
-        <div class="container fotolijst boxes-con">
-            <img src="images/kledingrek.jpeg" class="rounded-4 boxes contend-fotos" alt="foto1" />
-            <img src="images/colage.jpeg" class="rounded-4 boxes contend-fotos" alt="foto2" />
-            <img src="images/kledingrek.jpeg" class="rounded-4 boxes contend-fotos" alt="foto1" />
-            <img src="images/image00004.jpeg" class="rounded-4 boxes contend-fotos" alt="foto3" />
-            <img src="images/kledingrek.jpeg" class="rounded-4 boxes contend-fotos" alt="foto1" />
-            <img src="images/colage.jpeg" class="rounded-4 boxes contend-fotos" alt="foto2" />
-            <img src="images/image00004.jpeg" class="rounded-4 boxes contend-fotos" alt="foto3" />
-            <img src="images/colage.jpeg" class="rounded-4 boxes contend-fotos" alt="foto2" />
-            <img src="images/kledingrek.jpeg" class="rounded-4 boxes contend-fotos" alt="foto1" />
-            <img src="images/colage.jpeg" class="rounded-4 boxes contend-fotos" alt="foto2" />
-        </div>
+        <main>
+            <div id="tutorialGrid" class="masonry-grid"></div>
+        </main>
+
     </main>
+    <script type="module" src="firebase-init.js"></script>
 </body>
 
 </html>

@@ -12,22 +12,40 @@
 </head>
 
 <body>
-    <!-- app - frame  -->
+    <h2>Mijn favorieten</h2>
+<div id="favoritesGrid" class="masonry-grid"></div>
+
+
+    <!---------------------   app - frame  --------------------->
     <header>
         <img alt="logo" src="images/icons/logooptie.png" class="logo" />
     </header>
 
-    <footer>
-        <div class="navbar">
-            <img href="index.html" class="navbar-icon" src="images/icons/garen.png" alt="inspiratie">
-            <img href="favorites.html" class="navbar-icon" src="images/icons/fav_aan.png" alt="favorieten">
-            <img href="make.html" class="navbar-icon" src="images/icons/naaimachine.png" alt="make">
-            <img href="friends.html" class="navbar-icon" src="images/icons/friends.png" alt="friends">
-            <img href="profile.html" class="navbar-icon" src="images/icons/avatar_placeholder.png" alt="profile">
-        </div>
-    </footer>
+
+<footer class="fixed-bottom">
+  <div class="d-flex justify-content-around py-2">
+    <a href="index.html" class="text-center nav-item">
+      <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
+  
+    </a>
+    <a href="favorites.html" class="text-center nav-item">
+      <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
+    </a>
+    <a href="make.html" class="text-center nav-item">
+      <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
+    </a>
+    <a href="friends.html" class="text-center nav-item">
+      <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
+    </a>
+    <a href="profile.html" class="text-center nav-item">
+      <img src="images/icons/avatar_placeholder.png" class="navbar-icon" alt="profile">
+    </a>
+  </div>
+</footer>
+
 
     <main></main>
+    <script type="module" src="firebase-init.js"></script>
 </body>
 
 </html>

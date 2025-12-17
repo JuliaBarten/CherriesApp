@@ -8,26 +8,33 @@
     <link rel="stylesheet" href="css/styles.css" />
         <link rel="stylesheet" href="css/editprofile.css" />
     <script src="js/script.js"></script>
-    <script src="js/authentication.js" type="module"></script>
     <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
     <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
 
-  <div class="input-group mb-3">
-    <span class="input-group-text" id="basic-addon1">Email:</span>
-    <input type="text" class="form-control" placeholder="..." aria-label="email" id="persEmail"
-      aria-describedby="basic-addon1">
-  </div> </br>
-  <div class="input-group mb-3">
-    <span class="input-group-text" id="basic-addon2">Password</span>
-    <input type="text" class="form-control" placeholder="..." aria-label="password" id="persWachtwoord"
-      aria-describedby="basic-addon1">
-  </div>
-  <button type="button" class="btn" id="submitLogin">login</button>
+  <div class="d-flex flex-column classic-outline">
+<h2>Inloggen</h2>
 
+<input
+  id="loginUsername"
+  placeholder="Gebruikersnaam"
+/>
 
+<input
+  id="loginPassword"
+  type="password"
+  placeholder="Wachtwoord"
+/>
+
+<button class="classic-button" id="loginBtn">Inloggen</button>
+
+<p id="message"></p>
+</div>
+
+    <script type="module" src="js/authentication.js"></script>
+<script type="module" src="firebase-init.js"></script>
 </body>
 
 </html>

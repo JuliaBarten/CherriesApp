@@ -4,28 +4,48 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Cherry's</title>
-        <link rel="stylesheet" href="styles.css" />
+        <link rel="stylesheet" href="css/styles.css" />
         <script src="script.js"></script>
         <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
         <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
     </head>
 
     <body>
-        <header>
-            <img alt="logo" src="images/logo_placeholder.jpg" class="logo" />
-        </header>
 
-        <!--menu-->
-        <footer>
-            <div class="navbar">
-                <a href="index.html">inspiratie</a>
-                <a href="favorites.html">favs</a>
-                <a href="make.html">make</a>
-                <a href="friends.html">friends</a>
-                <a href="profile.html">profile</a>
-            </div>
-        </footer>
+
+
+   <!---------------------   app - frame  --------------------->
+    <header>
+        <img alt="logo" src="images/icons/logooptie.png" class="logo" />
+    </header>
+
+
+    <footer class="fixed-bottom">
+        <div class="d-flex justify-content-around py-2">
+            <a href="index.html" class="text-center nav-item">
+                <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
+
+            </a>
+            <a href="favorites.html" class="text-center nav-item">
+                <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
+            </a>
+            <a href="make.html" class="text-center nav-item">
+                <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
+            </a>
+            <a href="friends.html" class="text-center nav-item">
+                <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
+            </a>
+            <a href="profile.html" class="text-center nav-item">
+                <img src="images/icons/avatar_placeholder.png" class="navbar-icon" alt="profile">
+            </a>
+        </div>
+    </footer>
+
+
+
+
 
         <main></main>
+        <script type="module" src="firebase-init.js"></script>
     </body>
 </html>

@@ -1,30 +1,123 @@
+/* -------------------  Algemeen -------------------  */
+
+:root {
+    /* kleuren */
+    --hoofd: #f8486e;
+    --licht: #f0b3c0;
+    --ipvwit: #fffbfc;
+    --donker: #461f34;
+    --achter: #f7edf2;
+
+    /* tekst */
+    --textlicht: #fcd5d5;
+    --textmid: #c57878;
+    --textdonker: #492929;
+    --textplaceholder: #928989;
+    --sizeklein: 1.2rem;
+    --sizemidden: 3rem;
+    --sizegroot: 5rem;
+
+    /* border */
+    --borderknop: 12px;
+    --borderfoto: 12px;
+    --schaduw: 0 0 8px rgba(53, 5, 29, 0.247);
+
+    /* margins */
+    --margstandard: 8px;
+
+}
+
+.classic-button {
+    background-color: var(--hoofd);
+    color: var(--textlicht);
+    width: 100%;
+    display: block;
+    padding: 20px;
+    margin: var(--margstandard);
+    font-size: var(--sizeklein);
+    border: none;
+    border-radius: var(--borderknop);
+    box-shadow: var(--schaduw)
+}
+
+.classic-button-small {
+    background-color: var(--hoofd);
+    color: var(--textlicht);
+    width: 50%;
+    display: block;
+    padding: 20px;
+    margin: var(--margstandard);
+    font-size: var(--sizeklein);
+    border: none;
+    border-radius: var(--borderknop);
+    box-shadow: var(--schaduw)
+}
+
+.classic-outline {
+    background-color: var(--achter);
+    align-items: center;
+    position: fixed;
+    text-align: center;
+    justify-content: center;
+    padding: 30%;
+}
+
+.custom-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    margin: var(--margstandard);
+    border-radius: var(--borderknop);
+    border: 1px solid var(--licht);
+    background-color: var(--ipvwit);
+    box-shadow: var(--schaduw);
+    font-size: var(--sizeklein);
+    color: var(--textplaceholder);
+    outline: none;
+    transition: 0.3s;
+}
+
+
+.custom-input:focus {
+    border-color: var(--hoofd);
+    box-shadow: var(--schaduw);
+}
+
+.custom-input::placeholder {
+    color: var(--textplaceholder);
+    font-style: italic;
+}
+
+
 html {
     scroll-behavior: smooth;
     overflow-y: scroll;
+    background-color: var(--achter);
 }
 
 body {
-    background-color: #dfadd1;
+    height: 100%;
     overflow: hidden;
-    display: flex;
-
+    margin: 0;
+    padding: 0;
 }
 
 header {
     height: 83px;
     display: flex;
-    background-color: #ec4a68;
+    background-color: var(--hoofd);
     position: fixed;
     top: 0;
     width: 100%;
     padding-bottom: 3px;
 }
 
+/* -------------------  navbar -------------------  */
 /* Place the navbar at the bottom of the page, and make it stick */
 footer {
-    height:95px;
+    height: 95px;
     display: flex;
-    background-color: #ec4a68;
+    background-color: var(--hoofd);
     overflow: hidden;
     position: fixed;
     bottom: 0;
@@ -32,6 +125,10 @@ footer {
     justify-content: center;
 }
 
+h2 {
+    size: var(--sizemidden);
+    color: var(--textdonker);
+}
 
 .logo {
     height: 75%;
@@ -53,74 +150,91 @@ footer {
 
 /* Style the links inside the navigation bar */
 .navbar-icon {
-    float: center;
+    width: 90%;
+    /* icoon grootte */
+    height: auto;
     display: block;
-    padding: 3px;
-    justify-content: center;
-    width: 18%;
-    margin-bottom: 10px;
+    margin: 5px;
+    /* center + spacing */
+    padding: 2px;
 }
 
-/* Change the color of links on hover */
-
-
-/* Add a green background color to the active link */
-.navbaricon.active {
-    background-color: #ffffff;
-    color: white;
+.nav-item.active img {
+    filter: saturate(500%)
+        /* voorbeeld highlight kleur */
 }
 
-h1 {
-    font-size: 2.25rem;
-    font-weight: 500;
-    line-height: 1.2;
-    margin-top: 0;
+.nav-item {
+    flex: 1;
+    text-decoration: none;
+    color: #333;
 }
 
-/* AANMELDEN */
+/* -------------------  AANMELDEN -------------------  */
+.logobegin {
+    width: 70%;
+    padding-top: 30%;
+}
+
+.btnlogin {
+    background-color: var(--hoofd);
+    color: var(--textlicht);
+    width: 70%;
+    display: block;
+    padding: 2rem;
+    text-align: center;
+    font-size: var(--sizeklein);
+    border: none;
+    border-radius: var(--borderknop);
+}
+
+.btnmeld-aan {
+    background-color: var(--donker);
+    color: var(--textmid);
+    width: 70%;
+    display: block;
+    margin: var(--margstandard);
+    padding: 2rem;
+    text-align: center;
+    font-size: var(--sizeklein);
+    border: none;
+    border-radius: var(--borderknop);
+}
 
 .niveau-icon-choice {
     width: 40px;
     padding: 2px;
 }
 
-/* Hide the default radio button */
-/* input[type="radio"] {
-    display: none;
-} */
- 
-/* Style the label */
-/* label {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    background-image: url('images/icons/fav_uit.png');
-    background-size: cover;
-} */
-
- 
-/* Style the checked state */
-/* input[type="radio"]:checked + label {
-    background-image: url('images/icons/fav_aan.png');
-} */
-
-/* MAKEN */
+/* -------------------  MAKEN-------------------  */
 .add-picture {
     height: 40%;
     width: 100%;
     padding: 10px;
     margin: 10px;
-    color: #ec4a68;
+    color: var(--hoofd);
 }
 
-.make-form {
-    position: fixed;
-    margin-top: 40%;
-    padding: 10px;
-    width: 40%;
-    text-align: center;
-    font-size: 20px;
+.upload-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 150px;
+    border-radius: 15px;
+    background-color: var(--hoofd);
+    font-size: 24px;
+    transition: 0.3s;
 }
+
+.plus-icon {
+    font-size: 48px;
+    line-height: 1;
+    margin-bottom: 10px;
+    color: var(--textlicht);
+}
+
 
 /*
 Source - https://stackoverflow.com/a
@@ -128,4 +242,113 @@ Posted by Domino
 Retrieved 2025-12-10, License - CC BY-SA 4.0
 */
 
-input:invalid:not(:focus) { background: red; }
+/* -------------------  FOTOWALL  ------------------- */
+
+/*contenduitlijning*/
+.masonry-grid {
+    column-count: 2;
+    column-gap: 1rem;
+}
+
+.tutorial-card {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.tutorial-card img {
+    width: 100%;
+    border-radius: var(--borderfoto);
+}
+
+.overlay {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 6px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+}
+
+.favorite-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: white;
+    border-radius: 50%;
+    padding: 6px;
+    cursor: pointer;
+}
+
+
+/*---------------------- filtermenu -------------------*/
+
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 11px;
+    padding: 9px;
+    grid-template-rows: masonry;
+}
+
+.filterbutton {
+    background-color: var(--hoofd);
+    stroke: none;
+    width: 100%;
+    height: fit-content;
+    margin: auto;
+}
+
+.filtermenu {
+    height: 45px;
+    background-color: var(--licht);
+    align-content: center;
+    position: fixed;
+    margin-top: 83px;
+
+}
+
+#filterblok {
+    height: fit-content;
+    width: 43%;
+    background-color: var(--hoofd);
+    margin-right: 53%;
+    margin-top: 25%;
+    position: relative;
+}
+
+#sorteerblok {
+    height: fit-content;
+    width: 43%;
+    background-color: var(--hoofd);
+    margin-left: 53%;
+    margin-top: 25%;
+}
+
+#startpunt-check {
+    height: fit-content;
+    width: 43%;
+    background-color: var(--hoofd);
+    margin-right: 53%;
+    margin-top: 25%;
+}
+
+#materiaal-check {
+    height: fit-content;
+    width: 43%;
+    background-color: var(--hoofd);
+    margin-right: 53%;
+    margin-top: 25%;
+}
+
+#niveau-check {
+    height: fit-content;
+    width: 43%;
+    background-color: var(--hoofd);
+    margin-right: 53%;
+    margin-top: 25%;
+}
