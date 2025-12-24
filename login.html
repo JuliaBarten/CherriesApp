@@ -2,39 +2,29 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Cherry's</title>
-    <link rel="stylesheet" href="css/styles.css" />
-        <link rel="stylesheet" href="css/editprofile.css" />
-    <script src="js/script.js"></script>
-    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
-    <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cherry's</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/editprofile.css" />
+  <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
+  <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
 
   <div class="d-flex flex-column classic-outline">
-<h2>Inloggen</h2>
+    <img src="images/icons/logooptie.png" alt="Logo" class="logobegin">
+    <input id="loginUsername" class="custom-input" placeholder="Gebruikersnaam" />
+    <input id="loginPassword" class="custom-input" type="password" placeholder="Wachtwoord" />
+    <button class="classic-button" id="loginBtn">Inloggen</button>
+    <p id="message"></p>
+  </div>
 
-<input
-  id="loginUsername"
-  placeholder="Gebruikersnaam"
-/>
-
-<input
-  id="loginPassword"
-  type="password"
-  placeholder="Wachtwoord"
-/>
-
-<button class="classic-button" id="loginBtn">Inloggen</button>
-
-<p id="message"></p>
-</div>
-
-    <script type="module" src="js/authentication.js"></script>
-<script type="module" src="firebase-init.js"></script>
+  <script type="module" src="js/firebase-init.js"></script>
+  <script type="module" src="js/guard.js"></script>
+  <script type="module" src="js/authentication.js"></script>
+  <script type="module" src="js/script.js"></script>
 </body>
 
 </html>

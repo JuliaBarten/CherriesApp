@@ -2,8 +2,9 @@
 
 :root {
     /* kleuren */
-    --hoofd: #f8486e;
-    --licht: #f0b3c0;
+    --hoofd: #f84857;
+    --licht: #F9BEBE;
+    --mid: #ff9c9c;
     --ipvwit: #fffbfc;
     --donker: #461f34;
     --achter: #f7edf2;
@@ -11,15 +12,19 @@
     /* tekst */
     --textlicht: #fcd5d5;
     --textmid: #c57878;
-    --textdonker: #492929;
+    --textdonker: #920500;
     --textplaceholder: #928989;
     --sizeklein: 1.2rem;
     --sizemidden: 3rem;
     --sizegroot: 5rem;
+    --zwaartemid: 500;
+    --zwaartekop: 700;
+    --zwaartetitel: 900;
 
     /* border */
     --borderknop: 12px;
     --borderfoto: 12px;
+    --borderkop: 10px;
     --schaduw: 0 0 8px rgba(53, 5, 29, 0.247);
 
     /* margins */
@@ -27,79 +32,22 @@
 
 }
 
-.classic-button {
-    background-color: var(--hoofd);
-    color: var(--textlicht);
-    width: 100%;
-    display: block;
-    padding: 20px;
-    margin: var(--margstandard);
-    font-size: var(--sizeklein);
-    border: none;
-    border-radius: var(--borderknop);
-    box-shadow: var(--schaduw)
-}
-
-.classic-button-small {
-    background-color: var(--hoofd);
-    color: var(--textlicht);
-    width: 50%;
-    display: block;
-    padding: 20px;
-    margin: var(--margstandard);
-    font-size: var(--sizeklein);
-    border: none;
-    border-radius: var(--borderknop);
-    box-shadow: var(--schaduw)
-}
-
-.classic-outline {
-    background-color: var(--achter);
-    align-items: center;
-    position: fixed;
-    text-align: center;
-    justify-content: center;
-    padding: 30%;
-}
-
-.custom-input {
-    width: 100%;
-    max-width: 400px;
-    padding: 12px;
-    margin: var(--margstandard);
-    border-radius: var(--borderknop);
-    border: 1px solid var(--licht);
-    background-color: var(--ipvwit);
-    box-shadow: var(--schaduw);
-    font-size: var(--sizeklein);
-    color: var(--textplaceholder);
-    outline: none;
-    transition: 0.3s;
-}
-
-
-.custom-input:focus {
-    border-color: var(--hoofd);
-    box-shadow: var(--schaduw);
-}
-
-.custom-input::placeholder {
-    color: var(--textplaceholder);
-    font-style: italic;
-}
 
 
 html {
     scroll-behavior: smooth;
-    overflow-y: scroll;
     background-color: var(--achter);
 }
 
 body {
-    height: 100%;
-    overflow: hidden;
     margin: 0;
     padding: 0;
+    font-family: sans-serif;
+    overflow-y: auto;
+}
+
+main {
+    padding-top: 80px;
 }
 
 header {
@@ -134,6 +82,117 @@ h2 {
     height: 75%;
     margin: auto;
     text-align: center;
+}
+
+.classic-outline {
+    position: relative;
+    padding: 20px 5%;
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.classic-categories {
+    width: 100%;
+    display: block;
+    font-size: var(--sizeklein);
+    color: var(--textdonker);
+    font-weight: var(--zwaartekop);
+    background-color: var(--mid);
+    border: none;
+    border-radius: var(--borderkop);
+    margin: var(--margstandard);
+    text-align: center;
+}
+
+.classic-button {
+    background-color: var(--hoofd);
+    color: var(--textlicht);
+    width: 100%;
+    display: block;
+    padding: 20px;
+    margin: var(--margstandard);
+    font-size: var(--sizeklein);
+    border: none;
+    border-radius: var(--borderknop);
+    box-shadow: var(--schaduw)
+}
+
+.classic-button-small {
+    background-color: var(--hoofd);
+    color: var(--textlicht);
+    width: 50%;
+    display: block;
+    padding: 20px;
+    margin: var(--margstandard);
+    font-size: var(--sizeklein);
+    border: none;
+    border-radius: var(--borderknop);
+    box-shadow: var(--schaduw)
+}
+
+.custom-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    margin: var(--margstandard);
+    border-radius: var(--borderknop);
+    border: 1px solid var(--licht);
+    background-color: var(--ipvwit);
+    box-shadow: var(--schaduw);
+    font-size: var(--sizeklein);
+    color: var(--textplaceholder);
+    outline: none;
+    transition: 0.3s;
+}
+
+.adjust-main-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    margin: var(--margstandard);
+    border-radius: var(--borderknop);
+    border: 1px solid var(--licht);
+    background-color: var(--ipvwit);
+    box-shadow: var(--schaduw);
+    font-size: var(--sizeklein);
+    font-weight: 700;
+    color: var(--textdonker);
+    outline: none;
+    transition: 0.3s;
+}
+
+
+.custom-input:focus {
+    border-color: var(--hoofd);
+    box-shadow: var(--schaduw);
+}
+
+.custom-input::placeholder {
+    color: var(--textplaceholder);
+    font-style: italic;
+}
+
+.classic-toggle {
+    background-color: var(--licht);
+    box-shadow: var(--schaduw);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-radius: var(--borderknop);
+}
+
+.classic-toggle-item {
+    color: var(--textmid);
+    background-color: var(--licht);
+    border: none;
+    font-weight: var(--zwaartemid);
+    border-radius: var(--borderknop);
+}
+
+.classic-toggle-item :active {
+    background-color: var(--mid);
+    color: var(--textdonker);
 }
 
 
@@ -172,8 +231,10 @@ h2 {
 
 /* -------------------  AANMELDEN -------------------  */
 .logobegin {
-    width: 70%;
+    width: 100%;
     padding-top: 30%;
+    margin-bottom: 20%;
+
 }
 
 .btnlogin {
@@ -206,6 +267,136 @@ h2 {
     padding: 2px;
 }
 
+/*------------------- PROFIEL PAGINA --------------------*/
+
+.profile-card {
+    background-color: var(--ipvwit);
+    border-radius: var(--borderknop);
+    padding: 20px;
+    box-shadow: var(--schaduw);
+    display: inline-block;
+    position: relative;
+}
+
+
+.avatar-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.avatar-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.level-badge {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    background-color: var(--hoofd);
+    color: var(--textlicht);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    box-shadow: var(--schaduw);
+}
+
+.tutorial-card {
+    padding: 12px;
+    background-color: var(--ipvwit);
+    border-radius: var(--borderknop);
+    box-shadow: var(--schaduw);
+    transition: 0.2s;
+}
+
+/* Kleine knop die buiten kaart valt */
+.adjust-btn {
+    top: -15px;
+    right: -15px;
+    background-color: var(--hoofd);
+    border-radius: 50%;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--schaduw);
+    transition: 0.2s;
+}
+
+.adjust-btn img {
+    width: 25px;
+    height: 25px;
+}
+
+.adjust-btn:hover {
+    transform: scale(1.1);
+}
+
+
+/* ----------------------PROFIEL AANPASSEN-------------------*/
+
+/* AVATAR */
+.avatar-section {
+    text-align: center;
+}
+
+.avatar-img-edit {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* GEBRUIKERSNAAM */
+.profile-section input {
+    width: 100%;
+    padding: 10px;
+    border-radius: var(--borderknop);
+    border: 1px solid var(--licht);
+    font-size: var(--sizeklein);
+}
+
+/* NIVEAU */
+#niveauStars {
+    display: flex;
+    justify-content: center;
+}
+
+.niveau-icon {
+    width: 70px;
+    height: auto;
+}
+
+/* MATERIALEN */
+#materialenContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.material-blok {
+    padding: 6px 12px;
+    border-radius: 12px;
+    background-color: var(--licht);
+    cursor: pointer;
+    user-select: none;
+    transition: 0.2s;
+}
+
+.material-blok.selected {
+    background-color: var(--hoofd);
+    color: var(--textlicht);
+}
+
+
 /* -------------------  MAKEN-------------------  */
 .add-picture {
     height: 40%;
@@ -213,6 +404,19 @@ h2 {
     padding: 10px;
     margin: 10px;
     color: var(--hoofd);
+}
+
+.make-section input {
+    width: 100%;
+    padding: 10px;
+    border-radius: var(--borderknop);
+    border: 1px solid var(--licht);
+    font-size: var(--sizeklein);
+}
+
+.time-icon {
+    width: 70px;
+    height: auto;
 }
 
 .upload-btn {

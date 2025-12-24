@@ -3,58 +3,50 @@
 
 
 // ================== IMPORTS ==================
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getAuth, getAnalytics, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDocs, collection, query, where } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { doc, setDoc, getDocs, collection, query, where, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { auth, db } from "./firebase-init.js";
 
-// ================== FIREBASE CONFIG ==================
-const firebaseConfig = {
-  apiKey: "AIzaSyBFpfyYMfgAlyozywN27mkCM8NODcUntOA",
-  authDomain: "cherrysapp-de82f.firebaseapp.com",
-  projectId: "cherrysapp-de82f",
-  storageBucket: "cherrysapp-de82f.appspot.com",
-  messagingSenderId: "662896896244",
-  appId: "1:662896896244:web:4a7d8adf1364e3229c16a1"
-};
+//==================== wie is ingelogd===================
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("Ingelogd:", user.uid);
+  } else {
+    console.log("Niet ingelogd");
+    // window.location.href = "aanmelden.html";
+  }
+});
 
-// ================== INIT ==================
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// ================== REGISTREREN ==================
 async function register() {
   const username = document.getElementById("regUsername").value;
   const email = document.getElementById("regEmail").value;
   const password = document.getElementById("regPassword").value;
 
-  // gekozen radio ophalen
-  const niveau = document.querySelector(
-    'input[name="niveau"]:checked'
-  ).value;
-
-  // Check unieke username
+  // unieke username check
   const q = query(collection(db, "users"), where("username", "==", username));
   const snapshot = await getDocs(q);
 
   if (!snapshot.empty) {
-    console.log("Gebruikersnaam bestaat al");
+    alert("Gebruikersnaam bestaat al");
     return;
   }
 
-  // Firebase Auth gebruiker
+  // gebruiker aanmaken
   const cred = await createUserWithEmailAndPassword(auth, email, password);
 
-  // Opslaan username
+  // 🔹 USER DOCUMENT AANMAKEN
   await setDoc(doc(db, "users", cred.user.uid), {
     username,
     email,
-    niveau
+    level: null,
+    materialsOwned: [],
+    avatar: null,
+    profileCompleted: false,
+    createdAt: new Date()
   });
-  where("username", "==", username.toLowerCase())
 
-  console.log(username);
+  // 🔹 ALLEEN HIER REDIRECT
+  window.location.href = "profiel-change.html";
 }
 
 // ================== LOGIN MET USERNAME ==================
@@ -92,6 +84,9 @@ async function login() {
   } catch (error) {
     message.innerText = "Onjuist wachtwoord";
   }
+
+  // redirect na succesvol inloggen
+window.location.href = "index.html";
 }
 
 
@@ -105,40 +100,4 @@ const loginBtn = document.getElementById("loginBtn");
 if (loginBtn) {
   loginBtn.addEventListener("click", login);
 }
-
-
-
-
-// Aanpassen profiel
-
-// niveau oud
-import { getDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
-
-const snap = await getDoc(doc(db, "users", user.uid));
-const data = snap.data();
-
-document.getElementById("niveauSelect").value = data.niveau;
-
-//niveau nieuw
-
-import { updateDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-
-
-onAuthStateChanged(auth, async (user) => {
-  if (!user) return;
-
-  const userRef = doc(db, "users", user.uid);
-
-  document.getElementById("saveNiveau").addEventListener("click", async () => {
-    const nieuwNiveau =
-      document.getElementById("niveauSelect").value;
-
-    await updateDoc(userRef, {
-      niveau: nieuwNiveau
-    });
-
-    alert("Niveau bijgewerkt!");
-  });
-});
 

@@ -52,6 +52,7 @@ async function toggleFavorite(tutorialId, isFavorite) {
 const mainImageInput = document.getElementById("mainImage");
 const uploadBtn = document.querySelector(".upload-btn");
 
+if (mainImageInput && uploadBtn) {
 mainImageInput.addEventListener("change", function() {
   const file = this.files[0];
   if(file) {
@@ -66,6 +67,15 @@ mainImageInput.addEventListener("change", function() {
     reader.readAsDataURL(file);
   }
 });
+}
+
+const btn = document.getElementById("change");
+
+if (btn) {
+  btn.addEventListener("click", () => {
+    // code
+  });
+}
 
 // ------------------------------ render tutorials ------------------
 async function loadTutorials() {
@@ -166,6 +176,45 @@ async function loadUserData() {
 
 await loadUserData();
 
+
+/* ------------------POP UP INCOMPLEET [PROFIEL ---------------------*/
+import { requireProfile } from "./guard.js";
+// FILTER BUTTON
+const applyFiltersBtn = document.getElementById("applyFilters");
+if (applyFiltersBtn) {
+  applyFiltersBtn.addEventListener("click", async () => {
+    const check = await requireProfile(["materialsOwned"]);
+    if (!check.ok) {
+      showProfileModal("Vul eerst je materialen in om te filteren");
+      return;
+    }
+    applyFilters();
+  });
+}
+
+// MAKE BUTTON
+const makeBtn = document.getElementById("makeBtn");
+if (makeBtn) {
+  makeBtn.addEventListener("click", async () => {
+    const check = await requireProfile(["level", "materialsOwned"]);
+    if (!check.ok) {
+      showProfileModal("Vul eerst je niveau en materialen in om een tutorial te maken");
+      return;
+    }
+    window.location.href = "make.html";
+  });
+}
+
+// FUNCTIE VOOR POP-UP
+function showProfileModal(message) {
+  const modalEl = document.getElementById("profileRequiredModal");
+  if (!modalEl) return;
+
+  modalEl.querySelector("p").innerText = message;
+  new bootstrap.Modal(modalEl).show();
+}
+
+
 /* ------------------- MATERIALEN IN FILTER -----------------------*/
 
 function loadMaterialsForFilter(materials) {
@@ -243,3 +292,6 @@ function sortTutorials(tutorials) {
     return 0;
   });
 }
+
+
+//-------------------- MATERIALEN ALGEMEEN ----------------------

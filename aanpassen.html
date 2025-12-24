@@ -2,60 +2,85 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Cherry's</title>
-    <link rel="stylesheet" href="css/styles.css" />
-    <script src="js/script.js"></script>
-      <script src="js/users.js"></script>
-    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
-    <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cherry's - Profiel Aanpassen</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
+  <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
+  <div class="classic-outline">
 
-<h3>Wijzig Niveau</h3>
+    <!-- Avatar -->
+    <div class="avatar-section text-center">
+      <img id="avatarPreview" src="images/icons/avatar_placeholder.png" alt="Avatar" class="avatar-img-edit mb-2">
+      <br>
+      <a href="avatarmaker.html" class="classic-button">Avatar wijzigen</a>
+      <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+    </div>
 
-<select id="niveauSelect">
-  <option value="1">Optie 1</option>
-  <option value="2">Optie 2</option>
-  <option value="3">Optie 3</option>
-  <option value="4">Optie 4</option>
-  <option value="5">Optie 5</option>
-</select>
+    <!-- Gebruikersnaam -->
+    <div class="profile-section mb-3">
+      <input class="form-control adjust-main-input" type="text" id="usernameInput" placeholder="Vul je gebruikersnaam in">
+    </div>
 
-<button id="saveNiveau">Opslaan</button>
+    <!-- Niveau -->
+    <div class="profile-section mb-3 text-center">
+      <div id="niveauHearts" class="d-flex justify-content-center gap-2">
+        <img src="images/icons/fav_uit.png" data-level="1" class="niveau-icon" width="40" height="40">
+        <img src="images/icons/fav_uit.png" data-level="2" class="niveau-icon" width="40" height="40">
+        <img src="images/icons/fav_uit.png" data-level="3" class="niveau-icon" width="40" height="40">
+        <img src="images/icons/fav_uit.png" data-level="4" class="niveau-icon" width="40" height="40">
+        <img src="images/icons/fav_uit.png" data-level="5" class="niveau-icon" width="40" height="40">
+      </div>
+    </div>
 
+    <!-- Materialen -->
+    <div class="profile-section mb-4">
+      <label class="classic-categories">Materialen</label>
+      <div id="materialenContainer" class="d-flex flex-wrap gap-2">
+        <!-- Checkboxes worden via JS geladen -->
+      </div>
+    </div>
 
-    <!---------------------   app - frame  --------------------->
-    <header>
-        <img alt="logo" src="images/icons/logooptie.png" class="logo" />
-    </header>
+    <!-- Opslaan -->
+    <button id="saveProfile" class="classic-button">Opslaan</button>
 
-
-<footer class="fixed-bottom">
-  <div class="d-flex justify-content-around py-2">
-    <a href="index.html" class="text-center nav-item">
-      <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
-  
-    </a>
-    <a href="favorites.html" class="text-center nav-item">
-      <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
-    </a>
-    <a href="make.html" class="text-center nav-item">
-      <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
-    </a>
-    <a href="friends.html" class="text-center nav-item">
-      <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
-    </a>
-    <a href="profile.html" class="text-center nav-item">
-      <img src="images/icons/avatar_placeholder.png" class="navbar-icon" alt="profile">
-    </a>
   </div>
-</footer>
 
-    <script type="module" src="js/authentication.js"></script>
-    <script type="module" src="firebase-init.js"></script>
+  <!-- Header -->
+  <header>
+    <img alt="logo" src="images/icons/logooptie.png" class="logo" />
+  </header>
+
+  <!-- Footer -->
+  <footer class="fixed-bottom">
+    <div class="d-flex justify-content-around py-2">
+      <a href="index.html" class="text-center nav-item">
+        <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
+      </a>
+      <a href="favorites.html" class="text-center nav-item">
+        <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
+      </a>
+      <a href="make.html" class="text-center nav-item">
+        <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
+      </a>
+      <a href="friends.html" class="text-center nav-item">
+        <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
+      </a>
+      <a href="profiel.html" class="text-center nav-item">
+        <img src="images/icons/avatar_placeholder.png" class="navbar-icon" alt="profile">
+      </a>
+    </div>
+  </footer>
+
+  <script type="module" src="js/firebase-init.js"></script>
+  <script type="module" src="js/guard.js"></script>
+  <script type="module" src="js/authentication.js"></script>
+  <script type="module" src="js/script.js"></script>
+  <script type="module" src="js/edit-user.js"></script>
 </body>
 
 </html>

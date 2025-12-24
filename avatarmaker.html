@@ -11,11 +11,31 @@
 </head>
 
 <body>
-  <h2>Mijn favorieten</h2>
-  <div id="favoritesGrid" class="masonry-grid"></div>
+    <div id="avatarCanvas">
+  <div id="background"></div>
+  <div id="skin"></div>
+  <div id="eyes"></div>
+  <div id="hair"></div>
+  <div id="topClothing"></div>
+  <div id="bottomClothing"></div>
+  <div id="accessories"></div>
+</div>
 
+<!-- Controls -->
+<label>Haarstijl</label>
+<select id="hairStyleSelect">
+  <option value="short">Kort</option>
+  <option value="long">Lang</option>
+</select>
 
-  <!---------------------   app - frame  --------------------->
+<label>Haar kleur</label>
+<input type="color" id="hairColorInput" value="#000000">
+
+<!-- Zelfde voor kleding, ogen, huid, achtergrond -->
+
+<button id="saveAvatar">Opslaan</button>
+
+ <!---------------------   app - frame  --------------------->
   <header>
     <img alt="logo" src="images/icons/logooptie.png" class="logo" />
   </header>
@@ -42,11 +62,8 @@
     </div>
   </footer>
 
-
-  <main></main>
     <script type="module" src="js/firebase-init.js"></script>
-    <script type="module" src="js/guard.js"></script>
-    <script type="module" src="js/script.js"></script>
+  <script type="module" src="js/guard.js"></script>
+  <script type="module" src="js/script.js"></script>
 </body>
-
 </html>

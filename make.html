@@ -6,67 +6,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Cherry's</title>
     <link rel="stylesheet" href="css/styles.css" />
-    <script src="js/script.js"></script>
     <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
     <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
 
-    <form class="make-form flex-column d-flex classic-outline" id="tutorialForm">
+    <main>
+        <form class="make-form flex-column d-flex classic-outline" id="tutorialForm">
 
-        <!-- Hoofdfoto -->
-        <input type="file" id="mainImage" accept="image/*" required style="display:none;">
-        <label for="mainImage" class="upload-btn">
-            <span class="plus-icon">+</span>
-        </label>
+            <!-- Hoofdfoto -->
+            <input type="file" id="mainImage" accept="image/*" required style="display:none;">
+            <label for="mainImage" class="upload-btn">
+                <span class="plus-icon">+</span>
+            </label>
 
-        <!-- Titel -->
-        <div class="input-group mb-3">
-            <input class="custom-input" type="text" id="titel" placeholder="Titel" required />
-        </div>
-
-        <!-- Niveau -->
-  <div class="flex">
-        <label for="1"><img alt="heart" src="images/icons/fav_uit.png" class="niveau-icon-choice" />
-            <input type="radio" id="niveau" name="niveau" value="1"></label>
-        <label for="2"><img alt="heart" src="images/icons/fav_uit.png" class="niveau-icon-choice" />
-            <input type="radio" id="niveau" name="niveau" value="2"></label>
-        <label for="3"><img alt="heart" src="images/icons/fav_uit.png" class="niveau-icon-choice" />
-            <input type="radio" id="niveau" name="niveau" value="3"></label>
-        <label for="4"><img alt="heart" src="images/icons/fav_uit.png" class="niveau-icon-choice" />
-            <input type="radio" id="niveau" name="niveau" value="4"></label>
-        <label for="5"><img alt="heart" src="images/icons/fav_uit.png" class="niveau-icon-choice" />
-            <input type="radio" id="niveau" name="niveau" value="4"></label>
+            <!-- Titel -->
+            <div class="input-group">
+                <input class="custom-input" type="text" id="titel" placeholder="Titel" required />
             </div>
 
-        <!-- Duur -->
-        <input id="duration-input" class="custom-input" type="text" pattern="[0-9]{2}:[0-9]{2}" value="00:00" required />
+            <!-- Niveau -->
+            <div class="make-section mb-3 text-center">
+                <div id="niveauHearts" class="d-flex justify-content-center gap-2">
+                    <img src="images/icons/fav_uit.png" data-level="1" class="niveau-icon" width="40" height="40">
+                    <img src="images/icons/fav_uit.png" data-level="2" class="niveau-icon" width="40" height="40">
+                    <img src="images/icons/fav_uit.png" data-level="3" class="niveau-icon" width="40" height="40">
+                    <img src="images/icons/fav_uit.png" data-level="4" class="niveau-icon" width="40" height="40">
+                    <img src="images/icons/fav_uit.png" data-level="5" class="niveau-icon" width="40" height="40">
+                </div>
+            </div>
+
+            <!-- Duur -->
+            <div class="make-section d-flex">
+                <input id="duration-input" class="custom-input" type="text" pattern="[0-9]{2}:[0-9]{2}" value="00:00" required />
+                <img src="images/icons/garen.png" class="time-icon" />
+            </div>
+
+            <!-- Omschrijving -->
+            <div class="input-group">
+                <input type="text" class="custom-input" id="omschrijving" placeholder="Omschrijving" />
+            </div>
+
+            <!-- materialen -->
+            <div class="profile-section mb-4">
+                <label class="classic-categories">Materialen</label>
+                <div id="materialenContainer" class="d-flex flex-wrap gap-2">
+                    <!-- Checkboxes worden via JS geladen -->
+                </div>
+            </div>
+            <div id="stepsContainer"></div>
+
+            <button class="classic-button-small" type="button" id="addStepBtn">
+                + Stap toevoegen
+            </button>
+
+            <button class="classic-button" type="submit">Upload tutorial</button>
+
+        </form>
 
 
-        <!-- Omschrijving -->
-        <div class="input-group mb-3">
-            <input type="text" class="custom-input" id="omschrijving" placeholder="Omschrijving" />
-        </div>
-
-        <!-- materialen -->
-        <h3>Materialen</h3>
-        <div id="materials" required></div>
-
-        <div id="stepsContainer"></div>
-
-        <button class="classic-button-small" type="button" id="addStepBtn">
-            + Stap toevoegen
-        </button>
-
-        <button class="classic-button" type="submit">Upload tutorial</button>
-
-    </form>
 
 
-
-
-
+    </main>
 
 
     <!---------------------   app - frame  --------------------->
@@ -79,7 +81,6 @@
         <div class="d-flex justify-content-around py-2">
             <a href="index.html" class="text-center nav-item">
                 <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
-
             </a>
             <a href="favorites.html" class="text-center nav-item">
                 <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
@@ -90,7 +91,7 @@
             <a href="friends.html" class="text-center nav-item">
                 <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
             </a>
-            <a href="profile.html" class="text-center nav-item">
+            <a href="profiel.html" class="text-center nav-item">
                 <img src="images/icons/avatar_placeholder.png" class="navbar-icon" alt="profile">
             </a>
         </div>
@@ -98,7 +99,9 @@
 
 
     <!-- Source - https://stackoverflow.com/a -->
-    <script type="module" src="firebase-init.js"></script>
+    <script type="module" src="js/firebase-init.js"></script>
+    <script type="module" src="js/guard.js"></script>
+    <script type="module" src="js/script.js"></script>
     <script type="module" src="js/make.js"></script>
 </body>
 

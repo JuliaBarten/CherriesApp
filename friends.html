@@ -1,20 +1,20 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Cherry's</title>
-        <link rel="stylesheet" href="css/styles.css" />
-        <script src="script.js"></script>
-        <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
-        <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
-    </head>
 
-    <body>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cherry's</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
+    <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
 
 
 
-   <!---------------------   app - frame  --------------------->
+    <!---------------------   app - frame  --------------------->
     <header>
         <img alt="logo" src="images/icons/logooptie.png" class="logo" />
     </header>
@@ -35,7 +35,7 @@
             <a href="friends.html" class="text-center nav-item">
                 <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
             </a>
-            <a href="profile.html" class="text-center nav-item">
+            <a href="profiel.html" class="text-center nav-item">
                 <img src="images/icons/avatar_placeholder.png" class="navbar-icon" alt="profile">
             </a>
         </div>
@@ -45,7 +45,10 @@
 
 
 
-        <main></main>
-        <script type="module" src="firebase-init.js"></script>
-    </body>
+    <main></main>
+    <script type="module" src="js/firebase-init.js"></script>
+    <script type="module" src="js/guard.js"></script>
+    <script type="module" src="js/script.js"></script>
+</body>
+
 </html>
