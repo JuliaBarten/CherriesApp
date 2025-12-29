@@ -2,6 +2,9 @@ import { auth, db } from "./firebase-init.js";
 import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
+const myTutorialsContainer = document.getElementById("myTutorials");
+const madeTutorialsContainer = document.getElementById("madeTutorials");
+
 async function loadProfile(user) {
   const userRef = doc(db, "users", user.uid);
   const snap = await getDoc(userRef);
@@ -33,51 +36,42 @@ async function loadProfile(user) {
       materialenContainer.appendChild(div);
     }
   });
-
-  // Tutorials
-  await loadTutorials(user.uid, true);
 }
 
-// Tutorials laden
-let showingOwn = true;
-async function loadTutorials(userId, own = true) {
-  const container = document.getElementById("tutorialsContainer");
-  container.innerHTML = "";
-  showingOwn = own;
+async function loadMyTutorials(userId) {
+  myTutorialsContainer.innerHTML = "";
 
-  const tutorialsRef = collection(db, "Tutorials"); // stel dat je een collectie Tutorials hebt
-  let q;
-  if (own) {
-    q = query(tutorialsRef, where("creatorId", "==", userId));
-  } else {
-    q = query(tutorialsRef, where("creatorId", "!=", userId));
-  }
+  const q = query(
+    collection(db, "tutorials"),
+    where("authorId", "==", userId)
+  );
 
   const snap = await getDocs(q);
-  snap.forEach(docSnap => {
-    const t = docSnap.data();
-    const div = document.createElement("div");
-    div.className = "tutorial-card";
-    div.textContent = t.title || "Onbekend";
-    container.appendChild(div);
+  snap.forEach(doc => {
+    const t = doc.data();
+    myTutorialsContainer.innerHTML += `
+      <div class="tutorial-card">
+        <img src="${t.mainImageUrl}">
+        <h5>${t.title}</h5>
+      </div>
+    `;
   });
 }
 
-// Toggle buttons
-document.getElementById("ownTutorialsBtn").addEventListener("click", () => {
-  document.getElementById("ownTutorialsBtn").classList.add("active");
-  document.getElementById("othersTutorialsBtn").classList.remove("active");
-  loadTutorials(auth.currentUser.uid, true);
-});
+document.getElementById("btnMy").onclick = () => {
+  myTutorials.style.display = "block";
+  madeTutorials.style.display = "none";
+};
 
-document.getElementById("othersTutorialsBtn").addEventListener("click", () => {
-  document.getElementById("othersTutorialsBtn").classList.add("active");
-  document.getElementById("ownTutorialsBtn").classList.remove("active");
-  loadTutorials(auth.currentUser.uid, false);
-});
+document.getElementById("btnMade").onclick = () => {
+  myTutorials.style.display = "none";
+  madeTutorials.style.display = "block";
+};
+
 
 // Auth state
 onAuthStateChanged(auth, async (user) => {
   if (!user) window.location.href = "aanmelden.html";
   else await loadProfile(user);
+    await loadMyTutorials(user.uid);
 });

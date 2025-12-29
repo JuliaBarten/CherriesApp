@@ -1,3 +1,5 @@
+
+
 //  ------------------------ menu ------------------------------
 const current = window.location.pathname.split("/").pop();
 document.querySelectorAll('footer a').forEach(link => {
@@ -79,14 +81,27 @@ if (btn) {
 
 // ------------------------------ render tutorials ------------------
 async function loadTutorials() {
+  const grid = document.getElementById("tutorialGrid");
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
   const snapshot = await getDocs(collection(db, "tutorials"));
+
+  // 1️⃣ Tutorials verzamelen
+  const tutorials = snapshot.docs.map(docSnap => ({
+    id: docSnap.id,
+    ...docSnap.data()
+  }));
+
+  // 2️⃣ Filteren
   const filtered = tutorials.filter(matchesFilters);
+
+  // 3️⃣ Sorteren (nieuwste bovenaan)
   const sorted = sortTutorials(filtered);
-  renderTutorials(sorted);
 
-
-  snapshot.forEach(async (docSnap) => {
-    const t = docSnap.data();
+  // 4️⃣ Renderen
+  for (const t of sorted) {
     const tools = await getToolNames(t.materials || []);
 
     const card = document.createElement("div");
@@ -94,9 +109,7 @@ async function loadTutorials() {
 
     card.innerHTML = `
       <img src="${t.mainImageUrl}" alt="${t.title}">
-      
       <div class="favorite-btn">❤️</div>
-
       <div class="overlay">
         ⏱ ${t.duration}<br>
         ⭐ Niveau ${t.level}<br>
@@ -108,16 +121,15 @@ async function loadTutorials() {
     let isFavorite = false;
 
     favBtn.addEventListener("click", async () => {
-      await toggleFavorite(docSnap.id, isFavorite);
+      await toggleFavorite(t.id, isFavorite);
       isFavorite = !isFavorite;
       favBtn.textContent = isFavorite ? "💖" : "❤️";
     });
 
     grid.appendChild(card);
-  });
+  }
 }
 
-loadTutorials();
 
 
 // ------------------- FAVORIETEN PAGINA --------------------------
@@ -213,6 +225,16 @@ function showProfileModal(message) {
   modalEl.querySelector("p").innerText = message;
   new bootstrap.Modal(modalEl).show();
 }
+
+// aato volgorde tutorials
+import { query, orderBy } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+const q = query(
+  collection(db, "tutorials"),
+  orderBy("createdAt", "desc")
+);
+
+const snapshot = await getDocs(q);
 
 
 /* ------------------- MATERIALEN IN FILTER -----------------------*/

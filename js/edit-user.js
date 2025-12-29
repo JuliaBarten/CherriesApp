@@ -17,7 +17,7 @@ async function loadProfile(user) {
   usernameInput.value = data.username || "";
 
   // Niveau
-  updateStars(data.level || 1);
+  updateHearts(data.level || 1);
 
   // Avatar
   const avatarPreview = document.getElementById("avatarPreview");
@@ -46,11 +46,11 @@ async function loadProfile(user) {
 let selectedLevel = 1; // standaard niveau
 
 // ------------------ Sterren-niveau ------------------
-function updateStars(level) {
+function updateHearts(level) {
   const niveauIcons = document.querySelectorAll(".niveau-icon");
   niveauIcons.forEach(icon => {
     const iconLevel = parseInt(icon.dataset.level);
-    icon.src = iconLevel <= level ? "images/icons/fav_aan.png" : "images/icons/fav_uit.png";
+    icon.src = iconLevel <= level ? "images/icons/heart3.png" : "images/icons/heart4.png";
   });
   selectedLevel = level;
 }
@@ -59,13 +59,13 @@ function updateStars(level) {
 document.querySelectorAll(".niveau-icon").forEach(icon => {
   icon.addEventListener("click", () => {
     const level = parseInt(icon.dataset.level);
-    updateStars(level);
+    updateHearts(level);
   });
 });
 
 // ------------------ Materialen laden als blokken ------------------
 async function loadMaterials(userData) {
-  const materialenContainer = document.getElementById("materialenContainer");
+  const materialenContainer = document.getElementById("makeMaterialenContainer");
   materialenContainer.innerHTML = "";
 
   const materialenSnapshot = await getDocs(collection(db, "Materialen"));

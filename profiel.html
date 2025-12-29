@@ -17,11 +17,11 @@
     <!-- Avatar + niveau + naam -->
     <div class="profile-card text-center position-relative">
       <a href="aanpassen.html" class="adjust-btn position-absolute">
-        <img src="images/icons/garen.png" alt="Aanpassen" width="30" height="30">
+        <img src="images/icons/edit.png" alt="Aanpassen" width="30" height="30">
       </a>
 
       <div class="avatar-wrapper position-relative d-inline-block">
-        <img id="profileAvatar" src="images/icons/avatar_placeholder.png" alt="Avatar" class="avatar-img">
+        <img id="profileAvatar" src="images/icons/avatar.png" alt="Avatar" class="avatar-img">
         <span id="avatarLevel" class="level-badge">1</span>
       </div>
       <h3 id="profileUsername" class="mt-2">Gebruikersnaam</h3>
@@ -37,18 +37,15 @@
     </div>
   </div>
 
-  <!-- Tutorials toggle -->
-  <div>
-    <label class="classic-categories">Makes</label>
-    <div class="classic-toggle" role="group">
-      <button type="button" class="classic-toggle-item active" id="ownTutorialsBtn">Jouw Makes</button>
-      <button type="button" class="classic-toggle-item" id="othersTutorialsBtn">Gemaakte makes</button>
-    </div>
+    <!-- Tutorials toggle -->
+      <label class="classic-categories">Makes</label>
+  <div class="toggle-buttons classic-toggle">
+  <button id="btnMy" class="classic-toggle-item active">Mijn Makes</button>
+  <button id="btnMade" class="classic-toggle-item">Gemaakte Makes</button>
+</div>
 
-    <div id="tutorialsContainer" class="d-flex flex-column gap-2">
-      <!-- Tutorials worden geladen via JS -->
-    </div>
-  </div>
+<div id="myTutorials"></div>
+<div id="madeTutorials" style="display:none;"></div>
 
 </main>
 
@@ -73,7 +70,7 @@
         <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
       </a>
       <a href="profiel.html" class="text-center nav-item">
-        <img src="images/icons/avatar_placeholder.png" class="navbar-icon" alt="profile">
+        <img src="images/icons/avatar.png" class="navbar-icon" alt="profile">
       </a>
     </div>
     

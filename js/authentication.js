@@ -4,7 +4,7 @@
 
 // ================== IMPORTS ==================
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-import { doc, setDoc, getDocs, collection, query, where, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { doc, setDoc, getDocs, collection, query, where } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { auth, db } from "./firebase-init.js";
 
 //==================== wie is ingelogd===================

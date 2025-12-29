@@ -48,6 +48,7 @@ body {
 
 main {
     padding-top: 80px;
+     overflow-y: auto;
 }
 
 header {
@@ -209,18 +210,20 @@ h2 {
 
 /* Style the links inside the navigation bar */
 .navbar-icon {
-    width: 90%;
+    width: 95%;
     /* icoon grootte */
     height: auto;
     display: block;
-    margin: 5px;
+    margin: 3px;
     /* center + spacing */
-    padding: 2px;
+    padding: 4px;
 }
 
 .nav-item.active img {
-    filter: saturate(500%)
-        /* voorbeeld highlight kleur */
+    content: "";
+    border-radius: 50%;
+    background-color: var(--ipvwit);
+    z-index: -1;
 }
 
 .nav-item {
@@ -439,6 +442,13 @@ h2 {
     color: var(--textlicht);
 }
 
+.make-form {
+  min-height: calc(120vh - 200px);
+}
+
+.make-form button[type="submit"] {
+  margin-bottom: 5rem;
+}
 
 /*
 Source - https://stackoverflow.com/a
