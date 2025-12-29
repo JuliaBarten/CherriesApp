@@ -52,83 +52,73 @@ async function loadMaterialsForMake() {
         makeMaterialenContainer.appendChild(div);
     });
 }
-
 /* ======================
-   Stappen modal
+   Stappen modal + carrousel
 ====================== */
 let stepsData = [];
-const stepsContainer = document.getElementById("stepsContainer");
-const addStepBtn = document.getElementById("addStepBtn");
-const stepModalEl = document.getElementById("stepModal");
-const stepModal = new bootstrap.Modal(stepModalEl);
-const stepTextInput = document.getElementById("stepText");
-const stepImagesInput = document.getElementById("stepImages");
-const carouselInner = document.querySelector("#stepPreview .carousel-inner");
-const stepsOverview = document.getElementById("stepsOverview");
 let stepCount = 0;
 
-// Carrousel preview
-stepImagesInput.addEventListener("change", () => {
-    const files = Array.from(stepImagesInput.files).slice(0, 1);
-    carouselInner.innerHTML = "";
+const stepModal = new bootstrap.Modal(document.getElementById("stepModal"));
+const stepImageInput = document.getElementById("stepImage");
+const stepTextInput = document.getElementById("stepText");
+const stepNumberPreview = document.getElementById("stepNumberPreview");
 
-    files.forEach((file, index) => {
-        const reader = new FileReader();
-        reader.onload = e => {
-            const item = document.createElement("div");
-            item.className = `carousel-item ${index === 0 ? "active" : ""}`;
-            item.innerHTML = `<img src="${e.target.result}" class="d-block w-100">`;
-            carouselInner.appendChild(item);
-        };
-        reader.readAsDataURL(file);
-    });
+document.getElementById("addStepBtn").addEventListener("click", () => {
+  stepNumberPreview.textContent = stepCount + 1;
+  stepModal.show();
 });
 
-// Opslaan stap
 document.getElementById("saveStepBtn").addEventListener("click", () => {
-    const text = stepTextInput.value.trim();
-    const files = Array.from(stepImagesInput.files).slice(1);
+  stepCount++;
 
-    if (!text) {
-        alert("Vul een beschrijving in voor deze stap!");
-        return;
-    }
+  stepsData.push({
+    order: stepCount,
+    image: stepImageInput.files[0] || null,
+    text: stepTextInput.value.trim()
+  });
 
-    stepCount++;
-    stepsData.push({
-        order: stepCount,
-        text,
-        images: files
-    });
+  stepImageInput.value = "";
+  stepTextInput.value = "";
+  stepModal.hide();
 
-    stepModal.hide();
-    stepTextInput.value = "";
-    stepImagesInput.value = "";
-    carouselInner.innerHTML = "";
-
-    renderStepCards();
+  renderStepCarousel();
 });
 
-// Render stappen
-function renderStepCards() {
-    stepsOverview.innerHTML = "";
 
-    stepsData.forEach(step => {
-        const div = document.createElement("div");
-        div.className = "step-card classic-outline";
-        div.innerHTML = `
-            <strong>Stap ${step.order}</strong>
-            <p>${step.text}</p>
-        `;
-        stepsOverview.appendChild(div);
-    });
+// Render alle stappen in carrousel
+function renderStepCarousel() {
+  const carouselInner = document.querySelector("#stepsCarousel .carousel-inner");
+  carouselInner.innerHTML = "";
 
-    const addBtn = document.createElement("button");
-    addBtn.className = "classic-button-small";
-    addBtn.textContent = "+ Nieuwe stap";
-    addBtn.onclick = () => stepModal.show();
-    stepsOverview.appendChild(addBtn);
+  stepsData.forEach((step, index) => {
+    const item = document.createElement("div");
+    item.className = `carousel-item ${index === 0 ? "active" : ""}`;
+
+    item.innerHTML = `
+      <div class="step-card">
+        <div class="step-image-wrapper">
+          ${
+            step.image
+              ? `<img src="${URL.createObjectURL(step.image)}">`
+              : `<div class="step-placeholder">Geen afbeelding</div>`
+          }
+        </div>
+
+        <div class="step-text">
+          <strong>Stap ${step.order}</strong>
+          ${step.text ? `<p>${step.text}</p>` : ""}
+        </div>
+      </div>
+    `;
+
+    carouselInner.appendChild(item);
+  });
 }
+
+
+document.getElementById("addStepBtn").onclick = () => stepModal.show();
+
+
 
 /* ======================
    Tutorial Submit
@@ -181,24 +171,27 @@ form.addEventListener("submit", async (e) => {
 
         // Stappen uploaden
         for (const step of stepsData) {
-            const imageUrls = [];
+            let imageUrl = null;
 
-            for (const file of step.images) {
-                const stepRef = ref(storage, `tutorials/${tutorialRef.id}/${crypto.randomUUID()}`);
-                await uploadBytes(stepRef, file);
-                imageUrls.push(await getDownloadURL(stepRef));
+            if (step.image) {
+                const stepRef = ref(
+                    storage,
+                    `tutorials/${tutorialRef.id}/${crypto.randomUUID()}`
+                );
+                await uploadBytes(stepRef, step.image);
+                imageUrl = await getDownloadURL(stepRef);
             }
 
             await addDoc(collection(db, "tutorials", tutorialRef.id, "steps"), {
                 order: step.order,
                 text: step.text,
-                images: imageUrls
+                image: imageUrl
             });
         }
 
+
         alert("Tutorial succesvol geüpload!");
         form.reset();
-        stepsContainer.innerHTML = "";
         stepsOverview.innerHTML = "";
         stepCount = 0;
         stepsData = [];

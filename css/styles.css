@@ -443,12 +443,64 @@ h2 {
 }
 
 .make-form {
-  min-height: calc(120vh - 200px);
+  min-height: calc(160vh - 200px);
 }
 
 .make-form button[type="submit"] {
-  margin-bottom: 5rem;
+  margin-bottom: 3rem;
 }
+
+/* Carousel item centreren */
+#stepsCarousel .carousel-item {
+  display: flex;
+  justify-content: center;
+}
+
+/* De kaart zelf */
+.step-card {
+  width: 260px;
+  background: var(--mid);
+  border-radius: var(--borderknop);
+  padding: 12pv;
+  box-shadow: var(--schaduw);
+}
+
+/* Afbeelding container met vaste hoogte */
+.step-image-wrapper {
+  width: 100%;
+  height: 180px;          /* 👈 hier regel je de hoogte */
+  overflow: hidden;
+  border-radius: var(--borderfoto);
+  background: var(--licht);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Afbeelding zelf */
+.step-image-wrapper img {
+  width: 100%;
+  height: 100%;
+   border-radius: var(--borderfoto);
+  object-fit: cover;     /* 👈 maakt alle foto's gelijk */
+}
+
+/* Placeholder als er geen foto is */
+.step-image-placeholder {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+/* Tekst onder de afbeelding */
+.step-text {
+  margin-top: 10px;
+}
+
+.step-text p {
+  margin: 4px 0 0;
+  font-size: 0.95rem;
+}
+
 
 /*
 Source - https://stackoverflow.com/a

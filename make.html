@@ -57,50 +57,61 @@
                 </div>
             </div>
 
-            <div id="stepsContainer"></div>
-
-            <button class="classic-button-small" type="button" id="addStepBtn">
-                + Stap toevoegen
-            </button>
-
-        <!-- stappen toevoegen -->
-        <div class="modal fade" id="stepModal" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content classic-outline">
-
-                    <div class="modal-header">
-                        <h5 class="modal-title">Nieuwe stap</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <div class="modal-body">
-                        <textarea id="stepText" class="custom-input mb-3"
-                            placeholder="Beschrijving van deze stap"></textarea>
-
-                        <input type="file" id="stepImages" accept="image/*" multiple max="2" />
-
-                        <!-- Carousel preview -->
-                        <div id="stepPreview" class="carousel slide mt-3" data-bs-ride="false">
-                            <div class="carousel-inner"></div>
+            <!-- stappen toevoegen -->
+            <div class="modal fade" id="stepModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content classic-outline">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Nieuwe stap</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
-                    </div>
 
-                    <div class="modal-footer">
-                        <button class="classic-button-small" id="saveStepBtn">
-                            Stap opslaan
-                        </button>
-                    </div>
+                        <div class="modal-body">
+                            <p class="text-center">Stap <span id="stepNumberPreview"></span></p>
 
+                            <input type="file" id="stepImage" accept="image/*" class="mb-3">
+
+                            <textarea id="stepText" class="custom-input"
+                                placeholder="Uitleg bij deze stap (optioneel)"></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="classic-button-small" type="button" id="saveStepBtn">
+                                Stap opslaan
+                            </button>
+                        </div>
+
+                    </div>
                 </div>
             </div>
-        </div>
-        <div id="stepsOverview" class="d-flex flex-column gap-2"></div>
+
+            <div id="stepsOverview" class="d-flex flex-column gap-2"></div>
+
+            <!-- Carrousel met alle stappen -->
+            <div id="stepsCarousel" class="carousel slide">
+                <div class="carousel-inner"></div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#stepsCarousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+
+                <button class="carousel-control-next" type="button" data-bs-target="#stepsCarousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
 
 
-            <button class="classic-button" type="submit">Upload tutorial</button>
+            <!-- Knop voor nieuwe stap -->
+            <button class="classic-button-small mt-2" type="button" id="addStepBtn">+ Nieuwe stap</button>
+            </div>
 
+            <!-- Upload tutorial -->
+            <button class="classic-button mt-3" type="submit">Upload tutorial</button>
+            </div>
         </form>
-        
+
     </main>
     <!---------------------   app - frame  --------------------->
     <header>
