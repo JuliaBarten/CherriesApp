@@ -47,12 +47,11 @@ body {
 }
 
 main {
-    padding-top: 80px;
+    padding-top: 10px;
      overflow-y: auto;
 }
 
 header {
-    height: 83px;
     display: flex;
     background-color: var(--hoofd);
     position: fixed;
@@ -80,9 +79,12 @@ h2 {
 }
 
 .logo {
-    height: 75%;
-    margin: auto;
-    text-align: center;
+    justify-self: center;
+    position: absolute;
+    height: 70px;
+    width: auto;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .classic-outline {
@@ -195,7 +197,43 @@ h2 {
     background-color: var(--mid);
     color: var(--textdonker);
 }
+.app-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;       /* Verticaal centreren alles */
+  padding: 0 16px;
+  height: 85px;              /* Header hoogte */
+  position: relative;
+}
 
+.inbox-btn {
+  justify-self: end;         /* Inbox knop rechts */
+  position: relative;        /* Nodig voor badge */
+  display: inline-block;
+}
+
+.inbox-btn img {
+  height: 50px;
+  width: auto;
+  display: block;
+}
+
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%); /* Optimaal in de hoek van de knop */
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.hidden {
+  display: none;
+}
 
 /* For a responsive layout, make use of the media snippet and increase the grid-template-columns property */
 
@@ -229,7 +267,6 @@ h2 {
 .nav-item {
     flex: 1;
     text-decoration: none;
-    color: #333;
 }
 
 /* -------------------  AANMELDEN -------------------  */
@@ -424,9 +461,9 @@ h2 {
 
 .upload-btn {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
+    align-self: center;
     width: 150px;
     height: 150px;
     border-radius: 15px;
@@ -447,7 +484,7 @@ h2 {
 }
 
 .make-form button[type="submit"] {
-  margin-bottom: 3rem;
+  margin-bottom: 6rem;
 }
 
 /* Carousel item centreren */

@@ -11,73 +11,80 @@
 </head>
 
 <body>
+  
+    <!---------------------   app - frame  --------------------->
+    <header class="app-header">
+        <img alt="logo" src="images/icons/logooptie.png" class="logo" />
+          <a href="inbox.html" class="inbox-btn">
+    <img src="images/icons/inbox.png" alt="Inbox" />
+    <span id="inboxBadge" class="badge hidden"></span>
+  </a>
+    </header>
+
+
+    <footer class="fixed-bottom">
+        <div class="d-flex justify-content-around py-2">
+            <a href="index.html" class="text-center nav-item">
+                <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
+            </a>
+            <a href="favorites.html" class="text-center nav-item">
+                <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
+            </a>
+            <a href="make.html" class="text-center nav-item">
+                <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
+            </a>
+            <a href="friends.html" class="text-center nav-item">
+                <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
+            </a>
+            <a href="profiel.html" class="text-center nav-item">
+                <img src="images/icons/avatar.png" class="navbar-icon" alt="profile">
+            </a>
+        </div>
+    </footer>
+
   <main>
-  <div class="classic-outline">
+    <div class="classic-outline">
 
-    <!-- Avatar + niveau + naam -->
-    <div class="profile-card text-center position-relative">
-      <a href="aanpassen.html" class="adjust-btn position-absolute">
-        <img src="images/icons/edit.png" alt="Aanpassen" width="30" height="30">
-      </a>
+      <!-- Avatar + niveau + naam -->
+      <div class="profile-card text-center position-relative">
+        <a href="aanpassen.html" class="adjust-btn position-absolute">
+          <img src="images/icons/edit.png" alt="Aanpassen" width="30" height="30">
+        </a>
 
-      <div class="avatar-wrapper position-relative d-inline-block">
-        <img id="profileAvatar" src="images/icons/avatar.png" alt="Avatar" class="avatar-img">
-        <span id="avatarLevel" class="level-badge">1</span>
+        <div class="avatar-wrapper position-relative d-inline-block">
+          <img id="profileAvatar" src="images/icons/avatar.png" alt="Avatar" class="avatar-img">
+          <span id="avatarLevel" class="level-badge">1</span>
+        </div>
+        <h3 id="profileUsername" class="mt-2">Gebruikersnaam</h3>
       </div>
-      <h3 id="profileUsername" class="mt-2">Gebruikersnaam</h3>
+
     </div>
 
-  </div>
-
-  <!-- Materialen -->
-  <div>
-    <label class="classic-categories">Materialen</label>
-    <div id="profileMaterials" class="d-flex flex-wrap gap-2">
-      <!-- Materialen worden hier geladen -->
+    <!-- Materialen -->
+    <div>
+      <label class="classic-categories">Materialen</label>
+      <div id="profileMaterials" class="d-flex flex-wrap gap-2">
+        <!-- Materialen worden hier geladen -->
+      </div>
     </div>
-  </div>
 
     <!-- Tutorials toggle -->
-      <label class="classic-categories">Makes</label>
-  <div class="toggle-buttons classic-toggle">
-  <button id="btnMy" class="classic-toggle-item active">Mijn Makes</button>
-  <button id="btnMade" class="classic-toggle-item">Gemaakte Makes</button>
-</div>
-
-<div id="myTutorials"></div>
-<div id="madeTutorials" style="display:none;"></div>
-
-</main>
-
-  <!-- Header -->
-  <header>
-    <img alt="logo" src="images/icons/logooptie.png" class="logo" />
-  </header>
-
-  <!-- Footer -->
-  <footer class="fixed-bottom">
-    <div class="d-flex justify-content-around py-2">
-      <a href="index.html" class="text-center nav-item">
-        <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
-      </a>
-      <a href="favorites.html" class="text-center nav-item">
-        <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
-      </a>
-      <a href="make.html" class="text-center nav-item">
-        <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
-      </a>
-      <a href="friends.html" class="text-center nav-item">
-        <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
-      </a>
-      <a href="profiel.html" class="text-center nav-item">
-        <img src="images/icons/avatar.png" class="navbar-icon" alt="profile">
-      </a>
+    <label class="classic-categories">Makes</label>
+    <div class="toggle-buttons classic-toggle">
+      <button id="btnMy" class="classic-toggle-item active">Mijn Makes</button>
+      <button id="btnMade" class="classic-toggle-item">Gemaakte Makes</button>
     </div>
-    
-  </footer>
+
+    <div id="myTutorials"></div>
+    <div id="madeTutorials" style="display:none;"></div>
+
+  </main>
 
   <script type="module" src="js/firebase-init.js"></script>
   <script type="module" src="js/usersProfile.js"></script>
+  <script type="module" src="js/guard.js"></script>
+  <script type="module" src="js/script.js"></script>
+
 </body>
 
 </html>

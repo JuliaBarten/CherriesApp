@@ -2,16 +2,16 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cherry's</title>
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
-  <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cherry's</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
+    <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
-  
+    
     <!---------------------   app - frame  --------------------->
     <header class="app-header">
         <img alt="logo" src="images/icons/logooptie.png" class="logo" />
@@ -42,16 +42,30 @@
         </div>
     </footer>
 
-  <main>
-  <h2>Mijn favorieten</h2>
-  <div id="favoritesGrid" class="masonry-grid"></div>
-  <button class="classic-button" onclick="window.location.href='index.hmtl'"> Vind meer inspiratie  </button>
 
-  </main>
+    <main>
+
+<h2>Inbox</h2>
+
+<h3>Ongelezen</h3>
+<div id="inboxUnread"></div>
+
+<h3>In behandeling</h3>
+<div id="inboxPending"></div>
+
+<h3>Gelezen</h3>
+<div id="inboxHandled"></div>
+
+
+
+
+
+    </main>
 
     <script type="module" src="js/firebase-init.js"></script>
     <script type="module" src="js/guard.js"></script>
     <script type="module" src="js/script.js"></script>
-</body>
-
-</html>
+    <script type="module" src="js/inbox.js"></script>
+    
+    </body>
+    </html>

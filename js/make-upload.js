@@ -2,9 +2,7 @@ import { auth, db, storage } from "./firebase-init.js";
 import { collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
 
-/* ======================
-   Niveau LADEN (hearts)
-====================== */
+/* ======================   Niveau LADEN (hearts)   ====================== */
 let selectedLevel = 1;
 
 function updateHearts(level) {
@@ -25,9 +23,7 @@ document.querySelectorAll(".niveau-icon").forEach(icon => {
 // Standaard niveau
 updateHearts(1);
 
-/* ======================
-   Materialen laden
-====================== */
+/* ======================  Materialen laden ===================== */
 async function loadMaterialsForMake() {
     const makeMaterialenContainer = document.getElementById("makeMaterialenContainer");
     if (!makeMaterialenContainer) return;
