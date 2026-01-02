@@ -32,8 +32,6 @@
 
 }
 
-
-
 html {
     scroll-behavior: smooth;
     background-color: var(--achter);
@@ -47,8 +45,7 @@ body {
 }
 
 main {
-    padding-top: 10px;
-     overflow-y: auto;
+    overflow-y: auto;
 }
 
 header {
@@ -181,6 +178,7 @@ h2 {
     background-color: var(--licht);
     box-shadow: var(--schaduw);
     display: grid;
+    height: 20px;
     grid-template-columns: 1fr 1fr;
     border-radius: var(--borderknop);
 }
@@ -197,42 +195,48 @@ h2 {
     background-color: var(--mid);
     color: var(--textdonker);
 }
+
 .app-header {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;       /* Verticaal centreren alles */
-  padding: 0 16px;
-  height: 85px;              /* Header hoogte */
-  position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    /* Verticaal centreren alles */
+    padding: 0 16px;
+    height: 85px;
+    /* Header hoogte */
+    position: relative;
 }
 
 .inbox-btn {
-  justify-self: end;         /* Inbox knop rechts */
-  position: relative;        /* Nodig voor badge */
-  display: inline-block;
+    justify-self: end;
+    /* Inbox knop rechts */
+    position: relative;
+    /* Nodig voor badge */
+    display: inline-block;
 }
 
 .inbox-btn img {
-  height: 50px;
-  width: auto;
-  display: block;
+    height: 50px;
+    width: auto;
+    display: block;
 }
 
 .badge {
-  position: absolute;
-  top: 0;
-  right: 0;
-  transform: translate(50%, -50%); /* Optimaal in de hoek van de knop */
-  background-color: red;
-  color: white;
-  border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 12px;
-  font-weight: bold;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    /* Optimaal in de hoek van de knop */
+    background-color: var(--licht);
+    color: var(--ipvwit);
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .hidden {
-  display: none;
+    display: none;
 }
 
 /* For a responsive layout, make use of the media snippet and increase the grid-template-columns property */
@@ -313,6 +317,7 @@ h2 {
     background-color: var(--ipvwit);
     border-radius: var(--borderknop);
     padding: 20px;
+    margin-bottom: 10px;
     box-shadow: var(--schaduw);
     display: inline-block;
     position: relative;
@@ -349,11 +354,17 @@ h2 {
 }
 
 .tutorial-card {
-    padding: 12px;
+    position: relative;
     background-color: var(--ipvwit);
     border-radius: var(--borderknop);
     box-shadow: var(--schaduw);
     transition: 0.2s;
+    break-inside: avoid;
+}
+
+.tutorial-card img {
+    width: 100%;
+    border-radius: var(--borderfoto);
 }
 
 /* Kleine knop die buiten kaart valt */
@@ -480,62 +491,64 @@ h2 {
 }
 
 .make-form {
-  min-height: calc(160vh - 200px);
+    min-height: calc(160vh - 200px);
 }
 
 .make-form button[type="submit"] {
-  margin-bottom: 6rem;
+    margin-bottom: 6rem;
 }
 
 /* Carousel item centreren */
 #stepsCarousel .carousel-item {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 /* De kaart zelf */
 .step-card {
-  width: 260px;
-  background: var(--mid);
-  border-radius: var(--borderknop);
-  padding: 12pv;
-  box-shadow: var(--schaduw);
+    width: 260px;
+    background: var(--mid);
+    border-radius: var(--borderknop);
+    padding: 12pv;
+    box-shadow: var(--schaduw);
 }
 
 /* Afbeelding container met vaste hoogte */
 .step-image-wrapper {
-  width: 100%;
-  height: 180px;          /* 👈 hier regel je de hoogte */
-  overflow: hidden;
-  border-radius: var(--borderfoto);
-  background: var(--licht);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    width: 100%;
+    height: 180px;
+    /* 👈 hier regel je de hoogte */
+    overflow: hidden;
+    border-radius: var(--borderfoto);
+    background: var(--licht);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Afbeelding zelf */
 .step-image-wrapper img {
-  width: 100%;
-  height: 100%;
-   border-radius: var(--borderfoto);
-  object-fit: cover;     /* 👈 maakt alle foto's gelijk */
+    width: 100%;
+    height: 100%;
+    border-radius: var(--borderfoto);
+    object-fit: cover;
+    /* 👈 maakt alle foto's gelijk */
 }
 
 /* Placeholder als er geen foto is */
 .step-image-placeholder {
-  color: #888;
-  font-size: 0.9rem;
+    color: #888;
+    font-size: 0.9rem;
 }
 
 /* Tekst onder de afbeelding */
 .step-text {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 .step-text p {
-  margin: 4px 0 0;
-  font-size: 0.95rem;
+    margin: 4px 0 0;
+    font-size: 0.95rem;
 }
 
 
@@ -551,17 +564,8 @@ Retrieved 2025-12-10, License - CC BY-SA 4.0
 .masonry-grid {
     column-count: 2;
     column-gap: 1rem;
-}
-
-.tutorial-card {
-    break-inside: avoid;
-    margin-bottom: 1rem;
-    position: relative;
-}
-
-.tutorial-card img {
-    width: 100%;
-    border-radius: var(--borderfoto);
+    row-gap: 2rem;
+    margin: 3px;
 }
 
 .overlay {
@@ -570,7 +574,7 @@ Retrieved 2025-12-10, License - CC BY-SA 4.0
     left: 8px;
     right: 8px;
     background: rgba(0, 0, 0, 0.6);
-    color: white;
+    color: var(--ipvwit);
     padding: 6px;
     border-radius: 8px;
     font-size: 0.8rem;
@@ -580,7 +584,7 @@ Retrieved 2025-12-10, License - CC BY-SA 4.0
     position: absolute;
     top: 8px;
     right: 8px;
-    background: white;
+    background: var(--ipvwit);
     border-radius: 50%;
     padding: 6px;
     cursor: pointer;
@@ -589,30 +593,36 @@ Retrieved 2025-12-10, License - CC BY-SA 4.0
 
 /*---------------------- filtermenu -------------------*/
 
-
+/* 
 .container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 11px;
     padding: 9px;
     grid-template-rows: masonry;
-}
+} */
 
 .filterbutton {
     background-color: var(--hoofd);
-    stroke: none;
-    width: 100%;
-    height: fit-content;
-    margin: auto;
+    color: var(--textlicht);
+    width: 80vw;
+    display: block;
+    height: 50px;
+    margin: 5px;
+    font-size: var(--sizeklein);
+    border: none;
+    border-radius: var(--borderknop);
+    box-shadow: var(--schaduw)
 }
 
 .filtermenu {
     height: 45px;
-    background-color: var(--licht);
-    align-content: center;
+    width: 200vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     position: fixed;
-    margin-top: 83px;
-
+    padding: 3px;
+    z-index: -1;
 }
 
 #filterblok {

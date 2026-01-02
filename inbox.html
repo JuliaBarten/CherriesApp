@@ -11,14 +11,14 @@
 </head>
 
 <body>
-    
+
     <!---------------------   app - frame  --------------------->
     <header class="app-header">
         <img alt="logo" src="images/icons/logooptie.png" class="logo" />
-          <a href="inbox.html" class="inbox-btn">
-    <img src="images/icons/inbox.png" alt="Inbox" />
-    <span id="inboxBadge" class="badge hidden"></span>
-  </a>
+        <a href="inbox.html" class="inbox-btn">
+            <img src="images/icons/inbox.png" alt="Inbox" />
+            <span id="inboxBadge" class="badge hidden"></span>
+        </a>
     </header>
 
 
@@ -45,17 +45,18 @@
 
     <main>
 
-<h2>Inbox</h2>
-
-<h3>Ongelezen</h3>
-<div id="inboxUnread"></div>
-
-<h3>In behandeling</h3>
-<div id="inboxPending"></div>
-
-<h3>Gelezen</h3>
-<div id="inboxHandled"></div>
-
+        <!-- berichten toggle -->
+        <div class="toggle-buttons classic-toggle">
+            <button id="inboxUnread" class="classic-toggle-item active">Nieuw</button>
+            <button id="inboxPending" class="classic-toggle-item">in behandeling</button>
+            <button id="inboxHandled" class="classic-toggle-item">oud</button>
+        </div>
+        <!-- lijst berichten -->
+        <div>
+            <div id="inboxUnread"></div>
+            <div id="inboxPending" style="display:none;"></div>
+            <div id="inboxHandled" style="display:none;"></div>
+        </div>
 
 
 
@@ -66,6 +67,7 @@
     <script type="module" src="js/guard.js"></script>
     <script type="module" src="js/script.js"></script>
     <script type="module" src="js/inbox.js"></script>
-    
-    </body>
-    </html>
+
+</body>
+
+</html>

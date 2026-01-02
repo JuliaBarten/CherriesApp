@@ -15,10 +15,10 @@
     <!---------------------   app - frame  --------------------->
     <header class="app-header">
         <img alt="logo" src="images/icons/logooptie.png" class="logo" />
-          <a href="inbox.html" class="inbox-btn">
-    <img src="images/icons/inbox.png" alt="Inbox" />
-    <span id="inboxBadge" class="badge hidden"></span>
-  </a>
+        <a href="inbox.html" class="inbox-btn">
+            <img src="images/icons/inbox.png" alt="Inbox" />
+            <span id="inboxBadge" class="badge hidden"></span>
+        </a>
     </header>
 
 
@@ -44,50 +44,55 @@
 
 
     <main>
-        <div class="d-flex gap-2 mb-3">
-            <button class="btn btn-outline-secondary" data-bs-toggle="offcanvas" data-bs-target="#filterCanvas">
-                Filteren
-            </button>
-
-            <select id="sortSelect" class="form-select w-auto">
-                <option value="new">Nieuw → oud</option>
-                <option value="old">Oud → nieuw</option>
-                <option value="timeAsc">Tijd ↑</option>
-                <option value="timeDesc">Tijd ↓</option>
-            </select>
-        </div>
-
-        <div class="offcanvas offcanvas-start" id="filterCanvas">
-            <div class="offcanvas-header">
-                <h5>Filters</h5>
-                <button class="btn-close" data-bs-dismiss="offcanvas"></button>
-            </div>
-
-            <div class="offcanvas-body">
-                <h6>Soort</h6>
-                <select id="filterGarment" class="form-select mb-3">
-                    <option value="">Alles</option>
-                    <option value="broek">Broek</option>
-                    <option value="shirt">Shirt</option>
-                    <option value="rok">Rok</option>
-                </select>
-
-                <h6>Niveau</h6>
-                <select id="filterLevel" class="form-select mb-3">
-                    <option value="">Alle niveaus</option>
-                    <option value="myLevelOnly">Mijn niveau</option>
-                    <option value="myLevelOrLower">Mijn niveau en lager</option>
-                </select>
-
-
-                <h6>Materialen die ik heb</h6>
-                <div id="filterMaterials"></div>
-
-                <button class="btn btn-primary mt-3" id="applyFilters">
-                    Toepassen
+        <div class="filtermenu">
+            <div class="d-flex flex">
+                <button class="filterbutton" data-bs-toggle="offcanvas" data-bs-target="#filterCanvas">
+                    Filteren
                 </button>
+
+                <select id="sortSelect" class="form-select filterbutton">
+                    <option value="new">Nieuw → oud</option>
+                    <option value="old">Oud → nieuw</option>
+                    <option value="timeAsc">Tijd ↑</option>
+                    <option value="timeDesc">Tijd ↓</option>
+                </select>
+            </div>
+
+            <div class="offcanvas offcanvas-start" id="filterCanvas">
+                <div class="offcanvas-header">
+                    <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+                </div>
+
+                <div class="offcanvas-body">
+                    <h6>Soort</h6>
+                    <select id="filterGarment" class="form-select mb-3">
+                        <option value="">Alles</option>
+                        <option value="broek">Broek</option>
+                        <option value="shirt">Shirt</option>
+                        <option value="rok">Rok</option>
+                    </select>
+
+                    <h6>Niveau</h6>
+                    <select id="filterLevel" class="form-select mb-3">
+                        <option value="">Alle niveaus</option>
+                        <option value="myLevelOnly">Mijn niveau</option>
+                        <option value="myLevelOrLower">Mijn niveau en lager</option>
+                    </select>
+
+
+                    <h6>Materialen die ik heb</h6>
+                    <div id="filterMaterials"></div>
+
+                    <button class="classic-button-small" id="applyFilters">
+                        Toepassen
+                    </button>
+                </div>
             </div>
         </div>
+
+        
+        <!--kledingfoto's-->
+        <div id="tutorialGrid" class="masonry-grid"></div>
 
         <!-- POP UP VOOR INCOMPLEET PROFIEL -->
         <div class="modal fade" id="profileRequiredModal" tabindex="-1">
@@ -106,10 +111,6 @@
                 </div>
             </div>
         </div>
-
-
-        <!--kledingfoto's-->
-        <div id="tutorialGrid" class="masonry-grid"></div>
 
     </main>
 
@@ -132,8 +133,9 @@
 
     <script type="module" src="js/firebase-init.js"></script>
     <script type="module" src="js/guard.js"></script>
+    <script type="module" src="js/inspiratie.js"></script>
     <script type="module" src="js/script.js"></script>
-    
+
 </body>
 
 </html>
