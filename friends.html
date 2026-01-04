@@ -7,12 +7,12 @@
     <title>Cherrie's friends</title>
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
     <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
     <div class="app-wrapper">
-
         <!---------------------   app - frame  --------------------->
         <header class="app-header fixed-top">
             <img alt="logo" src="images/icons/logooptie.png" class="logo" />
@@ -21,8 +21,7 @@
                 <span id="inboxBadge" class="badge hidden"></span>
             </a>
         </header>
-
-        <footer class="fixed-bottom">
+        <footer class="fixed-bottom navbar">
             <div class="d-flex justify-content-around py-2 app-wrapper">
                 <a href="inspiration.html" class="text-center nav-item">
                     <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
@@ -42,7 +41,7 @@
             </div>
         </footer>
 
-        <main>
+        <main class="classic-outline">
             <!-- friends toggle -->
             <div class="toggle-buttons classic-toggle">
                 <button id="btnAll" class="classic-toggle-item active">Alle vrienden</button>
@@ -58,8 +57,9 @@
             <h2>Vriendschapsverzoeken</h2>
             <div id="friendRequests"></div>
 
-            <button class="classic-button" onclick="window.location.href='findfriends.hmtl'"> Vind meer vrienden
-            </button>
+            <a href="findfriends.html" class="classic-button-small">
+                Vind meer vrienden
+            </a>
         </main>
 
         <script type="module" src="js/firebase-init.js"></script>
