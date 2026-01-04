@@ -1,77 +1,65 @@
 import { auth, db } from "./firebase-init.js";
-import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-const myTutorialsContainer = document.getElementById("myTutorials");
-const madeTutorialsContainer = document.getElementById("madeTutorials");
+// ------------------------------ RENDER PROFIEL ------------------
 
 async function loadProfile(user) {
-  const userRef = doc(db, "users", user.uid);
-  const snap = await getDoc(userRef);
-  if (!snap.exists()) return;
+  if (!user) return;
 
-  const data = snap.data();
+  try {
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
+    if (!snap.exists()) return;
 
-  // Avatar
-  const profileAvatar = document.getElementById("profileAvatar");
-  profileAvatar.src = data.avatar || "images/icons/avatar.png";
+    const data = snap.data() || {};
 
-  // Niveau
-  const avatarLevel = document.getElementById("avatarLevel");
-  avatarLevel.textContent = data.level || "1";
+    // --- Avatar ---
+    const profileAvatar = document.getElementById("profileAvatar");
+    profileAvatar.src = data.avatar && data.avatar.trim() !== ""
+      ? data.avatar
+      : "images/icons/avatar.png"; // fallback als geen avatar
 
-  // Username
-  document.getElementById("profileUsername").textContent = data.username || "Gebruiker";
+    // --- Username ---
+    const profileUsername = document.getElementById("profileUsername");
+    profileUsername.textContent = data.username && data.username.trim() !== ""
+      ? data.username
+      : "Gebruiker";
 
-  // Materialen
-  const materialenContainer = document.getElementById("profileMaterials");
-  materialenContainer.innerHTML = "";
-  const materialenSnapshot = await getDocs(collection(db, "Materialen"));
-  materialenSnapshot.forEach(docSnap => {
-    const m = docSnap.data();
-    if (data.materialsOwned?.includes(docSnap.id)) {
-      const div = document.createElement("div");
-      div.className = "material-blok selected";
-      div.textContent = m.Materiaal || m.naam || "Onbekend";
-      materialenContainer.appendChild(div);
+    // --- Niveau ---
+    const avatarLevel = document.getElementById("avatarLevel");
+    avatarLevel.textContent = data.level || "1";
+
+    // --- Materialen ---
+    const materialenContainer = document.getElementById("profileMaterials");
+    materialenContainer.innerHTML = "";
+
+    if (data.materialsOwned && Array.isArray(data.materialsOwned) && data.materialsOwned.length > 0) {
+      const materialenSnapshot = await getDocs(collection(db, "Materialen"));
+
+      materialenSnapshot.forEach(docSnap => {
+        const m = docSnap.data();
+        if (data.materialsOwned.includes(docSnap.id)) {
+          const div = document.createElement("div");
+          div.className = "material-blok selected";
+          div.textContent = m.Materiaal || m.naam || "Onbekend";
+          materialenContainer.appendChild(div);
+        }
+      });
+    } else {
+      materialenContainer.innerHTML = "<p>Geen materialen toegevoegd</p>";
     }
-  });
+
+  } catch (error) {
+    console.error("Fout bij laden profiel:", error);
+  }
 }
 
-async function loadMyTutorials(userId) {
-  myTutorialsContainer.innerHTML = "";
-
-  const q = query(
-    collection(db, "tutorials"),
-    where("authorId", "==", userId)
-  );
-
-  const snap = await getDocs(q);
-  snap.forEach(doc => {
-    const t = doc.data();
-    myTutorialsContainer.innerHTML += `
-      <div class="tutorial-card">
-        <img src="${t.mainImageUrl}">
-        <h5>${t.title}</h5>
-      </div>
-    `;
-  });
-}
-
-document.getElementById("btnMy").onclick = () => {
-  myTutorials.style.display = "block";
-  madeTutorials.style.display = "none";
-};
-
-document.getElementById("btnMade").onclick = () => {
-  myTutorials.style.display = "none";
-  madeTutorials.style.display = "block";
-};
-
-
-// Auth state
+// ------------------------------ INIT AUTH ------------------
 onAuthStateChanged(auth, async (user) => {
-  if (!user) window.location.href = "aanmelden.html";
-  else await loadProfile(user);
-    await loadMyTutorials(user.uid);
+  if (!user) {
+    window.location.href = "aanmelden.html";
+  } else {
+    await loadProfile(user);
+  }
 });
