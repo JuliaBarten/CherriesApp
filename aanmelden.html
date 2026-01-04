@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Cherry's</title>
+    <title>Cherrie's aanmelden</title>
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/editprofile.css" />
     <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
@@ -12,19 +12,20 @@
 </head>
 
 <body>
+    <div class="app-wrapper">
+        <div class="d-flex flex-column classic-outline">
+            <img src="images/icons/logooptie.png" alt="Logo" class="logobegin">
+            <input id="regUsername" class="custom-input" placeholder="Username" required>
+            <input id="regEmail" class="custom-input" placeholder="Email" required>
+            <input id="regPassword" class="custom-input" placeholder="Wachtwoord" required>
+            <button class="flex-column classic-button" id="registerBtn">Registreren</button>
+        </div>
 
-    <div class="d-flex flex-column classic-outline">
-        <img src="images/icons/logooptie.png" alt="Logo" class="logobegin">
-        <input id="regUsername" class="custom-input" placeholder="Username" required>
-        <input id="regEmail" class="custom-input" placeholder="Email" required>
-        <input id="regPassword" class="custom-input" placeholder="Wachtwoord" required>
-        <button class="flex-column classic-button" id="registerBtn">Registreren</button>
+        <script type="module" src="js/firebase-init.js"></script>
+        <script type="module" src="js/guard.js"></script>
+        <script type="module" src="js/authentication.js"></script>
+        <script type="module" src="js/script.js"></script>
     </div>
-
-    <script type="module" src="js/firebase-init.js"></script>
-    <script type="module" src="js/guard.js"></script>
-    <script type="module" src="js/authentication.js"></script>
-    <script type="module" src="js/script.js"></script>
 </body>
 
 </html>

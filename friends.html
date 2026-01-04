@@ -4,72 +4,69 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Cherry's</title>
+    <title>Cherrie's friends</title>
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
     <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
-    
-    <!---------------------   app - frame  --------------------->
-    <header class="app-header">
-        <img alt="logo" src="images/icons/logooptie.png" class="logo" />
-          <a href="inbox.html" class="inbox-btn">
-    <img src="images/icons/inbox.png" alt="Inbox" />
-    <span id="inboxBadge" class="badge hidden"></span>
-  </a>
-    </header>
+    <div class="app-wrapper">
 
-
-    <footer class="fixed-bottom">
-        <div class="d-flex justify-content-around py-2">
-            <a href="index.html" class="text-center nav-item">
-                <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
+        <!---------------------   app - frame  --------------------->
+        <header class="app-header fixed-top">
+            <img alt="logo" src="images/icons/logooptie.png" class="logo" />
+            <a href="inbox.html" class="inbox-btn">
+                <img src="images/icons/inbox.png" alt="Inbox" />
+                <span id="inboxBadge" class="badge hidden"></span>
             </a>
-            <a href="favorites.html" class="text-center nav-item">
-                <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
-            </a>
-            <a href="make.html" class="text-center nav-item">
-                <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
-            </a>
-            <a href="friends.html" class="text-center nav-item">
-                <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
-            </a>
-            <a href="profiel.html" class="text-center nav-item">
-                <img src="images/icons/avatar.png" class="navbar-icon" alt="profile">
-            </a>
-        </div>
-    </footer>
+        </header>
 
-    <main>
+        <footer class="fixed-bottom">
+            <div class="d-flex justify-content-around py-2 app-wrapper">
+                <a href="inspiration.html" class="text-center nav-item">
+                    <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
+                </a>
+                <a href="favorites.html" class="text-center nav-item">
+                    <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
+                </a>
+                <a href="make.html" class="text-center nav-item">
+                    <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
+                </a>
+                <a href="friends.html" class="text-center nav-item">
+                    <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
+                </a>
+                <a href="profiel.html" class="text-center nav-item">
+                    <img src="images/icons/avatar.png" class="navbar-icon" alt="profile">
+                </a>
+            </div>
+        </footer>
 
-        <!-- friends toggle -->
-        <div class="toggle-buttons classic-toggle">
-            <button id="btnAll" class="classic-toggle-item active">Alle vrienden</button>
-            <button id="btnSharing" class="classic-toggle-item">Delende vrienden</button>
-        </div>
+        <main>
+            <!-- friends toggle -->
+            <div class="toggle-buttons classic-toggle">
+                <button id="btnAll" class="classic-toggle-item active">Alle vrienden</button>
+                <button id="btnSharing" class="classic-toggle-item">Delende vrienden</button>
+            </div>
 
-        <div id="allFriends"></div>
-        <div id="sharingFriends" style="display:none;"></div>
+            <div id="allFriends"></div>
+            <div id="sharingFriends" style="display:none;"></div>
 
-        <h2>Mijn vrienden</h2>
-        <div id="friendsList"></div>
+            <h2>Mijn vrienden</h2>
+            <div id="friendsList"></div>
 
-        <h2>Vriendschapsverzoeken</h2>
-        <div id="friendRequests"></div>
+            <h2>Vriendschapsverzoeken</h2>
+            <div id="friendRequests"></div>
 
-        <button class="classic-button" onclick="window.location.href='findfriends.hmtl'"> Vind meer vrienden </button>
+            <button class="classic-button" onclick="window.location.href='findfriends.hmtl'"> Vind meer vrienden
+            </button>
+        </main>
 
- 
-    </main>
-
-    
-
-    <script type="module" src="js/firebase-init.js"></script>
-    <script type="module" src="js/guard.js"></script>
-    <script type="module" src="js/script.js"></script>
-    <script type="module" src="js/friends.js"></script>
+        <script type="module" src="js/firebase-init.js"></script>
+        <script type="module" src="js/guard.js"></script>
+        <script type="module" src="js/script.js"></script>
+        <script type="module" src="js/friends.js"></script>
+    </div>
 </body>
 
 </html>

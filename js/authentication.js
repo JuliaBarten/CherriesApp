@@ -86,7 +86,7 @@ async function login() {
   }
 
   // redirect na succesvol inloggen
-window.location.href = "index.html";
+window.location.href = "inspiration.html";
 }
 
 

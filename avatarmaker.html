@@ -4,40 +4,43 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cherry's</title>
+  <title>Cherrie's avatar maker</title>
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
   <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
+  <div class="app-wrapper">
     <div id="avatarCanvas">
-  <div id="background"></div>
-  <div id="skin"></div>
-  <div id="eyes"></div>
-  <div id="hair"></div>
-  <div id="topClothing"></div>
-  <div id="bottomClothing"></div>
-  <div id="accessories"></div>
-</div>
+      <div id="background"></div>
+      <div id="skin"></div>
+      <div id="eyes"></div>
+      <div id="hair"></div>
+      <div id="topClothing"></div>
+      <div id="bottomClothing"></div>
+      <div id="accessories"></div>
+    </div>
 
-<!-- Controls -->
-<label>Haarstijl</label>
-<select id="hairStyleSelect">
-  <option value="short">Kort</option>
-  <option value="long">Lang</option>
-</select>
+    <!-- Controls -->
+    <label>Haarstijl</label>
+    <select id="hairStyleSelect">
+      <option value="short">Kort</option>
+      <option value="long">Lang</option>
+    </select>
 
-<label>Haar kleur</label>
-<input type="color" id="hairColorInput" value="#000000">
+    <label>Haar kleur</label>
+    <input type="color" id="hairColorInput" value="#000000">
 
-<!-- Zelfde voor kleding, ogen, huid, achtergrond -->
+    <!-- Zelfde voor kleding, ogen, huid, achtergrond -->
 
-<button id="saveAvatar">Opslaan</button>
+    <button id="saveAvatar">Opslaan</button>
 
 
     <script type="module" src="js/firebase-init.js"></script>
-  <script type="module" src="js/guard.js"></script>
-  <script type="module" src="js/script.js"></script>
+    <script type="module" src="js/guard.js"></script>
+    <script type="module" src="js/script.js"></script>
+  </div>
 </body>
+
 </html>

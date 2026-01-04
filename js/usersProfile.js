@@ -14,7 +14,7 @@ async function loadProfile(user) {
 
   // Avatar
   const profileAvatar = document.getElementById("profileAvatar");
-  profileAvatar.src = data.avatar || "images/icons/avatar_placeholder.png";
+  profileAvatar.src = data.avatar || "images/icons/avatar.png";
 
   // Niveau
   const avatarLevel = document.getElementById("avatarLevel");

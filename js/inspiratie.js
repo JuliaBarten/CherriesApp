@@ -1,13 +1,16 @@
 import { db } from "./firebase-init.js";
-import {
-  collection,
-  getDocs,
-  query,
-  orderBy
-} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
+// ------------------------------ RENDER HARTJES ------------------
+function renderHearts(level) {
+  let heartsHTML = "";
+  for (let i = 0; i < level; i++) {
+    heartsHTML += `<img src="images/icons/heart1.png" class="tut-card-ic" alt="hart">`;
+  }
+  return heartsHTML;
+}
 
-// ------------------------------ render tutorials ------------------
+// ------------------------------ RENDER TUTORIALS ------------------
 async function loadTutorials() {
   const grid = document.getElementById("tutorialGrid");
   if (!grid) return;
@@ -30,36 +33,47 @@ async function loadTutorials() {
 
   // 4️⃣ Renderen
   for (const t of sorted) {
-    const tools = await getToolNames(t.materials || []);
-
     const card = document.createElement("div");
     card.className = "tutorial-card";
 
     card.innerHTML = `
-      <img src="${t.mainImageUrl}" alt="${t.title}">
-      <div class="favorite-btn">❤️</div>
+      <img src="${t.mainImageUrl}" alt="${t.title}" class="tutorial-image">
+
+      <!-- FAVORIET KNOP -->
+      <div class="favorite-btn">
+        <img src="images/icons/fav_uit.png" alt="Favoriet">
+      </div>
+
+      <!-- INFO OVERLAY -->
       <div class="overlay">
-        ⏱ ${t.duration}<br>
-        ⭐ Niveau ${t.level}<br>
-        🛠 ${tools.join(", ")}
+        <div class="overlay-row hearts-row">
+          ${renderHearts(t.level)}
+        </div>
+
+        <div class="overlay-row time-row">
+        <span>${t.duration}</span>
+          <img src="images/icons/tijd_klok.png" alt="klok">
+        </div>
       </div>
     `;
 
-    const favBtn = card.querySelector(".favorite-btn");
-    let isFavorite = false;
+    // FAVORIET KNOP FUNCTIONALITEIT
+    const favIcon = card.querySelector(".favorite-btn img");
+    let isFavorite = false; // dit kan je later aanpassen met DB
 
-    favBtn.addEventListener("click", async () => {
-      await toggleFavorite(t.id, isFavorite);
+    favIcon.addEventListener("click", async () => {
+      // TODO: toggleFavorite in je DB aanroepen
       isFavorite = !isFavorite;
-      favBtn.textContent = isFavorite ? "💖" : "❤️";
+      favIcon.src = isFavorite
+        ? "images/icons/fav_aan.png"
+        : "images/icons/fav_uit.png";
     });
 
     grid.appendChild(card);
-
-    
   }
 }
 
+// ------------------------------ FILTER & SORT ------------------
 function matchesFilters() {
   return true;
 }
@@ -70,11 +84,7 @@ function sortTutorials(tutorials) {
   );
 }
 
-async function getToolNames(materialIds) {
-  return [];
-}
-
-
+// ------------------------------ INIT ------------------
 document.addEventListener("DOMContentLoaded", () => {
   loadTutorials();
 });

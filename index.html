@@ -4,138 +4,26 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Cherry's</title>
+    <title>Welcome to Cherrie's!</title>
     <link rel="stylesheet" href="css/styles.css" />
+    <script src="js/script.js"></script>
     <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
     <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
+    <div class="app-wrapper">
+        <div class="d-flex flex-column classic-outline">
+            <img src="images/icons/logooptie.png" alt="Logo" class="mb-5 logobegin">
 
-    <!---------------------   app - frame  --------------------->
-    <header class="app-header">
-        <img alt="logo" src="images/icons/logooptie.png" class="logo" />
-        <a href="inbox.html" class="inbox-btn">
-            <img src="images/icons/inbox.png" alt="Inbox" />
-            <span id="inboxBadge" class="badge hidden"></span>
-        </a>
-    </header>
-
-
-    <footer class="fixed-bottom">
-        <div class="d-flex justify-content-around py-2">
-            <a href="index.html" class="text-center nav-item">
-                <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
-            </a>
-            <a href="favorites.html" class="text-center nav-item">
-                <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
-            </a>
-            <a href="make.html" class="text-center nav-item">
-                <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
-            </a>
-            <a href="friends.html" class="text-center nav-item">
-                <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
-            </a>
-            <a href="profiel.html" class="text-center nav-item">
-                <img src="images/icons/avatar.png" class="navbar-icon" alt="profile">
-            </a>
-        </div>
-    </footer>
-
-
-    <main>
-        <div class="filtermenu">
-            <div class="d-flex flex">
-                <button class="filterbutton" data-bs-toggle="offcanvas" data-bs-target="#filterCanvas">
-                    Filteren
-                </button>
-
-                <select id="sortSelect" class="form-select filterbutton">
-                    <option value="new">Nieuw → oud</option>
-                    <option value="old">Oud → nieuw</option>
-                    <option value="timeAsc">Tijd ↑</option>
-                    <option value="timeDesc">Tijd ↓</option>
-                </select>
-            </div>
-
-            <div class="offcanvas offcanvas-start" id="filterCanvas">
-                <div class="offcanvas-header">
-                    <button class="btn-close" data-bs-dismiss="offcanvas"></button>
-                </div>
-
-                <div class="offcanvas-body">
-                    <h6>Soort</h6>
-                    <select id="filterGarment" class="form-select mb-3">
-                        <option value="">Alles</option>
-                        <option value="broek">Broek</option>
-                        <option value="shirt">Shirt</option>
-                        <option value="rok">Rok</option>
-                    </select>
-
-                    <h6>Niveau</h6>
-                    <select id="filterLevel" class="form-select mb-3">
-                        <option value="">Alle niveaus</option>
-                        <option value="myLevelOnly">Mijn niveau</option>
-                        <option value="myLevelOrLower">Mijn niveau en lager</option>
-                    </select>
-
-
-                    <h6>Materialen die ik heb</h6>
-                    <div id="filterMaterials"></div>
-
-                    <button class="classic-button-small" id="applyFilters">
-                        Toepassen
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        
-        <!--kledingfoto's-->
-        <div id="tutorialGrid" class="masonry-grid"></div>
-
-        <!-- POP UP VOOR INCOMPLEET PROFIEL -->
-        <div class="modal fade" id="profileRequiredModal" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content rounded-4">
-                    <div class="modal-body text-center">
-                        <h5>Profiel niet compleet</h5>
-                        <p>Voor deze functie hebben we extra info nodig.</p>
-                        <a href="profiel-change.html" class="btn btn-primary">
-                            Profiel aanvullen
-                        </a>
-                        <button class="btn btn-outline-secondary mt-2" data-bs-dismiss="modal">
-                            Later
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- profileRequiredModal -->
-    <div class="modal fade" id="profileRequiredModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Profiel incompleet</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p></p>
-                    <a href="aanpassen.html" class="btn btn-primary">Profiel aanpassen</a>
-                </div>
-            </div>
+            <button class="btnlogin" onclick="window.location.href='login.html'">
+                Login
+            </button>
+            <button class="btnmeld-aan" onclick="window.location.href='aanmelden.html'">
+                Aanmelden
+            </button>
         </div>
     </div>
-
-
-    <script type="module" src="js/firebase-init.js"></script>
-    <script type="module" src="js/guard.js"></script>
-    <script type="module" src="js/inspiratie.js"></script>
-    <script type="module" src="js/script.js"></script>
-
 </body>
 
 </html>
