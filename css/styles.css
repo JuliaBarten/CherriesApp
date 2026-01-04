@@ -388,6 +388,7 @@ footer .d-flex {
     box-shadow: var(--schaduw);
     position: relative;
     text-align: center;
+    font-family: kinkee, sans-serif;
 }
 
 .profiel-main {
