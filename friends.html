@@ -12,7 +12,6 @@
 </head>
 
 <body>
-    <div class="app-wrapper">
         <!---------------------   app - frame  --------------------->
         <header class="app-header fixed-top">
             <img alt="logo" src="images/icons/logooptie.png" class="logo" />
@@ -22,7 +21,7 @@
             </a>
         </header>
         <footer class="fixed-bottom navbar">
-            <div class="d-flex justify-content-around py-2 app-wrapper">
+            <div class="d-flex justify-content-around py-2">
                 <a href="inspiration.html" class="text-center nav-item">
                     <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
                 </a>
@@ -40,7 +39,8 @@
                 </a>
             </div>
         </footer>
-
+        
+<div class="app-wrapper">
         <main class="classic-outline">
             <!-- friends toggle -->
             <div class="toggle-buttons classic-toggle">
@@ -54,12 +54,9 @@
             <h2>Mijn vrienden</h2>
             <div id="friendsList"></div>
 
-            <h2>Vriendschapsverzoeken</h2>
-            <div id="friendRequests"></div>
-
-            <a href="findfriends.html" class="classic-button-small">
-                Vind meer vrienden
-            </a>
+            <button class="classic-button"> 
+                <a href="findfriends.html" class="text-center nav-item">Vind meer vrienden</a>
+            </button>
         </main>
 
         <script type="module" src="js/firebase-init.js"></script>

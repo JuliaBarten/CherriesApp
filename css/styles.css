@@ -79,6 +79,7 @@
     --margstandard: 8px;
     --header-height: 85px;
     --bottom-nav-height: 95px;
+    --filterheight: 80px;
 }
 
 .hidden {
@@ -86,8 +87,10 @@
 }
 
 h2 {
-    size: var(--sizemidden);
+    size: var(--sizegroot);
     color: var(--textdonker);
+    font-family: var(--font);
+    text-align: center;
 }
 
 /* ==========================  RESET / BASIS   ========================== */
@@ -104,8 +107,8 @@ body {
 }
 
 main {
-    padding-top: var(--header-height);
-    padding-bottom: var(--bottom-nav-height);
+    /* padding-top: var(--header-height);
+    padding-bottom: var(--bottom-nav-height); */
     margin-left: 5px;
     margin-right: 5px;
     max-width: 430px;
@@ -116,6 +119,7 @@ main {
     max-width: 430px;
     min-height: 100vh;
     position: relative;
+    background-color: var(--achter);
 }
 
 /* ===================  APP FRAME (wrapper, header, footer)   ========================== */
@@ -185,7 +189,6 @@ footer .d-flex {
     top: 0;
     right: 0;
     transform: translate(50%, -50%);
-    /* Optimaal in de hoek van de knop */
     background-color: var(--licht);
     color: var(--ipvwit);
     border-radius: 50%;
@@ -197,8 +200,8 @@ footer .d-flex {
 /* =============================  NAVBAR   ========================== */
 .navbar {
     overflow: hidden;
-    padding: 10px;
-    bottom: 10;
+    padding: 8px;
+    bottom: 0;
     z-index: 1000;
     max-width: 430px;
     align-items: center;
@@ -207,19 +210,28 @@ footer .d-flex {
 .navbar-icon {
     width: 70px;
     height: auto;
-
-}
-
-.nav-item.active img {
-    content: "";
-    border-radius: 50%;
-    background-color: var(--ipvwit);
-    z-index: -1;
 }
 
 .nav-item {
-    flex: 1;
-    text-decoration: none;
+    position: relative;
+}
+
+.nav-item::before {
+    content: "";
+    position: fixed;
+    margin-top: -5px;
+    margin-left: -5px;
+    width: 80px;
+    height: 80px;
+    background-color: var(--licht);
+    border-radius: 50%;
+    transform: scale(0);
+    transform-origin: center;
+    z-index: -1;
+}
+
+.nav-item.active::before {
+    transform: scale(1);
 }
 
 /* =======================  ALGEMENE COMPONENTEN   ========================== */
@@ -229,6 +241,8 @@ footer .d-flex {
     max-width: 500px;
     display: flex;
     flex-direction: column;
+    padding-top: calc(var(--header-height) + 15px);
+    padding-bottom: var(--bottom-nav-height);
 }
 
 .classic-categories {
@@ -327,7 +341,7 @@ footer .d-flex {
     height: 40px;
     grid-template-columns: 1fr 1fr;
     border-radius: var(--borderknop);
-      font-family: var(--font);
+    font-family: var(--font);
     font-size: var(--sizeklein);
 }
 
@@ -344,6 +358,10 @@ footer .d-flex {
     color: var(--textdonker);
 }
 
+.input-group {
+    margin-top: 10px;
+}
+
 /* =========================  LOGIN & AANMELDEN   ========================== */
 .btnlogin {
     background-color: var(--hoofd);
@@ -355,7 +373,7 @@ footer .d-flex {
     font-size: var(--sizeklein);
     border: none;
     border-radius: var(--borderknop);
-      font-family: var(--font);
+    font-family: var(--font);
     font-size: var(--sizemidden);
 }
 
@@ -370,7 +388,7 @@ footer .d-flex {
     font-size: var(--sizeklein);
     border: none;
     border-radius: var(--borderknop);
-      font-family: var(--font);
+    font-family: var(--font);
     font-size: var(--sizemidden);
 }
 
@@ -389,11 +407,6 @@ footer .d-flex {
     position: relative;
     text-align: center;
     font-family: kinkee, sans-serif;
-}
-
-.profiel-main {
-    margin-top: 80px;
-    padding-bottom: 120px;
 }
 
 .avatar-img {
@@ -518,9 +531,7 @@ footer .d-flex {
 
 .fotowall {
     position: relative;
-    padding-bottom: 120px;
-    padding: 0.75rem;
-    padding-top: var(--header-height);
+    padding-top: calc(var(--header-height) + 75px);
     padding-bottom: var(--bottom-nav-height);
 }
 
@@ -551,7 +562,7 @@ footer .d-flex {
     border: none;
     border-radius: var(--borderknop);
     box-shadow: var(--schaduw);
-        color: var(--textlicht);
+    color: var(--textlicht);
 }
 
 .filtermenu {
@@ -572,6 +583,80 @@ footer .d-flex {
     font-size: var(--sizemidden);
 
 }
+
+/* ====================== FAVORIETEN LIJST ======================== */
+
+.favorites-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.favorite-card {
+    display: flex;
+    background: var(--ipvwit);
+    border-radius: var(--borderfoto);
+    overflow: hidden;
+    box-shadow: var(--schaduw);
+    position: relative;
+}
+
+/* Afbeelding links */
+.favorite-image {
+    width: 25%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+/* Info rechts */
+.favorite-info {
+    width: 75%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.favorite-title {
+    font-weight: var(--zwaartekop);
+    font-size: 1rem;
+    margin-bottom: 6px;
+    color: var(--donker);
+}
+
+.favorite-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+}
+
+.favorite-meta img {
+    width: 16px;
+    height: auto;
+}
+
+.favorite-remove {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 26px;
+    height: 26px;
+    background: var(--ipvwit);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--schaduw);
+    cursor: pointer;
+}
+
+.favorite-remove img {
+    width: 14px;
+    height: 14px;
+}
+
 
 /* ==============================  MAKEN  ============================= */
 .add-picture {
@@ -600,13 +685,13 @@ footer .d-flex {
     align-items: center;
     justify-content: center;
     align-self: center;
-    width: 150px;
-    height: 150px;
-    border-radius: 15px;
+    width: 180px;
+    height: 180px;
+    border-radius: 20px;
     background-color: var(--hoofd);
     transition: 0.3s;
     margin-bottom: 20px;
-      font-family: var(--font);
+    font-family: var(--font);
 }
 
 .plus-icon {

@@ -23,7 +23,7 @@
         </header>
 
         <footer class="fixed-bottom navbar">
-            <div class="d-flex justify-content-around py-2 app-wrapper">
+            <div class="d-flex justify-content-around py-2">
                 <a href="inspiration.html" class="text-center nav-item">
                     <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
                 </a>
@@ -45,11 +45,14 @@
         <main>
             <h2>Mijn favorieten</h2>
             <div id="favoritesGrid"></div>
-            <button class="classic-button" onclick="window.location.href='index.hmtl'"> Vind meer inspiratie </button>
+            <button class="classic-button"> 
+                <a href="inspiration.html" class="text-center nav-item">Vind meer inspiratie</a>
+            </button>
         </main>
 
         <script type="module" src="js/firebase-init.js"></script>
         <script type="module" src="js/guard.js"></script>
+        <script type="module" src="js/favorites.js"></script>
         <script type="module" src="js/script.js"></script>
     </div>
 </body>
