@@ -79,7 +79,6 @@
     --margstandard: 8px;
     --header-height: 85px;
     --bottom-nav-height: 95px;
-    --filterheight: 80px;
 }
 
 .hidden {
@@ -200,7 +199,6 @@ footer .d-flex {
 /* =============================  NAVBAR   ========================== */
 .navbar {
     overflow: hidden;
-    padding: 8px;
     bottom: 0;
     z-index: 1000;
     max-width: 430px;
@@ -531,6 +529,7 @@ footer .d-flex {
 
 .fotowall {
     position: relative;
+    padding: 5px;
     padding-top: calc(var(--header-height) + 75px);
     padding-bottom: var(--bottom-nav-height);
 }
@@ -572,7 +571,6 @@ footer .d-flex {
     transform: translateX(-50%);
     width: 100%;
     max-width: 430px;
-    height: var(--filter-height);
     display: flex;
     gap: 8px;
     padding: 6px;
@@ -585,34 +583,36 @@ footer .d-flex {
 }
 
 /* ====================== FAVORIETEN LIJST ======================== */
-
+/* ------------------- FAVORITES LIST ------------------- */
 .favorites-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-top: 16px;
+    padding: 0;
+    margin: 0;
 }
 
 .favorite-card {
     display: flex;
-    background: var(--ipvwit);
-    border-radius: var(--borderfoto);
-    overflow: hidden;
+    align-items: center;
+    background-color: var(--ipvwit);
+    border-radius: var(--borderknop);
     box-shadow: var(--schaduw);
-    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s;
 }
 
-/* Afbeelding links */
 .favorite-image {
-    width: 25%;
-    aspect-ratio: 1 / 1;
+    flex: 0 0 25%; /* 1/4 van de breedte */
+    height: 100px;
     object-fit: cover;
+    border-right: 1px solid var(--licht);
 }
 
-/* Info rechts */
 .favorite-info {
-    width: 75%;
-    padding: 10px;
+    flex: 1;
+    padding: 10px 12px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -622,28 +622,30 @@ footer .d-flex {
     font-weight: var(--zwaartekop);
     font-size: 1rem;
     margin-bottom: 6px;
-    color: var(--donker);
+    color: var(--textdonker);
 }
 
 .favorite-meta {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
     font-size: 0.85rem;
+    color: var(--textmid);
 }
 
 .favorite-meta img {
-    width: 16px;
-    height: auto;
+    width: 18px;
+    height: 18px;
 }
 
 .favorite-remove {
     position: absolute;
     top: 6px;
     right: 6px;
-    width: 26px;
-    height: 26px;
-    background: var(--ipvwit);
+    width: 24px;
+    height: 24px;
+    z-index: 5;
+    background-color: var(--ipvwit);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -653,9 +655,22 @@ footer .d-flex {
 }
 
 .favorite-remove img {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
 }
+
+@media screen and (max-width: 430px) {
+    .favorite-card {
+        flex-direction: row;
+    }
+    .favorite-image {
+        height: 80px;
+    }
+    .favorite-info {
+        padding: 6px 8px;
+    }
+}
+
 
 
 /* ==============================  MAKEN  ============================= */

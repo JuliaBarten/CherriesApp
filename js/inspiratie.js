@@ -1,5 +1,6 @@
 import { db } from "./firebase-init.js";
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { auth } from "./firebase-init.js";
 
 // ------------------------------ RENDER HARTJES ------------------
 function renderHearts(level) {
@@ -62,15 +63,33 @@ async function loadTutorials() {
     let isFavorite = false; // dit kan je later aanpassen met DB
 
     favIcon.addEventListener("click", async () => {
-      // TODO: toggleFavorite in je DB aanroepen
       isFavorite = !isFavorite;
       favIcon.src = isFavorite
         ? "images/icons/fav_aan.png"
         : "images/icons/fav_uit.png";
+
+      if (isFavorite) {
+        // ✅ Voeg toe aan Firestore
+        const userId = auth.currentUser.uid;
+        await addFavorite(userId, t.id);
+      } else {
+        // ❌ Verwijder uit Firestore
+        const userId = auth.currentUser.uid;
+        await deleteDoc(doc(db, "users", userId, "favorites", t.id));
+      }
     });
 
     grid.appendChild(card);
   }
+}
+
+// ============================ add favorite =============================
+
+async function addFavorite(userId, tutorialId) {
+  await setDoc(
+    doc(db, "users", userId, "favorites", tutorialId),
+    { createdAt: new Date() }
+  );
 }
 
 // ------------------------------ FILTER & SORT ------------------
