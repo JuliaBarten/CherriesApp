@@ -13,20 +13,19 @@
 </head>
 
 <body>
-    <div class="app-wrapper">
+  <div class="app-wrapper">
+    <div class="classic-outline">
+      <img src="images/icons/logooptie.png" alt="Logo" class="logobegin">
+      <input id="loginUsername" class="custom-input" placeholder="Gebruikersnaam" />
+      <input id="loginPassword" class="custom-input" type="password" placeholder="Wachtwoord" />
+      <button class="classic-button-small" id="loginBtn">Inloggen</button>
+      <p id="message"></p>
+    </div>
 
-  <div class="d-flex flex-column classic-outline">
-    <img src="images/icons/logooptie.png" alt="Logo" class="logobegin">
-    <input id="loginUsername" class="custom-input" placeholder="Gebruikersnaam" />
-    <input id="loginPassword" class="custom-input" type="password" placeholder="Wachtwoord" />
-    <button class="classic-button" id="loginBtn">Inloggen</button>
-    <p id="message"></p>
-  </div>
-
-  <script type="module" src="js/firebase-init.js"></script>
-  <script type="module" src="js/guard.js"></script>
-  <script type="module" src="js/authentication.js"></script>
-  <script type="module" src="js/script.js"></script>
+    <script type="module" src="js/firebase-init.js"></script>
+    <script type="module" src="js/guard.js"></script>
+    <script type="module" src="js/authentication.js"></script>
+    <script type="module" src="js/script.js"></script>
   </div>
 </body>
 

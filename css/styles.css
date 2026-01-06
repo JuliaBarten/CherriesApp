@@ -151,9 +151,10 @@ header {
 }
 
 .logobegin {
-    width: 50%;
+    width: 230px;
+    height: auto;
     padding-top: 30%;
-    margin-bottom: 20%;
+    margin-bottom: 20px;
     align-content: center;
 }
 
@@ -163,7 +164,7 @@ header {
 }
 
 .inbox-btn img {
-    height: 50px;
+    height: 60px;
 }
 
 footer {
@@ -239,8 +240,21 @@ footer .d-flex {
     max-width: 500px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     padding-top: calc(var(--header-height) + 15px);
     padding-bottom: var(--bottom-nav-height);
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .classic-categories {
@@ -263,7 +277,7 @@ footer .d-flex {
     background-color: var(--hoofd);
     color: var(--textlicht);
     width: 100%;
-    height: 60px;
+    height: 80px;
     display: block;
     margin: var(--margstandard);
     font-size: var(--sizeklein);
@@ -277,8 +291,8 @@ footer .d-flex {
 .classic-button-small {
     background-color: var(--hoofd);
     color: var(--textlicht);
-    width: 100%;
-    height: 60px;
+    width: 80%;
+    height: 80px;
     display: block;
     margin: var(--margstandard);
     font-size: var(--sizeklein);
@@ -291,7 +305,7 @@ footer .d-flex {
 }
 
 .custom-input {
-    width: 100%;
+    width: 90%;
     max-width: 400px;
     padding: 12px;
     margin: var(--margstandard);
@@ -364,10 +378,10 @@ footer .d-flex {
 .btnlogin {
     background-color: var(--hoofd);
     color: var(--textlicht);
-    width: 70%;
+    width: 80%;
     display: block;
-    padding: 2rem;
     text-align: center;
+    padding: 1rem;
     font-size: var(--sizeklein);
     border: none;
     border-radius: var(--borderknop);
@@ -378,10 +392,10 @@ footer .d-flex {
 .btnmeld-aan {
     background-color: var(--donker);
     color: var(--textmid);
-    width: 70%;
+    width: 80%;
     display: block;
     margin: var(--margstandard);
-    padding: 2rem;
+    padding: 1rem;
     text-align: center;
     font-size: var(--sizeklein);
     border: none;
@@ -564,26 +578,36 @@ footer .d-flex {
     color: var(--textlicht);
 }
 
-.filtermenu {
-    position: fixed;
-    top: var(--header-height);
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 430px;
-    display: flex;
-    gap: 8px;
-    padding: 6px;
-    background: var(--achter);
-    backdrop-filter: blur(18px);
-    z-index: 900;
-    font-family: var(--font);
-    font-size: var(--sizemidden);
-
+.filter-container {
+  position: fixed;
+  top: var(--header-height);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  padding: 6px;
+  z-index: 900;
+  background: var(--achter);
+  backdrop-filter: blur(18px);
 }
 
+.filterdropdown {
+  margin-top: 8px;
+  background: var(--ipvwit);
+  border-radius: var(--borderknop);
+  box-shadow: var(--schaduw);
+  padding: 12px;
+
+  /* verborgen */
+  display: none;
+}
+
+.filterdropdown.open {
+  display: block;
+}
+
+
 /* ====================== FAVORIETEN LIJST ======================== */
-/* ------------------- FAVORITES LIST ------------------- */
 .favorites-list {
     display: flex;
     flex-direction: column;
@@ -604,7 +628,8 @@ footer .d-flex {
 }
 
 .favorite-image {
-    flex: 0 0 25%; /* 1/4 van de breedte */
+    flex: 0 0 25%;
+    /* 1/4 van de breedte */
     height: 100px;
     object-fit: cover;
     border-right: 1px solid var(--licht);
@@ -663,9 +688,11 @@ footer .d-flex {
     .favorite-card {
         flex-direction: row;
     }
+
     .favorite-image {
         height: 80px;
     }
+
     .favorite-info {
         padding: 6px 8px;
     }

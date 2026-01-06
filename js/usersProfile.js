@@ -1,9 +1,12 @@
 import { auth, db } from "./firebase-init.js";
-import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { doc, getDoc, collection, getDocs } from
+  "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { onAuthStateChanged } from
+  "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+let authChecked = false;
 
 // ------------------------------ RENDER PROFIEL ------------------
-
 async function loadProfile(user) {
   if (!user) return;
 
@@ -14,35 +17,33 @@ async function loadProfile(user) {
 
     const data = snap.data() || {};
 
-    // --- Avatar ---
-    const profileAvatar = document.getElementById("profileAvatar");
-    profileAvatar.src = data.avatar && data.avatar.trim() !== ""
-      ? data.avatar
-      : "images/icons/avatar.png"; // fallback als geen avatar
+    document.getElementById("profileAvatar").src =
+      data.avatar?.trim()
+        ? data.avatar
+        : "images/icons/avatar.png";
 
-    // --- Username ---
-    const profileUsername = document.getElementById("profileUsername");
-    profileUsername.textContent = data.username && data.username.trim() !== ""
-      ? data.username
-      : "Gebruiker";
+    document.getElementById("profileUsername").textContent =
+      data.username?.trim()
+        ? data.username
+        : "Gebruiker";
 
-    // --- Niveau ---
-    const avatarLevel = document.getElementById("avatarLevel");
-    avatarLevel.textContent = data.level || "1";
+    document.getElementById("avatarLevel").textContent =
+      data.level || "1";
 
-    // --- Materialen ---
     const materialenContainer = document.getElementById("profileMaterials");
     materialenContainer.innerHTML = "";
 
-    if (data.materialsOwned && Array.isArray(data.materialsOwned) && data.materialsOwned.length > 0) {
+    if (Array.isArray(data.materialsOwned) && data.materialsOwned.length > 0) {
       const materialenSnapshot = await getDocs(collection(db, "Materialen"));
 
       materialenSnapshot.forEach(docSnap => {
-        const m = docSnap.data();
         if (data.materialsOwned.includes(docSnap.id)) {
           const div = document.createElement("div");
           div.className = "material-blok selected";
-          div.textContent = m.Materiaal || m.naam || "Onbekend";
+          div.textContent =
+            docSnap.data().Materiaal ||
+            docSnap.data().naam ||
+            "Onbekend";
           materialenContainer.appendChild(div);
         }
       });
@@ -55,10 +56,18 @@ async function loadProfile(user) {
   }
 }
 
-// ------------------------------ INIT AUTH ------------------
+// ------------------------------ AUTH INIT ------------------
 onAuthStateChanged(auth, async (user) => {
+  if (authChecked) return; // voorkomt dubbele triggers
+  authChecked = true;
+
   if (!user) {
-    window.location.href = "aanmelden.html";
+    // 👇 kleine vertraging voorkomt mobile race-condition
+    setTimeout(() => {
+      if (!auth.currentUser) {
+        window.location.href = "aanmelden.html";
+      }
+    }, 300);
   } else {
     await loadProfile(user);
   }

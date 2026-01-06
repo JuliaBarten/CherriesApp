@@ -43,9 +43,9 @@
         </footer>
 
         <main>
-            <div class="filtermenu">
+            <div class="filter-container">
                 <div class="d-flex flex">
-                    <button class="filterbutton" data-bs-toggle="offcanvas" data-bs-target="#filterCanvas">
+                    <button class="filterbutton" id="filterToggle">
                         Filteren
                     </button>
 
@@ -57,58 +57,37 @@
                     </select>
                 </div>
 
-                <div class="offcanvas offcanvas-start" id="filterCanvas">
-                    <div class="offcanvas-header">
-                        <button class="btn-close" data-bs-dismiss="offcanvas"></button>
-                    </div>
+                <!-- UITKLAP MENU -->
+                <div class="filterdropdown" id="filterDropdown">
+                    <h6>Soort</h6>
+                    <select id="filterGarment" class="form-select mb-3">
+                        <option value="">Alles</option>
+                        <option value="broek">Broek</option>
+                        <option value="shirt">Shirt</option>
+                        <option value="rok">Rok</option>
+                        <option value="rok">overig</option>
+                    </select>
 
-                    <div class="offcanvas-body">
-                        <h6>Soort</h6>
-                        <select id="filterGarment" class="form-select mb-3">
-                            <option value="">Alles</option>
-                            <option value="broek">Broek</option>
-                            <option value="shirt">Shirt</option>
-                            <option value="rok">Rok</option>
-                        </select>
+                    <h6>Niveau</h6>
+                    <select id="filterLevel" class="form-select mb-3">
+                        <option value="">Alle niveaus</option>
+                        <option value="myLevelOnly">Mijn niveau</option>
+                        <option value="myLevelOrLower">Mijn niveau en lager</option>
+                    </select>
 
-                        <h6>Niveau</h6>
-                        <select id="filterLevel" class="form-select mb-3">
-                            <option value="">Alle niveaus</option>
-                            <option value="myLevelOnly">Mijn niveau</option>
-                            <option value="myLevelOrLower">Mijn niveau en lager</option>
-                        </select>
+                    <h6>Materialen die ik heb</h6>
+                    <div id="filterMaterials"></div>
 
-                        <h6>Materialen die ik heb</h6>
-                        <div id="filterMaterials"></div>
-
-                        <button class="classic-button-small" id="applyFilters">
-                            Toepassen
-                        </button>
-                    </div>
+                    <button class="classic-button-small" id="applyFilters">
+                        Toepassen
+                    </button>
                 </div>
             </div>
+
 
 
             <!--kledingfoto's-->
             <div id="tutorialGrid" class="masonry-grid fotowall"></div>
-
-            <!-- POP UP VOOR INCOMPLEET PROFIEL -->
-            <div class="modal fade" id="profileRequiredModal" tabindex="-1">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content rounded-4">
-                        <div class="modal-body text-center">
-                            <h5>Profiel niet compleet</h5>
-                            <p>Voor deze functie hebben we extra info nodig.</p>
-                            <a href="profiel-change.html" class="btn btn-primary">
-                                Profiel aanvullen
-                            </a>
-                            <button class="btn btn-outline-secondary mt-2" data-bs-dismiss="modal">
-                                Later
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
         </main>
 

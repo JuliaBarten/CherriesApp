@@ -1,109 +1,160 @@
-import { db } from "./firebase-init.js";
-import { collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
-import { auth } from "./firebase-init.js";
+import { auth, db } from "./firebase-init.js";
+import {
+  collection,
+  getDocs,
+  doc,
+  setDoc,
+  deleteDoc
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { onAuthStateChanged } from
+  "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-// ------------------------------ RENDER HARTJES ------------------
-function renderHearts(level) {
-  let heartsHTML = "";
+/* =================== STATE =================== */
+let tutorialCache = null;
+let favoriteCache = [];
+let isLoading = false;
+
+/* =================== HELPERS =================== */
+
+// ❤️ Hartjes
+function renderHearts(level = 0) {
+  let html = "";
   for (let i = 0; i < level; i++) {
-    heartsHTML += `<img src="images/icons/heart1.png" class="tut-card-ic" alt="hart">`;
+    html += `<img src="images/icons/heart1.png" class="tut-card-ic" alt="hart">`;
   }
-  return heartsHTML;
+  return html;
 }
 
-// ------------------------------ RENDER TUTORIALS ------------------
-async function loadTutorials() {
-  const grid = document.getElementById("tutorialGrid");
-  if (!grid) return;
+/* =================== FAVORIETEN =================== */
 
-  grid.innerHTML = "";
-
-  const snapshot = await getDocs(collection(db, "tutorials"));
-
-  // 1️⃣ Tutorials verzamelen
-  const tutorials = snapshot.docs.map(docSnap => ({
-    id: docSnap.id,
-    ...docSnap.data()
-  }));
-
-  // 2️⃣ Filteren
-  const filtered = tutorials.filter(matchesFilters);
-
-  // 3️⃣ Sorteren (nieuwste bovenaan)
-  const sorted = sortTutorials(filtered);
-
-  // 4️⃣ Renderen
-  for (const t of sorted) {
-    const card = document.createElement("div");
-    card.className = "tutorial-card";
-
-    card.innerHTML = `
-      <img src="${t.mainImageUrl}" alt="${t.title}" class="tutorial-image">
-
-      <!-- FAVORIET KNOP -->
-      <div class="favorite-btn">
-        <img src="images/icons/fav_uit.png" alt="Favoriet">
-      </div>
-
-      <!-- INFO OVERLAY -->
-      <div class="overlay">
-        <div class="overlay-row hearts-row">
-          ${renderHearts(t.level)}
-        </div>
-
-        <div class="overlay-row time-row">
-        <span>${t.duration}</span>
-          <img src="images/icons/tijd_klok.png" alt="klok">
-        </div>
-      </div>
-    `;
-
-    // FAVORIET KNOP FUNCTIONALITEIT
-    const favIcon = card.querySelector(".favorite-btn img");
-    let isFavorite = false; // dit kan je later aanpassen met DB
-
-    favIcon.addEventListener("click", async () => {
-      isFavorite = !isFavorite;
-      favIcon.src = isFavorite
-        ? "images/icons/fav_aan.png"
-        : "images/icons/fav_uit.png";
-
-      if (isFavorite) {
-        // ✅ Voeg toe aan Firestore
-        const userId = auth.currentUser.uid;
-        await addFavorite(userId, t.id);
-      } else {
-        // ❌ Verwijder uit Firestore
-        const userId = auth.currentUser.uid;
-        await deleteDoc(doc(db, "users", userId, "favorites", t.id));
-      }
-    });
-
-    grid.appendChild(card);
-  }
+async function loadFavorites(userId) {
+  const snap = await getDocs(
+    collection(db, "users", userId, "favorites")
+  );
+  favoriteCache = snap.docs.map(d => d.id);
 }
-
-// ============================ add favorite =============================
 
 async function addFavorite(userId, tutorialId) {
   await setDoc(
     doc(db, "users", userId, "favorites", tutorialId),
     { createdAt: new Date() }
   );
+  favoriteCache.push(tutorialId);
 }
 
-// ------------------------------ FILTER & SORT ------------------
-function matchesFilters() {
-  return true;
-}
-
-function sortTutorials(tutorials) {
-  return tutorials.sort((a, b) =>
-    (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)
+async function removeFavorite(userId, tutorialId) {
+  await deleteDoc(
+    doc(db, "users", userId, "favorites", tutorialId)
   );
+  favoriteCache = favoriteCache.filter(id => id !== tutorialId);
 }
 
-// ------------------------------ INIT ------------------
-document.addEventListener("DOMContentLoaded", () => {
-  loadTutorials();
+/* =================== TUTORIALS =================== */
+async function loadTutorials(user) {
+  if (isLoading) return;
+  isLoading = true;
+
+  const grid = document.getElementById("tutorialGrid");
+  if (!grid) return;
+
+  // 🦴 Skeleton (optioneel maar sterk aangeraden)
+  if (!tutorialCache) {
+    grid.innerHTML = `
+      <div class="tutorial-skeleton skeleton"></div>
+      <div class="tutorial-skeleton skeleton"></div>
+      <div class="tutorial-skeleton skeleton"></div>
+    `;
+  }
+
+  // 1️⃣ tutorials ophalen (alleen eerste keer)
+  if (!tutorialCache) {
+    const snap = await getDocs(collection(db, "tutorials"));
+    tutorialCache = snap.docs.map(docSnap => ({
+      id: docSnap.id,
+      ...docSnap.data()
+    }));
+  }
+
+  // 2️⃣ favorieten ophalen
+  await loadFavorites(user.uid);
+
+  // 3️⃣ render
+  renderTutorials(user);
+
+  isLoading = false;
+}
+// Filter dropdown
+const filterToggle = document.getElementById("filterToggle");
+const filterDropdown = document.getElementById("filterDropdown");
+
+if (filterToggle && filterDropdown) {
+  filterToggle.addEventListener("click", () => {
+    filterDropdown.classList.toggle("open");
+  });
+}
+document.getElementById("applyFilters")?.addEventListener("click", () => {
+  filterDropdown.classList.remove("open");
+});
+
+
+function renderTutorials(user) {
+  const grid = document.getElementById("tutorialGrid");
+  grid.innerHTML = "";
+
+  for (const t of tutorialCache) {
+    const isFavorite = favoriteCache.includes(t.id);
+
+    const card = document.createElement("div");
+    card.className = "tutorial-card";
+
+    card.innerHTML = `
+      <img src="${t.mainImageUrl}" alt="${t.title}" class="tutorial-image">
+
+      <div class="favorite-btn">
+        <img 
+          src="images/icons/${isFavorite ? "fav_aan.png" : "fav_uit.png"}"
+          alt="Favoriet"
+        >
+      </div>
+
+      <div class="overlay">
+        <div class="overlay-row hearts-row">
+          ${renderHearts(t.level)}
+        </div>
+
+        <div class="overlay-row time-row">
+          <span>${t.duration}</span>
+          <img src="images/icons/tijd_klok.png" alt="klok">
+        </div>
+      </div>
+    `;
+
+    const favIcon = card.querySelector(".favorite-btn img");
+
+    favIcon.addEventListener("click", async (e) => {
+      e.stopPropagation();
+
+      if (favoriteCache.includes(t.id)) {
+        await removeFavorite(user.uid, t.id);
+        favIcon.src = "images/icons/fav_uit.png";
+      } else {
+        await addFavorite(user.uid, t.id);
+        favIcon.src = "images/icons/fav_aan.png";
+      }
+    });
+
+    // 👉 openen van tutorial
+    card.addEventListener("click", () => {
+      window.location.href = `make-project.html?id=${t.id}`;
+    });
+
+    grid.appendChild(card);
+  }
+}
+
+/* =================== AUTH =================== */
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) return;
+  loadTutorials(user);
 });
