@@ -159,6 +159,7 @@ form.addEventListener("submit", async (e) => {
             level: selectedLevel,
             duration,
             materials,
+            category,
             mainImageUrl,
             authorId: user.uid,
             authorUsername: user.displayName || "Onbekend",

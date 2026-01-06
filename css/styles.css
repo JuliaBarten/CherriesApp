@@ -534,6 +534,69 @@ footer .d-flex {
     margin-top: 15px;
     padding-bottom: 120px;
 }
+/* =========================  INSPIRATIE PAGINA  ========================== */
+/* Filtercontainer */
+.filter-container {
+    position: relative;
+    width: 100%;
+    max-width: 430px;
+    margin: var(--header-height) auto 10px auto; /* onder header */
+    padding: 6px;
+    background: var(--achter);
+    backdrop-filter: blur(18px);
+    z-index: 900;
+    font-family: var(--font);
+}
+
+/* Filterknop */
+.filterbutton {
+    background-color: var(--hoofd);
+    width: 48%;
+    height: 50px;
+    border: none;
+    border-radius: var(--borderknop);
+    box-shadow: var(--schaduw);
+    color: var(--textlicht);
+    margin: 0 4px 0 0;
+    cursor: pointer;
+}
+
+/* Dropdown menu */
+.filterdropdown {
+    position: absolute;
+    top: 60px; /* net onder de filterknop */
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: var(--achter);
+    padding: 10px;
+    border-radius: var(--borderknop);
+    box-shadow: var(--schaduw);
+    display: none; /* standaard verborgen */
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Open staat */
+.filterdropdown.open {
+    display: flex;
+}
+
+/* Material toggle knoppen */
+.material-toggle-btn {
+    flex: 1;
+    padding: 6px;
+    margin-right: 4px;
+    border-radius: var(--borderknop);
+    border: none;
+    cursor: pointer;
+}
+
+.material-toggle-btn.active {
+    background-color: var(--hoofd);
+    color: var(--textlicht);
+}
+
 
 /* =======================  FOTOWALL / MASONRY   ========================== */
 .masonry-grid {
@@ -543,8 +606,7 @@ footer .d-flex {
 
 .fotowall {
     position: relative;
-    padding: 5px;
-    padding-top: calc(var(--header-height) + 75px);
+    padding: 5px; 
     padding-bottom: var(--bottom-nav-height);
 }
 
@@ -565,47 +627,6 @@ footer .d-flex {
     display: block;
     border-radius: var(--borderfoto);
 }
-
-.filterbutton {
-    background-color: var(--hoofd);
-    width: 80vw;
-    display: block;
-    height: 50px;
-    margin: 5px;
-    border: none;
-    border-radius: var(--borderknop);
-    box-shadow: var(--schaduw);
-    color: var(--textlicht);
-}
-
-.filter-container {
-  position: fixed;
-  top: var(--header-height);
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 430px;
-  padding: 6px;
-  z-index: 900;
-  background: var(--achter);
-  backdrop-filter: blur(18px);
-}
-
-.filterdropdown {
-  margin-top: 8px;
-  background: var(--ipvwit);
-  border-radius: var(--borderknop);
-  box-shadow: var(--schaduw);
-  padding: 12px;
-
-  /* verborgen */
-  display: none;
-}
-
-.filterdropdown.open {
-  display: block;
-}
-
 
 /* ====================== FAVORIETEN LIJST ======================== */
 .favorites-list {
