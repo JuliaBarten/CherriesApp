@@ -171,21 +171,24 @@ sortSelect?.addEventListener("change", () => {
 });
 
 /* =================== INIT AUTH =================== */
-
 onAuthStateChanged(auth, async (user) => {
   if (!user) return;
 
-  // 1️⃣ Data ophalen
+  // 1️⃣ data ophalen
   await Promise.all([
-    loadAllMaterials(),
     loadUserMaterials(user),
+    loadAllMaterials(),
     loadFavorites(user.uid)
   ]);
 
-  // 2️⃣ Filterknoppen opzetten
+  // 2️⃣ defaults
+  materialMode = "all";     // alle materialen
+  activeSort = "new";       // nieuwste eerst
+
+  // 3️⃣ UI hooks
   setupMaterialFilters();
 
-  // 3️⃣ Tutorials ophalen en cache vullen
+  // 4️⃣ tutorials ophalen (1x)
   if (!tutorialCache) {
     const snap = await getDocs(collection(db, "tutorials"));
     tutorialCache = snap.docs.map(docSnap => ({
@@ -194,6 +197,6 @@ onAuthStateChanged(auth, async (user) => {
     }));
   }
 
-  // 4️⃣ Render tutorials (default alle materialen, nieuwste eerst)
+  // 5️⃣ render
   renderTutorialsFiltered();
 });

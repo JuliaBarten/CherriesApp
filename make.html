@@ -13,7 +13,7 @@
 
 <body>
     <div class="app-wrapper">
-              <!---------------------   app - frame  --------------------->
+        <!---------------------   app - frame  --------------------->
         <header class="app-header fixed-top">
             <img alt="logo" src="images/icons/logooptie.png" class="logo" />
             <a href="inbox.html" class="inbox-btn">
@@ -44,11 +44,11 @@
         <main>
             <form class="make-form d-flex classic-outline" id="tutorialForm">
 
-                <!-- Hoofdfoto -->
-                <input type="file" id="mainImage" accept="image/*" required style="display:none;">
-                <label for="mainImage" class="upload-btn">
+                <!-- Hoofdfoto preview -->
+                <div class="main-image-preview" id="mainImagePreview">
                     <span class="plus-icon">+</span>
-                </label>
+                </div>
+                <input type="file" id="mainImage" accept="image/*" required hidden>
 
                 <!-- Titel -->
                 <div class="input-group">
@@ -73,10 +73,16 @@
                     <img src="images/icons/tijd_klok.png" class="time-icon" />
                 </div>
 
-                <!-- Omschrijving -->
-                <div class="input-group">
-                    <input type="text" class="custom-input" id="omschrijving" placeholder="Omschrijving" />
-                </div>
+                <select id="tutorialCategory" class="custom-input">
+                    <option value="">Selecteer categorie</option>
+                    <option value="broek">Broek</option>
+                    <option value="legging">Legging</option>
+                    <option value="trui/vest">Trui/Vest</option>
+                    <option value="shirt">Shirt</option>
+                    <option value="rok">Rok</option>
+                    <option value="jurk">jurk</option>
+                    <option value="overig">Overig</option>
+                </select>
 
                 <!-- Materialen -->
                 <div class="make-section mb-4">
@@ -91,21 +97,19 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content classic-outline">
                             <div class="modal-header">
-                                <h5 class="modal-title">Nieuwe stap</h5>
+                                  <h2>Stap <span id="stepNumberPreview"></span></h2>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
 
                             <div class="modal-body">
-                                <p class="text-center">Stap <span id="stepNumberPreview"></span></p>
-
                                 <input type="file" id="stepImage" accept="image/*" class="mb-3">
 
                                 <textarea id="stepText" class="custom-input"
-                                    placeholder="Uitleg bij deze stap (optioneel)"></textarea>
+                                    placeholder="Uitleg bij deze stap"></textarea>
                             </div>
 
                             <div class="modal-footer">
-                                <button class="classic-button-small" type="button" id="saveStepBtn">
+                                <button class="classic-button" type="button" id="saveStepBtn">
                                     Stap opslaan
                                 </button>
                             </div>
@@ -116,26 +120,13 @@
 
                 <div id="stepsOverview" class="d-flex flex-column gap-2"></div>
 
-                <!-- Carrousel met alle stappen -->
-                <div id="stepsCarousel" class="carousel slide">
-                    <div class="carousel-inner"></div>
-
-                    <button class="carousel-control-prev" type="button" data-bs-target="#stepsCarousel"
-                        data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon"></span>
-                    </button>
-
-                    <button class="carousel-control-next" type="button" data-bs-target="#stepsCarousel"
-                        data-bs-slide="next">
-                        <span class="carousel-control-next-icon"></span>
-                    </button>
-                </div>
+              
 
                 <!-- Knop voor nieuwe stap -->
                 <button class="classic-button-small mt-2" type="button" id="addStepBtn">+ Nieuwe stap</button>
 
-    <!-- Upload tutorial -->
-    <button class="classic-button" type="submit">Upload tutorial</button>
+                <!-- Upload tutorial -->
+                <button class="classic-button" type="submit">Upload tutorial</button>
     </div>
     </form>
     </main>
@@ -144,7 +135,7 @@
     <script type="module" src="js/guard.js"></script>
     <script type="module" src="js/make-upload.js"></script>
     <script type="module" src="js/script.js"></script>
- </div>
+    </div>
 </body>
 
 </html>

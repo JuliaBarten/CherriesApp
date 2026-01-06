@@ -2,7 +2,6 @@ import { auth, db } from "./firebase-init.js";
 import { collection, getDocs, doc, getDoc, deleteDoc} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-
 async function loadFavorites(userId) {
   const container = document.getElementById("favoritesGrid");
   container.innerHTML = "";

@@ -1,23 +1,50 @@
 import { auth, db, storage } from "./firebase-init.js";
 import { collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
+import { onAuthStateChanged } from
+  "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) return;
+  loadMaterialsForMake();
+});
+
+let editingStepIndex = null;
+
+
+const mainImageInput = document.getElementById("mainImage");
+const mainImagePreview = document.getElementById("mainImagePreview");
+
+mainImagePreview.addEventListener("click", () => {
+  mainImageInput.click();
+});
+
+mainImageInput.addEventListener("change", () => {
+  const file = mainImageInput.files[0];
+  if (!file) return;
+
+  mainImagePreview.innerHTML = `
+    <img src="${URL.createObjectURL(file)}" alt="Hoofdfoto preview">
+  `;
+});
+
 
 /* ======================   Niveau LADEN (hearts)   ====================== */
 let selectedLevel = 1;
 
 function updateHearts(level) {
-    document.querySelectorAll(".niveau-icon").forEach(icon => {
-        const iconLevel = Number(icon.dataset.level);
-        icon.src = iconLevel <= level ? "images/icons/heart3.png" : "images/icons/heart4.png";
-    });
-    selectedLevel = level;
+  document.querySelectorAll(".niveau-icon").forEach(icon => {
+    const iconLevel = Number(icon.dataset.level);
+    icon.src = iconLevel <= level ? "images/icons/heart3.png" : "images/icons/heart4.png";
+  });
+  selectedLevel = level;
 }
 
 // Klik-events op hartjes
 document.querySelectorAll(".niveau-icon").forEach(icon => {
-    icon.addEventListener("click", () => {
-        updateHearts(Number(icon.dataset.level));
-    });
+  icon.addEventListener("click", () => {
+    updateHearts(Number(icon.dataset.level));
+  });
 });
 
 // Standaard niveau
@@ -25,32 +52,43 @@ updateHearts(1);
 
 /* ======================  Materialen laden ===================== */
 async function loadMaterialsForMake() {
-    const makeMaterialenContainer = document.getElementById("makeMaterialenContainer");
-    if (!makeMaterialenContainer) return;
+  const makeMaterialenContainer = document.getElementById("makeMaterialenContainer");
+  if (!makeMaterialenContainer) return;
 
-    makeMaterialenContainer.innerHTML = "";
+  makeMaterialenContainer.innerHTML = "";
 
-    const materialenSnapshot = await getDocs(collection(db, "Materialen"));
+  const materialenSnapshot = await getDocs(collection(db, "Materialen"));
 
-    materialenSnapshot.forEach(docSnap => {
-        const m = docSnap.data();
-        const materialName = m.Materiaal || m.naam || "Onbekend";
+  materialenSnapshot.forEach(docSnap => {
+    const m = docSnap.data();
+    const materialName = m.Materiaal || m.naam || "Onbekend";
 
-        const div = document.createElement("div");
-        div.className = "material-blok";
-        div.textContent = materialName;
-        div.dataset.materialId = docSnap.id;
+    const div = document.createElement("div");
+    div.className = "material-blok";
+    div.textContent = materialName;
+    div.dataset.materialId = docSnap.id;
 
-        div.addEventListener("click", () => {
-            div.classList.toggle("selected");
-        });
-
-        makeMaterialenContainer.appendChild(div);
+    div.addEventListener("click", () => {
+      div.classList.toggle("selected");
     });
+
+    makeMaterialenContainer.appendChild(div);
+  });
 }
 /* ======================
-   Stappen modal + carrousel
+   Stappen modal
 ====================== */
+
+function openEditStep(index) {
+  const step = stepsData[index];
+
+  stepTextInput.value = step.text;
+  stepImageInput.value = "";
+
+  editingStepIndex = index;
+  stepModal.show();
+}
+
 let stepsData = [];
 let stepCount = 0;
 
@@ -65,56 +103,105 @@ document.getElementById("addStepBtn").addEventListener("click", () => {
 });
 
 document.getElementById("saveStepBtn").addEventListener("click", () => {
-  stepCount++;
+  const text = stepTextInput.value.trim();
+  const image = stepImageInput.files[0] || null;
 
-  stepsData.push({
-    order: stepCount,
-    image: stepImageInput.files[0] || null,
-    text: stepTextInput.value.trim()
-  });
+  if (editingStepIndex !== null) {
+    // ✏️ EDIT
+    stepsData[editingStepIndex].text = text;
+    if (image) {
+      stepsData[editingStepIndex].image = image;
+    }
+    editingStepIndex = null;
+  } else {
+    // ➕ NIEUW
+    stepCount++;
+    stepsData.push({
+      order: stepCount,
+      text,
+      image
+    });
+  }
 
-  stepImageInput.value = "";
   stepTextInput.value = "";
+  stepImageInput.value = "";
   stepModal.hide();
-
-  renderStepCarousel();
+  renderStepsList();
 });
 
 
-// Render alle stappen in carrousel
-function renderStepCarousel() {
-  const carouselInner = document.querySelector("#stepsCarousel .carousel-inner");
-  carouselInner.innerHTML = "";
+// Herschrijf stapnummers na verwijderen
+function renumberSteps() {
+  stepsData.forEach((step, i) => {
+    step.order = i + 1;
+  });
+  stepCount = stepsData.length;
+}
+
+function openEditStep(index) {
+  const step = stepsData[index];
+
+  stepTextInput.value = step.text;
+  stepImageInput.value = "";
+
+  stepModal.show();
+
+  document.getElementById("saveStepBtn").onclick = () => {
+    step.text = stepTextInput.value.trim();
+    step.image = stepImageInput.files[0] || step.image;
+
+    stepModal.hide();
+    renderStepsList();
+
+    // reset
+    document.getElementById("saveStepBtn").onclick = null;
+  };
+}
+
+//stappen lijst
+function renderStepsList() {
+  const container = document.getElementById("stepsOverview");
+  container.innerHTML = "";
 
   stepsData.forEach((step, index) => {
-    const item = document.createElement("div");
-    item.className = `carousel-item ${index === 0 ? "active" : ""}`;
+    const row = document.createElement("div");
+    row.className = "step-row";
 
-    item.innerHTML = `
-      <div class="step-card">
-        <div class="step-image-wrapper">
-          ${
-            step.image
-              ? `<img src="${URL.createObjectURL(step.image)}">`
-              : `<div class="step-placeholder">Geen afbeelding</div>`
-          }
-        </div>
+    row.innerHTML = `
+      <div class="step-image">
+        ${
+          step.image
+            ? `<img src="${URL.createObjectURL(step.image)}">`
+            : `<div class="step-placeholder"></div>`
+        }
+      </div>
 
-        <div class="step-text">
-          <strong>Stap ${step.order}</strong>
-          ${step.text ? `<p>${step.text}</p>` : ""}
-        </div>
+      <div class="step-content">
+        <strong>Stap ${step.order}</strong>
+        <p>${step.text || ""}</p>
+      </div>
+
+      <div class="step-actions">
+        <button class="classic-button-small edit-step">✏️</button>
+        <button class="classic-button-small delete-step">🗑</button>
       </div>
     `;
 
-    carouselInner.appendChild(item);
+    // Verwijderen
+    row.querySelector(".delete-step").addEventListener("click", () => {
+      stepsData.splice(index, 1);
+      renumberSteps();
+      renderStepsList();
+    });
+
+    // Bewerken
+    row.querySelector(".edit-step").addEventListener("click", () => {
+      openEditStep(index);
+    });
+
+    container.appendChild(row);
   });
 }
-
-
-document.getElementById("addStepBtn").onclick = () => stepModal.show();
-
-
 
 /* ======================
    Tutorial Submit
@@ -122,85 +209,92 @@ document.getElementById("addStepBtn").onclick = () => stepModal.show();
 const form = document.getElementById("tutorialForm");
 
 form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const user = auth.currentUser;
-    if (!user) return alert("Je moet ingelogd zijn");
+  const user = auth.currentUser;
+  if (!user) {
+    alert("Je moet ingelogd zijn");
+    return;
+  }
 
-    const title = document.getElementById("titel").value.trim();
-    const description = document.getElementById("omschrijving").value.trim();
-    const duration = document.getElementById("duration-input").value;
-    const mainImageFile = document.getElementById("mainImage").files[0];
+  const title = document.getElementById("titel").value.trim();
+  const duration = document.getElementById("duration-input").value;
+  const mainImageFile = document.getElementById("mainImage").files[0];
+  const category = document.getElementById("tutorialCategory").value;
 
-    const materials = Array.from(
-        document.querySelectorAll("#makeMaterialenContainer .material-blok.selected")
-    ).map(el => el.dataset.materialId);
+  const materials = Array.from(
+    document.querySelectorAll("#makeMaterialenContainer .material-blok.selected")
+  ).map(el => el.dataset.materialId);
 
-    if (!materials.length) {
-        alert("Selecteer minstens één materiaal!");
-        return;
-    }
+  if (!materials.length) {
+    alert("Selecteer minstens één materiaal!");
+    return;
+  }
 
-    if (!mainImageFile) {
-        alert("Upload een hoofdfoto!");
-        return;
-    }
+  if (!mainImageFile) {
+    alert("Upload een hoofdfoto!");
+    return;
+  }
 
-    try {
-        // Hoofdafbeelding uploaden
-        const mainRef = ref(storage, `tutorials/${user.uid}/${Date.now()}_main.jpg`);
-        await uploadBytes(mainRef, mainImageFile);
-        const mainImageUrl = await getDownloadURL(mainRef);
+  if (!category) {
+    alert("Selecteer een categorie!");
+    return;
+  }
 
-        // Tutorial document
-        const tutorialRef = await addDoc(collection(db, "tutorials"), {
-            title,
-            description,
-            level: selectedLevel,
-            duration,
-            materials,
-            category,
-            mainImageUrl,
-            authorId: user.uid,
-            authorUsername: user.displayName || "Onbekend",
-            createdAt: serverTimestamp()
-        });
+  try {
+    const mainRef = ref(
+      storage,
+      `tutorials/${user.uid}/${Date.now()}_main.jpg`
+    );
+    await uploadBytes(mainRef, mainImageFile);
+    const mainImageUrl = await getDownloadURL(mainRef);
+    const tutorialRef = await addDoc(collection(db, "tutorials"), {
+      title,
+      level: selectedLevel,
+      duration,
+      materials,
+      category,
+      mainImageUrl,
+      authorId: user.uid,
+      authorUsername: user.displayName || "Onbekend",
+      createdAt: serverTimestamp()
+    });
 
-        // Stappen uploaden
-        for (const step of stepsData) {
-            let imageUrl = null;
+    for (const step of stepsData) {
+      let imageUrl = null;
 
-            if (step.image) {
-                const stepRef = ref(
-                    storage,
-                    `tutorials/${tutorialRef.id}/${crypto.randomUUID()}`
-                );
-                await uploadBytes(stepRef, step.image);
-                imageUrl = await getDownloadURL(stepRef);
-            }
+      if (step.image) {
+        const stepRef = ref(
+          storage,
+          `tutorials/${tutorialRef.id}/${crypto.randomUUID()}`
+        );
+        await uploadBytes(stepRef, step.image);
+        imageUrl = await getDownloadURL(stepRef);
+      }
 
-            await addDoc(collection(db, "tutorials", tutorialRef.id, "steps"), {
-                order: step.order,
-                text: step.text,
-                image: imageUrl
-            });
+      await addDoc(
+        collection(db, "tutorials", tutorialRef.id, "steps"),
+        {
+          order: step.order,
+          text: step.text,
+          image: imageUrl
         }
-
-
-        alert("Tutorial succesvol geüpload!");
-        form.reset();
-        stepsOverview.innerHTML = "";
-        stepCount = 0;
-        stepsData = [];
-        updateHearts(1);
-
-    } catch (err) {
-        console.error(err);
-        alert("Upload mislukt: " + err.message);
+      );
     }
+
+    alert("Tutorial succesvol geüpload!");
+    form.reset();
+    stepsData = [];
+    stepCount = 0;
+    updateHearts(1);
+
+  } catch (err) {
+    console.error(err);
+    alert("Upload mislukt: " + err.message);
+  }
 });
 
 // Materialen laden bij DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
-    loadMaterialsForMake();
+  loadMaterialsForMake();
 });

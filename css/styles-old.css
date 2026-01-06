@@ -135,7 +135,7 @@ footer {
     text-decoration: none;
 }
 
-h2 {
+h1 {
     size: var(--sizemidden);
     color: var(--textdonker);
 }
