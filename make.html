@@ -97,12 +97,16 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content classic-outline">
                             <div class="modal-header">
-                                  <h2>Stap <span id="stepNumberPreview"></span></h2>
+                                <h2>Stap <span id="stepNumberPreview"></span></h2>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
 
                             <div class="modal-body">
-                                <input type="file" id="stepImage" accept="image/*" class="mb-3">
+                                <div id="stepImagePreview" class="step-image-preview upload-btn mb-3">
+                                    <span class="plus-icon">+</span>
+                                </div>
+
+                                <input type="file" id="stepImage" accept="image/*" hidden>
 
                                 <textarea id="stepText" class="custom-input"
                                     placeholder="Uitleg bij deze stap"></textarea>
@@ -120,7 +124,7 @@
 
                 <div id="stepsOverview" class="d-flex flex-column gap-2"></div>
 
-              
+
 
                 <!-- Knop voor nieuwe stap -->
                 <button class="classic-button-small mt-2" type="button" id="addStepBtn">+ Nieuwe stap</button>

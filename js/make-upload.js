@@ -11,7 +11,6 @@ onAuthStateChanged(auth, (user) => {
 
 let editingStepIndex = null;
 
-
 const mainImageInput = document.getElementById("mainImage");
 const mainImagePreview = document.getElementById("mainImagePreview");
 
@@ -78,17 +77,6 @@ async function loadMaterialsForMake() {
 /* ======================
    Stappen modal
 ====================== */
-
-function openEditStep(index) {
-  const step = stepsData[index];
-
-  stepTextInput.value = step.text;
-  stepImageInput.value = "";
-
-  editingStepIndex = index;
-  stepModal.show();
-}
-
 let stepsData = [];
 let stepCount = 0;
 
@@ -96,6 +84,22 @@ const stepModal = new bootstrap.Modal(document.getElementById("stepModal"));
 const stepImageInput = document.getElementById("stepImage");
 const stepTextInput = document.getElementById("stepText");
 const stepNumberPreview = document.getElementById("stepNumberPreview");
+const stepImagePreview = document.getElementById("stepImagePreview");
+
+// Klik op preview → open file picker
+stepImagePreview.addEventListener("click", () => {
+  stepImageInput.click();
+});
+
+// Preview tonen bij selecteren
+stepImageInput.addEventListener("change", () => {
+  const file = stepImageInput.files[0];
+  if (!file) return;
+
+  stepImagePreview.innerHTML = `
+    <img src="${URL.createObjectURL(file)}" alt="Stap afbeelding preview">
+  `;
+});
 
 document.getElementById("addStepBtn").addEventListener("click", () => {
   stepNumberPreview.textContent = stepCount + 1;
@@ -122,6 +126,8 @@ document.getElementById("saveStepBtn").addEventListener("click", () => {
       image
     });
   }
+  stepImagePreview.innerHTML = `<span class="plus-icon">+</span>`;
+
 
   stepTextInput.value = "";
   stepImageInput.value = "";
@@ -141,22 +147,21 @@ function renumberSteps() {
 function openEditStep(index) {
   const step = stepsData[index];
 
-  stepTextInput.value = step.text;
+  stepTextInput.value = step.text || "";
   stepImageInput.value = "";
 
+  if (step.image) {
+    stepImagePreview.innerHTML = `
+      <img src="${URL.createObjectURL(step.image)}">
+    `;
+  } else {
+    stepImagePreview.innerHTML = `<span class="plus-icon">+</span>`;
+  }
+
+  editingStepIndex = index;
   stepModal.show();
-
-  document.getElementById("saveStepBtn").onclick = () => {
-    step.text = stepTextInput.value.trim();
-    step.image = stepImageInput.files[0] || step.image;
-
-    stepModal.hide();
-    renderStepsList();
-
-    // reset
-    document.getElementById("saveStepBtn").onclick = null;
-  };
 }
+
 
 //stappen lijst
 function renderStepsList() {
@@ -292,9 +297,4 @@ form.addEventListener("submit", async (e) => {
     console.error(err);
     alert("Upload mislukt: " + err.message);
   }
-});
-
-// Materialen laden bij DOMContentLoaded
-document.addEventListener("DOMContentLoaded", () => {
-  loadMaterialsForMake();
 });
