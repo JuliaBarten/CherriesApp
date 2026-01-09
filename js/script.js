@@ -1,3 +1,23 @@
+import { auth, db } from "./firebase-init.js";
+import { doc, getDoc } from
+  "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { onAuthStateChanged } from
+  "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return;
+
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (!snap.exists()) return;
+
+  const avatar = snap.data().avatar;
+  const navbarAvatar = document.getElementById("navbarAvatar");
+
+  if (navbarAvatar && avatar) {
+    navbarAvatar.src = avatar;
+  }
+});
+
 // menu active state
 const current = window.location.pathname.split("/").pop();
 document.querySelectorAll("footer a").forEach(link => {

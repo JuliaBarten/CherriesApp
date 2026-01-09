@@ -2,7 +2,39 @@ import { auth, db, storage } from "./firebase-init.js";
 import { doc, getDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { renderAvatarPicker } from "./avatar-utils.js";
 
+const AVATARS = [
+  "images/avatar/premade/pm_1.png",
+  "images/avatar/premade/pm_2.png",
+  "images/avatar/premade/pm_3.png",
+  "images/avatar/premade/pm_4.png",
+  "images/avatar/premade/pm_5.png",
+  "images/avatar/premade/pm_6.png"
+];
+
+let selectedAvatarIndex = 0; // Houdt bij welke avatar geselecteerd is
+let selectedAvatar = AVATARS[selectedAvatarIndex];
+
+const currentAvatarImg = document.getElementById("currentAvatar");
+const prevBtn = document.getElementById("prevAvatar");
+const nextBtn = document.getElementById("nextAvatar");
+
+function updateAvatarPreview() {
+  currentAvatarImg.src = AVATARS[selectedAvatarIndex];
+  selectedAvatar = AVATARS[selectedAvatarIndex];
+}
+
+// Event listeners voor pijltjes
+prevBtn.addEventListener("click", () => {
+  selectedAvatarIndex = (selectedAvatarIndex - 1 + AVATARS.length) % AVATARS.length;
+  updateAvatarPreview();
+});
+
+nextBtn.addEventListener("click", () => {
+  selectedAvatarIndex = (selectedAvatarIndex + 1) % AVATARS.length;
+  updateAvatarPreview();
+});
 
 // ------------------ Profiel laden ------------------
 async function loadProfile(user) {
@@ -12,36 +44,34 @@ async function loadProfile(user) {
 
   const data = snap.data();
 
-  // Gebruikersnaam
-  const usernameInput = document.getElementById("usernameInput");
-  usernameInput.value = data.username || "";
+  // gebruikersnaam
+  document.getElementById("usernameInput").value = data.username || "";
 
-  // Niveau
+  // niveau
   updateHearts(data.level || 1);
 
-  // Avatar
+  // avatar
+  const avatarCarousel = document.getElementById("avatarCarousel");
   const avatarPreview = document.getElementById("avatarPreview");
-  if (data.avatar) {
-    avatarPreview.src = data.avatar;
-    avatarPreview.style.display = "block";
+
+  if (avatarCarousel && avatarPreview) {
+    renderAvatarPicker(avatarCarousel, (avatar) => {
+      selectedAvatar = avatar;
+      avatarPreview.src = avatar;
+    });
+
+    // Zet huidige avatar
+    if (data.avatar) {
+      const index = AVATARS.findIndex(src => src === data.avatar);
+      if (index >= 0) selectedAvatarIndex = index;
+    }
+    updateAvatarPreview();
+
   }
 
-  const avatarInput = document.getElementById("avatarInput");
-  avatarInput?.addEventListener("change", () => {
-    const file = avatarInput.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      avatarPreview.src = e.target.result;
-      avatarPreview.style.display = "block";
-    };
-    reader.readAsDataURL(file);
-  });
-
-  // Materialen
+  // materialen
   await loadMaterials(data);
 }
-
 
 let selectedLevel = 1; // standaard niveau
 
@@ -65,9 +95,13 @@ document.querySelectorAll(".niveau-icon").forEach(icon => {
 
 // ------------------ Materialen laden als blokken ------------------
 async function loadMaterials(userData) {
-  const materialenContainer = document.getElementById("makeMaterialenContainer");
-  materialenContainer.innerHTML = "";
+  const materialenContainer = document.getElementById("materialenContainer");
+  if (!materialenContainer) {
+    console.warn("materialenContainer niet gevonden");
+    return;
+  }
 
+  materialenContainer.innerHTML = "";
   const materialenSnapshot = await getDocs(collection(db, "Materialen"));
   materialenSnapshot.forEach(docSnap => {
     const m = docSnap.data();
@@ -91,7 +125,7 @@ async function loadMaterials(userData) {
       }
     });
 
-
+    console.log("Materials owned:", userData.materialsOwned);
     materialenContainer.appendChild(div);
   });
 }
@@ -104,38 +138,27 @@ async function saveProfile() {
   if (!user) return;
 
   const username = document.getElementById("usernameInput").value.trim();
-  const avatarInput = document.getElementById("avatarInput");
-  const avatarPreview = document.getElementById("avatarPreview");
   const materialenContainer = document.getElementById("materialenContainer");
 
   // Geselecteerde materialen ophalen
   const selectedMaterials = Array.from(materialenContainer.querySelectorAll(".material-blok.selected"))
     .map(mblok => mblok.dataset.materialId);
+
   console.log("Geselecteerde materialen:", selectedMaterials);
 
   // Validatie
   if (!username) return alert("Vul je gebruikersnaam in!");
-  if (!selectedMaterials.length) return alert("Selecteer minstens één materiaal!");
   if (!selectedLevel) return alert("Selecteer een niveau!");
-  if (!avatarInput.files[0] && !avatarPreview.src) return alert("Upload een avatar!");
-
-  // Avatar uploaden indien nieuw bestand
-  let avatarUrl = avatarPreview.src;
-  if (avatarInput.files[0]) {
-    const storageRef = ref(storage, `avatars/${user.uid}`);
-    await uploadBytes(storageRef, avatarInput.files[0]);
-    avatarUrl = await getDownloadURL(storageRef);
-  }
+  if (!selectedAvatar) return alert("Kies een avatar!");
 
   // Update Firestore
   await updateDoc(doc(db, "users", user.uid), {
     username,
     level: selectedLevel,
     materialsOwned: selectedMaterials,
-    avatar: avatarUrl,
+    avatar: selectedAvatar,
     profileCompleted: true
   });
-
 
   alert("Profiel succesvol bijgewerkt!");
   window.location.href = "profiel.html";

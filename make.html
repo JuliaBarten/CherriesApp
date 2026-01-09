@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Cherrie's - make</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
@@ -15,7 +16,7 @@
     <div class="app-wrapper">
         <!---------------------   app - frame  --------------------->
         <header class="app-header fixed-top">
-            <img alt="logo" src="images/icons/logooptie.png" class="logo" />
+            <img alt="logo" src="images/logo_bol.png" class="logo" />
             <a href="inbox.html" class="inbox-btn">
                 <img src="images/icons/inbox.png" alt="Inbox" />
                 <span id="inboxBadge" class="badge hidden"></span>
@@ -37,7 +38,7 @@
                     <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
                 </a>
                 <a href="profiel.html" class="text-center nav-item">
-                    <img src="images/icons/avatar.png" class="navbar-icon" alt="profile">
+                    <img id="navbarAvatar" class="navbar-avatar" />
                 </a>
             </div>
         </footer>
@@ -87,7 +88,7 @@
                 <!-- Materialen -->
                 <div class="make-section mb-4">
                     <label class="classic-categories">Materialen</label>
-                    <div id="makeMaterialenContainer" class="d-flex flex-wrap gap-2">
+                    <div id="materialenContainer" class="d-flex flex-wrap gap-2">
                         <!-- Checkboxes worden via JS geladen -->
                     </div>
                 </div>
@@ -136,7 +137,7 @@
     </main>
     <!-- Source - https://stackoverflow.com/a -->
     <script type="module" src="js/firebase-init.js"></script>
- 
+
     <script type="module" src="js/make-upload.js"></script>
     <script type="module" src="js/script.js"></script>
     </div>

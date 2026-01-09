@@ -1,5 +1,5 @@
 import { auth, db } from "./firebase-init.js";
-import { collection, getDocs, doc, getDoc, deleteDoc} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { collection, getDocs, doc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 async function loadFavorites(userId) {
@@ -14,7 +14,7 @@ async function loadFavorites(userId) {
     return;
   }
 
- for (const fav of favSnap.docs) {
+  for (const fav of favSnap.docs) {
     const tutorialId = fav.id;  // Gebruik het document-ID als tutorial-ID
     const tutorialSnap = await getDoc(doc(db, "tutorials", tutorialId));
     if (!tutorialSnap.exists()) continue;

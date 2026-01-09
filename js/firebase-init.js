@@ -12,15 +12,15 @@ import { getStorage } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-s
 //   appId: "1:662896896244:web:4a7d8adf1364e3229c16a1"
 // };
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBFpfyYMfgAlyozywN27mkCM8NODcUntOA",
-    authDomain: "cherrysapp-de82f.firebaseapp.com",
-    projectId: "cherrysapp-de82f",
-    storageBucket: "cherrysapp-de82f.firebasestorage.app",
-    messagingSenderId: "662896896244",
-    appId: "1:662896896244:web:4a7d8adf1364e3229c16a1",
-    measurementId: "G-YLY36ZVKKV"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyBFpfyYMfgAlyozywN27mkCM8NODcUntOA",
+  authDomain: "cherrysapp-de82f.firebaseapp.com",
+  projectId: "cherrysapp-de82f",
+  storageBucket: "cherrysapp-de82f.firebasestorage.app",
+  messagingSenderId: "662896896244",
+  appId: "1:662896896244:web:4a7d8adf1364e3229c16a1",
+  measurementId: "G-YLY36ZVKKV"
+};
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);

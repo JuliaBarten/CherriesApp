@@ -6,8 +6,7 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { auth, db } from "./firebase-init.js";
-
-
+import { getRandomAvatar } from "./avatar-utils.js";
 
 function getFakeEmailFromUsername(username) {
   return `${username}@mail.com`;
@@ -37,13 +36,16 @@ async function register() {
 
   if (!cred?.user) return;
 
-  await setDoc(doc(db, "users", cred.user.uid), {
-    username,
-    email,
-    profileCompleted: false,
-    materialsOwned: [],
-    createdAt: new Date()
-  });
+await setDoc(doc(db, "users", cred.user.uid), {
+  username,
+  email,
+  avatar: getRandomAvatar(),
+  level: null,
+  materialsOwned: [],
+  profileCompleted: false,
+  createdAt: new Date()
+});
+
 
   window.location.href = "profiel-change.html";
 }
@@ -77,18 +79,6 @@ async function login() {
   }
 }
 
-
-
-// ================== BUTTONS ==================
-// const registerBtn = document.getElementById("registerBtn");
-// if (registerBtn) {
-//   registerBtn.addEventListener("click", register);
-// }
-
-// const loginBtn = document.getElementById("loginBtn");
-// if (loginBtn) {
-//   loginBtn.addEventListener("click", login);
-// }
 
 const registerForm = document.getElementById("registerForm");
 if (registerForm) {

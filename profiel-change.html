@@ -5,6 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cherrie's - Profiel Aanpassen</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
@@ -13,44 +14,46 @@
 
 <body>
   <div class="app-wrapper">
-        <!---------------------   app - frame  --------------------->
-        <header class="app-header fixed-top">
-            <img alt="logo" src="images/icons/logooptie.png" class="logo" />
-            <a href="inbox.html" class="inbox-btn">
-                <img src="images/icons/inbox.png" alt="Inbox" />
-                <span id="inboxBadge" class="badge hidden"></span>
-            </a>
-        </header>
+    <!---------------------   app - frame  --------------------->
+    <header class="app-header fixed-top">
+      <img alt="logo" src="images/logo_bol.png" class="logo" />
+      <a href="inbox.html" class="inbox-btn">
+        <img src="images/icons/inbox.png" alt="Inbox" />
+        <span id="inboxBadge" class="badge hidden"></span>
+      </a>
+    </header>
 
-        <footer class="fixed-bottom navbar">
-            <div class="d-flex justify-content-around py-2">
-                <a href="inspiration.html" class="text-center nav-item">
-                    <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
-                </a>
-                <a href="favorites.html" class="text-center nav-item">
-                    <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
-                </a>
-                <a href="make.html" class="text-center nav-item">
-                    <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
-                </a>
-                <a href="friends.html" class="text-center nav-item">
-                    <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
-                </a>
-                <a href="profiel.html" class="text-center nav-item">
-                    <img src="images/icons/avatar.png" class="navbar-icon" alt="profile">
-                </a>
-            </div>
-        </footer>
+    <footer class="fixed-bottom navbar">
+      <div class="d-flex justify-content-around py-2">
+        <a href="inspiration.html" class="text-center nav-item">
+          <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
+        </a>
+        <a href="favorites.html" class="text-center nav-item">
+          <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
+        </a>
+        <a href="make.html" class="text-center nav-item">
+          <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
+        </a>
+        <a href="friends.html" class="text-center nav-item">
+          <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
+        </a>
+        <a href="profiel.html" class="text-center nav-item">
+          <img id="navbarAvatar" class="navbar-avatar" />
+        </a>
+      </div>
+    </footer>
 
     <div class="classic-outline profiel-main">
 
       <!-- Avatar -->
-      <div class="avatar-section text-center">
-        <img id="avatarPreview" src="images/icons/avatar.png" alt="Avatar" class="avatar-img-edit mb-2">
-        <br>
-        <a href="avatarmaker.html" class="classic-button">Avatar wijzigen</a>
-        <input type="file" id="avatarInput" accept="image/*" style="display:none;">
-      </div>
+<div class="avatar-carousel-wrapper text-center">
+  <button id="prevAvatar" class="carousel-btn">&lt;</button>
+  <img id="currentAvatar" class="avatar-preview" src="images/avatar/skin/optie2.png alt="Avatar">
+  <button id="nextAvatar" class="carousel-btn">&gt;</button>
+</div>
+
+
+
 
       <!-- Gebruikersnaam -->
       <div class="profile-section mb-3">
@@ -81,10 +84,9 @@
       <button id="saveProfile" class="classic-button">Opslaan</button>
     </div>
     <script type="module" src="js/firebase-init.js"></script>
- 
     <script type="module" src="js/authentication.js"></script>
-    <script type="module" src="js/script.js"></script>
     <script type="module" src="js/edit-user.js"></script>
+    <script type="module" src="js/script.js"></script>
   </div>
 </body>
 

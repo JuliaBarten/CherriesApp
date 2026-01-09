@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Cherrie's inspiration</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
@@ -15,7 +16,7 @@
     <div class="app-wrapper">
         <!---------------------   app - frame  --------------------->
         <header class="app-header fixed-top">
-            <img alt="logo" src="images/icons/logooptie.png" class="logo" />
+            <img alt="logo" src="images/logo_bol.png" class="logo" />
             <a href="inbox.html" class="inbox-btn">
                 <img src="images/icons/inbox.png" alt="Inbox" />
                 <span id="inboxBadge" class="badge hidden"></span>
@@ -37,7 +38,7 @@
                     <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
                 </a>
                 <a href="profiel.html" class="text-center nav-item">
-                    <img src="images/icons/avatar.png" class="navbar-icon" alt="profile">
+                    <img id="navbarAvatar" class="navbar-avatar" />
                 </a>
             </div>
         </footer>
@@ -109,14 +110,14 @@
                     </div>
                     <div class="modal-body">
                         <p></p>
-                        <a href="aanpassen.html" class="btn btn-primary">Profiel aanpassen</a>
+                        <a href="profiel-change.html" class="btn btn-primary">Profiel aanpassen</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <script type="module" src="js/firebase-init.js"></script>
-     
+
         <script type="module" src="js/inspiratie.js"></script>
         <script type="module" src="js/script.js"></script>
     </div>

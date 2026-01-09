@@ -1,64 +1,50 @@
 import { auth, db } from "./firebase-init.js";
-import { doc, getDoc, collection, getDocs } from
-  "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
-import { onAuthStateChanged } from
-  "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-let authChecked = false;
-
-// ------------------------------ RENDER PROFIEL ------------------
-async function loadProfile(user) {
-  if (!user) return;
-
-  try {
-    const userRef = doc(db, "users", user.uid);
-    const snap = await getDoc(userRef);
-    if (!snap.exists()) return;
-
-    const data = snap.data() || {};
-
-    document.getElementById("profileAvatar").src =
-      data.avatar?.trim()
-        ? data.avatar
-        : "images/icons/avatar.png";
-
-    document.getElementById("profileUsername").textContent =
-      data.username?.trim()
-        ? data.username
-        : "Gebruiker";
-
-    document.getElementById("avatarLevel").textContent =
-      data.level || "1";
-
-    const materialenContainer = document.getElementById("profileMaterials");
-    materialenContainer.innerHTML = "";
-
-    if (Array.isArray(data.materialsOwned) && data.materialsOwned.length > 0) {
-      const materialenSnapshot = await getDocs(collection(db, "Materialen"));
-
-      materialenSnapshot.forEach(docSnap => {
-        if (data.materialsOwned.includes(docSnap.id)) {
-          const div = document.createElement("div");
-          div.className = "material-blok selected";
-          div.textContent =
-            docSnap.data().Materiaal ||
-            docSnap.data().naam ||
-            "Onbekend";
-          materialenContainer.appendChild(div);
-        }
-      });
-    } else {
-      materialenContainer.innerHTML = "<p>Geen materialen toegevoegd</p>";
-    }
-
-  } catch (error) {
-    console.error("Fout bij laden profiel:", error);
-  }
-}
-
-// ------------------------------ AUTH INIT ------------------
 onAuthStateChanged(auth, async (user) => {
   if (!user) return;
 
-  loadProfile(user);
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (!snap.exists()) return;
+
+  const data = snap.data();
+
+  // profiel avatar
+  const profileAvatar = document.getElementById("profileAvatar");
+  if (profileAvatar && data.avatar) {
+    profileAvatar.src = data.avatar;
+  }
+
+  // navbar avatar
+  const navbarAvatar = document.getElementById("navbarAvatar");
+  if (navbarAvatar && data.avatar) {
+    navbarAvatar.src = data.avatar;
+  }
+
+  // username
+  const nameEl = document.getElementById("profileUsername");
+  if (nameEl) nameEl.innerText = data.username;
+
+  // materialen
+  const materialsContainer = document.getElementById("profileMaterials");
+  if (materialsContainer) {
+    materialsContainer.innerHTML = ""; // eerst leegmaken
+    const materialenSnapshot = await getDocs(collection(db, "Materialen")); // alle materialen ophalen
+    materialenSnapshot.forEach(docSnap => {
+      const m = docSnap.data();
+      const materialName = m.Materiaal || m.naam || "Onbekend";
+
+      const div = document.createElement("div");
+      div.className = "material-blok";
+
+      // Check of gebruiker dit materiaal bezit
+      if (data.materialsOwned?.includes(docSnap.id)) {
+        div.classList.add("selected");
+      }
+
+      div.innerText = materialName;
+      materialsContainer.appendChild(div);
+    });
+  }
 });

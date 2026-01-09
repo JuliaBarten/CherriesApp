@@ -10,55 +10,33 @@ const allowAnonymous = [
   "login.html"
 ];
 
-// // wacht tot de gebruiker bekend is
-// onAuthStateChanged(auth, async (user) => {
-//   if (allowAnonymous.includes(currentPage)) {
-//     return;
-//   }
-
-//   if (!user) {
-//     console.log("Geen gebruiker ingelogd, redirect naar index");
-//     window.location.href = "index.html";
-//     return;
-//   }
-
-//   // Check profiel alleen als we niet op aanpassen.html zijn
-//   if (currentPage !== "aanpassen.html") {
-//     const snap = await getDoc(doc(db, "users", user.uid));
-//     if (snap.exists() && !snap.data().profileCompleted) {
-//       console.log("Profiel niet compleet, redirect naar aanpassen.html");
-//       window.location.href = "aanpassen.html";
-//     } else {
-//       console.log("Gebruiker ingelogd en profiel compleet, pagina blijft");
-//     }
-//   }
-// });
-
-let authChecked = false;
+const profileEditPages = [
+  "aanpassen.html",
+  "profiel-change.html",
+  "avatarmaker.html"
+];
 
 onAuthStateChanged(auth, async (user) => {
-  if (authChecked) return;
-  authChecked = true;
-
   if (allowAnonymous.includes(currentPage)) return;
 
   if (!user) {
-    console.log("Niet ingelogd → redirect");
-    window.location.replace("index.html");
+        console.log("Niet ingelogd → redirect");
+    window.location.href = "index.html";
     return;
   }
 
-  if (currentPage !== "aanpassen.html") {
-    const snap = await getDoc(doc(db, "users", user.uid));
-    if (snap.exists() && !snap.data().profileCompleted) {
-      window.location.replace("aanpassen.html");
-    }
+  const snap = await getDoc(doc(db, "users", user.uid));
+
+  if (
+    snap.exists() &&
+    !snap.data().profileCompleted &&
+    !profileEditPages.includes(currentPage)
+  ) {
+    window.location.href = "profiel-change.html";
   }
 });
 
 
-
-// Profiel check functie blijft hetzelfde
 export async function requireProfile(fields = []) {
   const user = auth.currentUser;
   if (!user) return { ok: false, reason: "notLoggedIn" };
@@ -67,8 +45,16 @@ export async function requireProfile(fields = []) {
   if (!snap.exists()) return { ok: false, reason: "noProfile" };
 
   const data = snap.data();
+
   for (const field of fields) {
-    if (!data[field] || (Array.isArray(data[field]) && data[field].length === 0)) {
+    if (!(field in data)) {
+      return { ok: false, reason: "missing", field };
+    }
+
+    // ⚠️ lege arrays zijn toegestaan
+    if (Array.isArray(data[field])) continue;
+
+    if (!data[field]) {
       return { ok: false, reason: "missing", field };
     }
   }

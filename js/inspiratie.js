@@ -140,6 +140,11 @@ async function loadAllMaterials() {
 async function loadUserMaterials(user) {
   const snap = await getDoc(doc(db, "users", user.uid));
   userMaterials = snap.data()?.materialsOwned || [];
+  if (!userMaterials.length) {
+    // toon alles
+    return tutorials;
+  }
+
 }
 
 // Render filter buttons

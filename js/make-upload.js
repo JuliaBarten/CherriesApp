@@ -46,10 +46,10 @@ updateHearts(1);
 
 /* ======================  Materialen laden ===================== */
 async function loadMaterialsForMake() {
-  const makeMaterialenContainer = document.getElementById("makeMaterialenContainer");
-  if (!makeMaterialenContainer) return;
+  const materialenContainer = document.getElementById("materialenContainer");
+  if (!materialenContainer) return;
 
-  makeMaterialenContainer.innerHTML = "";
+  materialenContainer.innerHTML = "";
 
   const materialenSnapshot = await getDocs(collection(db, "Materialen"));
 
@@ -66,7 +66,7 @@ async function loadMaterialsForMake() {
       div.classList.toggle("selected");
     });
 
-    makeMaterialenContainer.appendChild(div);
+    materialenContainer.appendChild(div);
   });
 }
 
@@ -170,11 +170,10 @@ function renderStepsList() {
 
     row.innerHTML = `
       <div class="step-image">
-        ${
-          step.image
-            ? `<img src="${URL.createObjectURL(step.image)}">`
-            : `<div class="step-placeholder"></div>`
-        }
+        ${step.image
+        ? `<img src="${URL.createObjectURL(step.image)}">`
+        : `<div class="step-placeholder"></div>`
+      }
       </div>
 
       <div class="step-content">
@@ -224,7 +223,7 @@ form.addEventListener("submit", async (e) => {
   const category = document.getElementById("tutorialCategory").value;
 
   const materials = Array.from(
-    document.querySelectorAll("#makeMaterialenContainer .material-blok.selected")
+    document.querySelectorAll("#materialenContainer .material-blok.selected")
   ).map(el => el.dataset.materialId);
 
   if (!materials.length) {
