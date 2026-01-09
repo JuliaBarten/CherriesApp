@@ -1,4 +1,3 @@
-
 // menu active state
 const current = window.location.pathname.split("/").pop();
 document.querySelectorAll("footer a").forEach(link => {

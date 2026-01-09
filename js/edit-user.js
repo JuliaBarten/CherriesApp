@@ -144,10 +144,7 @@ async function saveProfile() {
 
 // ------------------ Auth state ------------------
 onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    window.location.href = "aanmelden.html";
-    return;
-  }
+  if (!user) return;
 
   await loadProfile(user);
 

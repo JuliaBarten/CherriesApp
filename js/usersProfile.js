@@ -58,17 +58,7 @@ async function loadProfile(user) {
 
 // ------------------------------ AUTH INIT ------------------
 onAuthStateChanged(auth, async (user) => {
-  if (authChecked) return; // voorkomt dubbele triggers
-  authChecked = true;
+  if (!user) return;
 
-  if (!user) {
-    // 👇 kleine vertraging voorkomt mobile race-condition
-    setTimeout(() => {
-      if (!auth.currentUser) {
-        window.location.href = "aanmelden.html";
-      }
-    }, 300);
-  } else {
-    await loadProfile(user);
-  }
+  loadProfile(user);
 });

@@ -4,11 +4,6 @@ import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/fireba
 import { onAuthStateChanged } from
   "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-onAuthStateChanged(auth, (user) => {
-  if (!user) return;
-  loadMaterialsForMake();
-});
-
 let editingStepIndex = null;
 
 const mainImageInput = document.getElementById("mainImage");
@@ -74,6 +69,7 @@ async function loadMaterialsForMake() {
     makeMaterialenContainer.appendChild(div);
   });
 }
+
 /* ======================
    Stappen modal
 ====================== */
@@ -247,10 +243,7 @@ form.addEventListener("submit", async (e) => {
   }
 
   try {
-    const mainRef = ref(
-      storage,
-      `tutorials/${user.uid}/${Date.now()}_main.jpg`
-    );
+    const mainRef = ref(storage, `tutorials/${user.uid}/${Date.now()}_main.jpg`);
     await uploadBytes(mainRef, mainImageFile);
     const mainImageUrl = await getDownloadURL(mainRef);
     const tutorialRef = await addDoc(collection(db, "tutorials"), {
@@ -277,8 +270,7 @@ form.addEventListener("submit", async (e) => {
         imageUrl = await getDownloadURL(stepRef);
       }
 
-      await addDoc(
-        collection(db, "tutorials", tutorialRef.id, "steps"),
+      await addDoc(collection(db, "tutorials", tutorialRef.id, "steps"),
         {
           order: step.order,
           text: step.text,
@@ -297,4 +289,9 @@ form.addEventListener("submit", async (e) => {
     console.error(err);
     alert("Upload mislukt: " + err.message);
   }
+});
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) return;
+  loadMaterialsForMake();
 });

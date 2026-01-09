@@ -3,57 +3,65 @@
 
 
 // ================== IMPORTS ==================
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-import { doc, setDoc, getDocs, collection, query, where } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { auth, db } from "./firebase-init.js";
 
-//==================== wie is ingelogd===================
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log("Ingelogd:", user.uid);
-  } else {
-    console.log("Niet ingelogd");
-    // window.location.href = "aanmelden.html";
-  }
-});
+
+
+function getFakeEmailFromUsername(username) {
+  return `${username}@mail.com`;
+}
 
 async function register() {
-  const username = document.getElementById("regUsername").value;
-  const email = document.getElementById("regEmail").value;
-  const password = document.getElementById("regPassword").value;
+  const usernameInput = document.getElementById("regUsername");
+  const passwordInput = document.getElementById("regPassword");
 
-  // unieke username check
-  const q = query(collection(db, "users"), where("username", "==", username));
-  const snapshot = await getDocs(q);
+  // Niet op deze pagina → niets doen
+  if (!usernameInput || !passwordInput) {
+    return;
+  }
 
-  if (!snapshot.empty) {
+  const username = usernameInput.value.trim();
+  const password = passwordInput.value;
+
+  const email = getFakeEmailFromUsername(username);
+
+  let cred;
+  try {
+    cred = await createUserWithEmailAndPassword(auth, email, password);
+  } catch (error) {
     alert("Gebruikersnaam bestaat al");
     return;
   }
 
-  // gebruiker aanmaken
-  const cred = await createUserWithEmailAndPassword(auth, email, password);
+  if (!cred?.user) return;
 
-  // 🔹 USER DOCUMENT AANMAKEN
   await setDoc(doc(db, "users", cred.user.uid), {
     username,
     email,
-    level: null,
-    materialsOwned: [],
-    avatar: null,
     profileCompleted: false,
+    materialsOwned: [],
     createdAt: new Date()
   });
 
-  // 🔹 ALLEEN HIER REDIRECT
   window.location.href = "profiel-change.html";
 }
 
+
 // ================== LOGIN MET USERNAME ==================
 async function login() {
-  const username = document.getElementById("loginUsername").value.trim();
-  const password = document.getElementById("loginPassword").value;
+  const usernameInput = document.getElementById("loginUsername");
+  const passwordInput = document.getElementById("loginPassword");
   const message = document.getElementById("message");
+
+  //  Niet op loginpagina
+  if (!usernameInput || !passwordInput) {
+    return;
+  }
+
+  const username = usernameInput.value.trim();
+  const password = passwordInput.value;
 
   if (!username || !password) {
     message.innerText = "Vul gebruikersnaam en wachtwoord in";
@@ -61,43 +69,39 @@ async function login() {
   }
 
   try {
-    //  zoek email bij username
-    const q = query(
-      collection(db, "users"),
-      where("username", "==", username)
-    );
-
-    const snapshot = await getDocs(q);
-
-    if (snapshot.empty) {
-      message.innerText = "Gebruikersnaam bestaat niet";
-      return;
-    }
-
-    const email = snapshot.docs[0].data().email;
-
-    // login via Firebase Auth
+    const email = getFakeEmailFromUsername(username);
     await signInWithEmailAndPassword(auth, email, password);
-
-    message.innerText = "Inloggen gelukt!";
-    // window.location.href = "dashboard.html";
-  } catch (error) {
-    message.innerText = "Onjuist wachtwoord";
+    window.location.href = "inspiration.html";
+  } catch {
+    message.innerText = "Combinatie gebruikers-wachtwoord is onjuist";
   }
-
-  // redirect na succesvol inloggen
-window.location.href = "inspiration.html";
 }
+
 
 
 // ================== BUTTONS ==================
-const registerBtn = document.getElementById("registerBtn");
-if (registerBtn) {
-  registerBtn.addEventListener("click", register);
+// const registerBtn = document.getElementById("registerBtn");
+// if (registerBtn) {
+//   registerBtn.addEventListener("click", register);
+// }
+
+// const loginBtn = document.getElementById("loginBtn");
+// if (loginBtn) {
+//   loginBtn.addEventListener("click", login);
+// }
+
+const registerForm = document.getElementById("registerForm");
+if (registerForm) {
+  registerForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    register();
+  });
 }
 
-const loginBtn = document.getElementById("loginBtn");
-if (loginBtn) {
-  loginBtn.addEventListener("click", login);
+const loginForm = document.getElementById("loginForm");
+if (loginForm) {
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    login();
+  });
 }
-

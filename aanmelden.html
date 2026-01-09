@@ -15,15 +15,15 @@
 <body>
     <div class="app-wrapper">
         <div class="classic-outline">
-            <img src="images/icons/logooptie.png" alt="Logo" class="logobegin">
-            <input id="regUsername" class="custom-input" placeholder="Username" required>
-            <input id="regEmail" class="custom-input" placeholder="Email" required>
-            <input id="regPassword" class="custom-input" placeholder="Wachtwoord" required>
-            <button class="flex-column classic-button-small" id="registerBtn">Registreren</button>
+            <form id="registerForm">
+                <input id="regUsername" class="custom-input" placeholder="Gebruikersnaam" />
+                <input id="regPassword" class="custom-input" type="password" placeholder="Wachtwoord" required>
+                <button class="flex-column classic-button-small" type="submit" id="registerBtn">Registreren</button>
         </div>
 
+
+
         <script type="module" src="js/firebase-init.js"></script>
-        <script type="module" src="js/guard.js"></script>
         <script type="module" src="js/authentication.js"></script>
         <script type="module" src="js/script.js"></script>
     </div>

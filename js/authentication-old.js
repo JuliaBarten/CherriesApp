@@ -1,36 +1,95 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBFpfyYMfgAlyozywN27mkCM8NODcUntOA",
-  authDomain: "cherrysapp-de82f.firebaseapp.com",
-  projectId: "cherrysapp-de82f",
-  storageBucket: "cherrysapp-de82f.firebasestorage.app",
-  messagingSenderId: "662896896244",
-  appId: "1:662896896244:web:4a7d8adf1364e3229c16a1",
-  measurementId: "G-YLY36ZVKKV"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const auth = getAuth(app);
+// // TODO: Add SDKs for Firebase products that you want to use
+// // https://firebase.google.com/docs/web/setup#available-libraries
 
 
-//firebase initieren
-function loginFunc() {
+// ================== IMPORTS ==================
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { doc, setDoc, getDocs, collection, query, where } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { auth, db } from "./firebase-init.js";
 
-  let email = document.getElementById("persEmail").value;
-  let wachtwoord = document.getElementById("persWachtwoord").value;
-  createUserWithEmailAndPassword(auth, email, wachtwoord).then(() => console.log("jeej")).catch((e) => console.log(e))
-  console.log (email);
-};
+//==================== wie is ingelogd===================
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("Ingelogd:", user.uid);
+  } else {
+    console.log("Niet ingelogd");
+    window.location.href = "index.html";
+  }
+});
 
-document.getElementById("submitLogin").onclick = loginFunc
+function getFakeEmailFromUsername(username) {
+  return `${username}@mail.com`;
+}
+
+async function register() {
+  const username = document.getElementById("regUsername").value;
+  // const email = document.getElementById("regEmail").value;
+  const email = getFakeEmailFromUsername(username);
+  const password = document.getElementById("regPassword").value;
+
+  // // unieke username check
+  // const q = query(collection(db, "users"), where("username", "==", username));
+  // const snapshot = await getDocs(q);
+
+  if (!snapshot.empty) {
+    alert("Gebruikersnaam bestaat al");
+    return;
+  }
+
+  // gebruiker aanmaken
+  const cred = await createUserWithEmailAndPassword(auth, email, password);
+
+  // 🔹 USER DOCUMENT AANMAKEN
+  await setDoc(doc(db, "users", cred.user.uid), {
+    username,
+    email,
+    level: null,
+    materialsOwned: [],
+    avatar: null,
+    profileCompleted: false,
+    createdAt: new Date()
+  });
+
+  // 🔹 ALLEEN HIER REDIRECT
+  window.location.href = "profiel-change.html";
+}
+
+// ================== LOGIN MET USERNAME ==================
+async function login() {
+  const username = document.getElementById("loginUsername").value.trim();
+  const password = document.getElementById("loginPassword").value;
+  const message = document.getElementById("message");
+
+  if (!username || !password) {
+    message.innerText = "Vul gebruikersnaam en wachtwoord in";
+    return;
+  }
+
+  // Verwijder mogelijke foutmelding van vorige poging.
+  message.innerText = "";
+
+  try {
+    const email = getFakeEmailFromUsername(username);
+
+    // login via Firebase Auth
+    await signInWithEmailAndPassword(auth, email, password);
+
+    message.innerText = "Inloggen gelukt!";
+    window.location.href = "inspiration.html";
+  } catch (error) {
+    message.innerText = "Combinatie gebruikers-wachtwoord is onjuist";
+  }
+}
+
+
+// ================== BUTTONS ==================
+const registerBtn = document.getElementById("registerBtn");
+if (registerBtn) {
+  registerBtn.addEventListener("click", register);
+}
+
+const loginBtn = document.getElementById("loginBtn");
+if (loginBtn) {
+  loginBtn.addEventListener("click", login);
+}
+
