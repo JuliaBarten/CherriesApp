@@ -31,15 +31,15 @@
                 <a href="favorites.html" class="text-center nav-item">
                     <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
                 </a>
-                
-               <div class="modal fade" id="makeChoiceModal">
-  <div class="modal-dialog modal-bottom">
-    <div class="modal-content p-4">
-      <button id="newMakeBtn" class="classic-button">Nieuw project</button>
-      <button id="draftsBtn" class="classic-button-outline">Mijn drafts</button>
-    </div>
-  </div>
-</div>
+
+                <div class="modal fade" id="makeChoiceModal">
+                    <div class="modal-dialog modal-bottom">
+                        <div class="modal-content p-4">
+                            <button id="newMakeBtn" class="classic-button">Nieuw project</button>
+                            <button id="draftsBtn" class="classic-button-outline">Mijn drafts</button>
+                        </div>
+                    </div>
+                </div>
 
                 <a href="friends.html" class="text-center nav-item">
                     <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
@@ -52,11 +52,15 @@
 
         <div class="classic-outline">
             <main>
-                <h1>Mijn favorieten</h1>
-                <div id="favoritesGrid"></div>
-                <button class="classic-button">
-                    <a href="inspiration.html" class="text-center">Vind meer inspiratie</a>
-                </button>
+                <h2 class="classic-title">Mijn drafts</h2>
+
+                <div id="draftsContainer" class="masonry-grid">
+                    <!-- drafts via JS -->
+                </div>
+
+                <p id="emptyState" class="text-center mt-4" style="display:none;">
+                    Je hebt nog geen drafts ✨
+                </p>
             </main>
 
             <script type="module" src="js/firebase-init.js"></script>

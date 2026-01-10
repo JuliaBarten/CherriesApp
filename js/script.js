@@ -26,22 +26,31 @@ document.querySelectorAll("footer a").forEach(link => {
   }
 });
 
-/* ================= make knop pop-up ===========================*/
-document.querySelector('a[href="make.html"]')
-  .addEventListener("click", (e) => {
-    e.preventDefault();
-    new bootstrap.Modal(
-      document.getElementById("makeChoiceModal")
-    ).show();
-  });
-  
-  document.getElementById("newMakeBtn").onclick = () => {
-  window.location.href = "make-upload.html";
-};
+/* ==================== make button pop up ==================*/
+const makeNavBtn = document.getElementById("makeNavBtn");
+const makeMenu = document.getElementById("makeMenu");
 
-document.getElementById("draftsBtn").onclick = () => {
-  window.location.href = "make-drafts.html";
-};
+makeNavBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  makeMenu.classList.toggle("show");
+});
+
+// Klik buiten menu → sluiten
+document.addEventListener("click", (e) => {
+  if (!makeMenu.contains(e.target) && !makeNavBtn.contains(e.target)) {
+    makeMenu.classList.remove("show");
+  }
+});
+
+document.getElementById("newProjectBtn")
+  .addEventListener("click", () => {
+    window.location.href = "make-upload.html";
+  });
+
+document.getElementById("draftsBtn")
+  .addEventListener("click", () => {
+    window.location.href = "make-drafts.html";
+  });
 
 
 /* ==================== POP UP INCOMPLEET [PROFIEL} ==================*/

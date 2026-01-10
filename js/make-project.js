@@ -1,6 +1,8 @@
 import { db } from "./firebase-init.js";
 import { doc, getDoc, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { auth } from "./firebase-init.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
 
 function setupEditButton(authorId) {
   const btn = document.getElementById("editTutorialBtn");
@@ -44,6 +46,7 @@ async function loadTutorial(id) {
   setupEditButton(t.authorId);
 }
 
+
 function renderSteps(steps) {
   const container = document.getElementById("projectSteps");
   container.innerHTML = "";
@@ -68,3 +71,18 @@ function renderSteps(steps) {
     container.appendChild(div);
   });
 }
+
+onAuthStateChanged(auth, user => {
+  const editBtn = document.getElementById("editTutorialBtn");
+
+  if (!editBtn) return;
+
+  if (!user || user.uid !== t.authorId) {
+    editBtn.style.display = "none";
+  } else {
+    editBtn.style.display = "block";
+    editBtn.onclick = () => {
+      window.location.href = `make-edit.html?id=${tutorialId}`;
+    };
+  }
+});

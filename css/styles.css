@@ -244,6 +244,40 @@ footer .d-flex {
     object-fit: cover;
 }
 
+.make-menu {
+  position: fixed;
+  bottom: 80px;              /* net boven navbar */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.make-menu.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(-6px);
+}
+
+.make-pill {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  background: var(--licht);
+  color: var(--textdonker);
+  font-weight: var(--size3);
+}
+
+.make-pill.secondary {
+  background: var(--licht);
+  color: var(--textdonker);
+}
+
+
 /* =======================  ALGEMENE COMPONENTEN   ========================== */
 .classic-outline {
     position: relative;

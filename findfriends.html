@@ -14,7 +14,7 @@
 
 <body>
     <div class="app-wrapper">
-        <!---------------------   app - frame  --------------------->
+              <!---------------------   app - frame  --------------------->
         <header class="app-header fixed-top">
             <img alt="logo" src="images/logo_bol.png" class="logo" />
             <a href="inbox.html" class="inbox-btn">
@@ -22,6 +22,7 @@
                 <span id="inboxBadge" class="badge hidden"></span>
             </a>
         </header>
+
         <footer class="fixed-bottom navbar">
             <div class="d-flex justify-content-around py-2">
                 <a href="inspiration.html" class="text-center nav-item">
@@ -30,9 +31,16 @@
                 <a href="favorites.html" class="text-center nav-item">
                     <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
                 </a>
-                <a href="make.html" class="text-center nav-item">
+                
+              <a href="#" id="makeNavBtn" class="text-center nav-item">
                     <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
                 </a>
+                
+                <div class="make-menu" id="makeMenu">
+                    <button id="newProjectBtn" class="make-pill">Nieuw</button>
+                    <button id="draftsBtn" class="make-pill secondary">Drafts</button>
+                </div>
+                
                 <a href="friends.html" class="text-center nav-item">
                     <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
                 </a>
