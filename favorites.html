@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <div class="app-wrapper classic-outline">
+    <div class="app-wrapper">
         <!---------------------   app - frame  --------------------->
         <header class="app-header fixed-top">
             <img alt="logo" src="images/logo_bol.png" class="logo" />
@@ -31,9 +31,16 @@
                 <a href="favorites.html" class="text-center nav-item">
                     <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
                 </a>
-                <a href="make.html" class="text-center nav-item">
-                    <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
-                </a>
+                
+               <div class="modal fade" id="makeChoiceModal">
+  <div class="modal-dialog modal-bottom">
+    <div class="modal-content p-4">
+      <button id="newMakeBtn" class="classic-button">Nieuw project</button>
+      <button id="draftsBtn" class="classic-button-outline">Mijn drafts</button>
+    </div>
+  </div>
+</div>
+
                 <a href="friends.html" class="text-center nav-item">
                     <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
                 </a>
@@ -43,17 +50,19 @@
             </div>
         </footer>
 
-        <main>
-            <h1>Mijn favorieten</h1>
-            <div id="favoritesGrid"></div>
-            <button class="classic-button">
-                <a href="inspiration.html" class="text-center nav-item">Vind meer inspiratie</a>
-            </button>
-        </main>
+        <div class="classic-outline">
+            <main>
+                <h1>Mijn favorieten</h1>
+                <div id="favoritesGrid"></div>
+                <button class="classic-button">
+                    <a href="inspiration.html" class="text-center">Vind meer inspiratie</a>
+                </button>
+            </main>
 
-        <script type="module" src="js/firebase-init.js"></script>
-        <script type="module" src="js/favorites.js"></script>
-        <script type="module" src="js/script.js"></script>
+            <script type="module" src="js/firebase-init.js"></script>
+            <script type="module" src="js/favorites.js"></script>
+            <script type="module" src="js/script.js"></script>
+        </div>
     </div>
 </body>
 

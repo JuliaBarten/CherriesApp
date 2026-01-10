@@ -1,6 +1,18 @@
 import { db } from "./firebase-init.js";
-import { doc, getDoc } from
-  "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { doc, getDoc, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { auth } from "./firebase-init.js";
+
+function setupEditButton(authorId) {
+  const btn = document.getElementById("editTutorialBtn");
+  const user = auth.currentUser;
+
+  if (user && user.uid === authorId) {
+    btn.style.display = "block";
+    btn.addEventListener("click", () => {
+      window.location.href = `make-edit.html?id=${tutorialId}`;
+    });
+  }
+}
 
 const params = new URLSearchParams(window.location.search);
 const tutorialId = params.get("id");
@@ -9,16 +21,27 @@ if (!tutorialId) {
   console.error("Geen tutorial ID");
 }
 
-
 async function loadTutorial(id) {
+  // tutorial zelf
   const snap = await getDoc(doc(db, "tutorials", id));
   if (!snap.exists()) return;
 
   const t = snap.data();
-
   document.getElementById("projectTitle").textContent = t.title;
 
-  renderSteps(t.steps || []);
+  // stappen ophalen
+  const stepsSnap = await getDocs(
+    query(
+      collection(db, "tutorials", id, "steps"),
+      orderBy("order")
+    )
+  );
+
+  const steps = stepsSnap.docs.map(d => d.data());
+  renderSteps(steps);
+
+  // edit-knop tonen
+  setupEditButton(t.authorId);
 }
 
 function renderSteps(steps) {
@@ -32,12 +55,12 @@ function renderSteps(steps) {
     div.innerHTML = `
       <div class="step-image-wrapper">
         ${step.image
-        ? `<img src="${step.image}" alt="stap ${index + 1}">`
+        ? `<img src="${step.image}" alt="Stap ${index + 1}">`
         : `<div class="step-image-placeholder">Geen foto</div>`
       }
       </div>
       <div class="step-text">
-        <strong>Stap ${index + 1}</strong>
+        <strong>Stap ${step.order}</strong>
         <p>${step.text}</p>
       </div>
     `;
@@ -45,5 +68,3 @@ function renderSteps(steps) {
     container.appendChild(div);
   });
 }
-
-loadTutorial(tutorialId);

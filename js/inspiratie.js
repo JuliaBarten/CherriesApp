@@ -63,6 +63,8 @@ async function removeFavorite(userId, tutorialId) {
 
 // Render één tutorialkaart
 function renderSingleTutorial(t) {
+  where("draft", "!=", true)
+
   const grid = document.getElementById("tutorialGrid");
   const isFavorite = favoriteCache.includes(t.id);
 

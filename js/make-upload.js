@@ -1,8 +1,7 @@
 import { auth, db, storage } from "./firebase-init.js";
-import { collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { collection, addDoc, getDocs, setDoc, updateDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
-import { onAuthStateChanged } from
-  "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 let editingStepIndex = null;
 
@@ -124,19 +123,17 @@ document.getElementById("saveStepBtn").addEventListener("click", () => {
   }
   stepImagePreview.innerHTML = `<span class="plus-icon">+</span>`;
 
-
   stepTextInput.value = "";
   stepImageInput.value = "";
   stepModal.hide();
   renderStepsList();
 });
 
+autoSaveDraft();
 
 // Herschrijf stapnummers na verwijderen
 function renumberSteps() {
-  stepsData.forEach((step, i) => {
-    step.order = i + 1;
-  });
+  stepsData.forEach((step, i) => { step.order = i + 1; });
   stepCount = stepsData.length;
 }
 
@@ -203,11 +200,36 @@ function renderStepsList() {
   });
 }
 
-/* ======================
-   Tutorial Submit
-====================== */
-const form = document.getElementById("tutorialForm");
+/*====================== drafts ===============================*/
+draftsSnap.forEach(docSnap => {
+  const t = docSnap.data();
 
+  const card = document.createElement("div");
+  card.className = "tutorial-card";
+
+  card.innerHTML = `
+    <img src="${t.mainImageUrl || 'images/placeholder.png'}">
+    <h4>${t.title}</h4>
+    <small>Laatst bewerkt</small>
+  `;
+
+  card.onclick = () => {
+    window.location.href =
+      `make-edit.html?id=${docSnap.id}`;
+  };
+
+  container.appendChild(card);
+});
+
+await updateDoc(doc(db, "tutorials", tutorialId), {
+  draft: false,
+  publishedAt: serverTimestamp()
+});
+
+
+
+/* ====================== Tutorial Submit  ====================== */
+const form = document.getElementById("tutorialForm");
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -245,17 +267,22 @@ form.addEventListener("submit", async (e) => {
     const mainRef = ref(storage, `tutorials/${user.uid}/${Date.now()}_main.jpg`);
     await uploadBytes(mainRef, mainImageFile);
     const mainImageUrl = await getDownloadURL(mainRef);
-    const tutorialRef = await addDoc(collection(db, "tutorials"), {
+    if (!draftId) {
+      alert("Draft ontbreekt, probeer opnieuw");
+      return;
+    }
+
+    await updateDoc(doc(db, "tutorials", draftId), {
       title,
       level: selectedLevel,
       duration,
       materials,
       category,
       mainImageUrl,
-      authorId: user.uid,
-      authorUsername: user.displayName || "Onbekend",
-      createdAt: serverTimestamp()
+      draft: false,
+      publishedAt: serverTimestamp()
     });
+
 
     for (const step of stepsData) {
       let imageUrl = null;
@@ -279,16 +306,70 @@ form.addEventListener("submit", async (e) => {
     }
 
     alert("Tutorial succesvol geüpload!");
-    form.reset();
-    stepsData = [];
-    stepCount = 0;
-    updateHearts(1);
+
+    // 🔁 DIRECT DOOR NAAR DETAILPAGINA
+    window.location.href = `make-project.html?id=${tutorialRef.id}`;
+
 
   } catch (err) {
     console.error(err);
     alert("Upload mislukt: " + err.message);
   }
 });
+
+
+/* ======================== autosave =====================*/
+let draftId = null;
+
+const autoSaveDraft = debounce(async () => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const title = document.getElementById("titel").value.trim();
+  const materials = getSelectedMaterials();
+
+  if (!draftId) {
+    const ref = doc(collection(db, "tutorials"));
+    draftId = ref.id;
+
+    await setDoc(ref, {
+      title: title || "Nieuw project",
+      authorId: user.uid,
+      draft: true,
+      createdAt: serverTimestamp(),
+      lastEditedAt: serverTimestamp()
+    });
+  } else {
+    await updateDoc(doc(db, "tutorials", draftId), {
+      title,
+      level: selectedLevel,
+      materials,
+      lastEditedAt: serverTimestamp()
+    });
+  }
+}, 1200);
+
+
+function debounce(fn, delay = 1000) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
+}
+
+document.getElementById("titel")
+  .addEventListener("input", autoSaveDraft);
+
+document.querySelectorAll(".niveau-icon")
+  .forEach(icon => icon.addEventListener("click", autoSaveDraft));
+
+document.getElementById("materialenContainer")
+  .addEventListener("click", autoSaveDraft);
+
+
+
+
 
 onAuthStateChanged(auth, (user) => {
   if (!user) return;
