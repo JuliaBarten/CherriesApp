@@ -13,9 +13,9 @@
     --textmid: #c57878;
     --textdonker: #920500;
     --textplaceholder: #928989;
-    --sizeklein: 1.2rem;
-    --sizemidden: 3rem;
-    --sizegroot: 5rem;
+    -- size1: 1.2rem;
+    -- size3: 3rem;
+    -- size5: 5rem;
     --zwaartemid: 500;
     --zwaartekop: 700;
     --zwaartetitel: 900;
@@ -136,7 +136,7 @@ footer {
 }
 
 h1 {
-    size: var(--sizemidden);
+    size: var(-- size3);
     color: var(--textdonker);
 }
 
@@ -161,7 +161,7 @@ h1 {
 .classic-categories {
     width: 100%;
     display: block;
-    font-size: var(--sizeklein);
+    font-size: var(-- size1);
     color: var(--textdonker);
     font-weight: var(--zwaartekop);
     background-color: var(--mid);
@@ -178,7 +178,7 @@ h1 {
     display: block;
     padding: 20px;
     margin: var(--margstandard);
-    font-size: var(--sizeklein);
+    font-size: var(-- size1);
     border: none;
     border-radius: var(--borderknop);
     box-shadow: var(--schaduw)
@@ -191,7 +191,7 @@ h1 {
     display: block;
     padding: 20px;
     margin: var(--margstandard);
-    font-size: var(--sizeklein);
+    font-size: var(-- size1);
     border: none;
     border-radius: var(--borderknop);
     box-shadow: var(--schaduw)
@@ -206,7 +206,7 @@ h1 {
     border: 1px solid var(--licht);
     background-color: var(--ipvwit);
     box-shadow: var(--schaduw);
-    font-size: var(--sizeklein);
+    font-size: var(-- size1);
     color: var(--textplaceholder);
     outline: none;
     transition: 0.3s;
@@ -221,7 +221,7 @@ h1 {
     border: 1px solid var(--licht);
     background-color: var(--ipvwit);
     box-shadow: var(--schaduw);
-    font-size: var(--sizeklein);
+    font-size: var(-- size1);
     font-weight: 700;
     color: var(--textdonker);
     outline: none;
@@ -309,7 +309,7 @@ h1 {
     display: block;
     padding: 2rem;
     text-align: center;
-    font-size: var(--sizeklein);
+    font-size: var(-- size1);
     border: none;
     border-radius: var(--borderknop);
 }
@@ -322,7 +322,7 @@ h1 {
     margin: var(--margstandard);
     padding: 2rem;
     text-align: center;
-    font-size: var(--sizeklein);
+    font-size: var(-- size1);
     border: none;
     border-radius: var(--borderknop);
 }
@@ -420,7 +420,7 @@ h1 {
     padding: 10px;
     border-radius: var(--borderknop);
     border: 1px solid var(--licht);
-    font-size: var(--sizeklein);
+    font-size: var(-- size1);
 }
 
 /* NIVEAU */
@@ -477,7 +477,7 @@ h1 {
     padding: 10px;
     border-radius: var(--borderknop);
     border: 1px solid var(--licht);
-    font-size: var(--sizeklein);
+    font-size: var(-- size1);
 }
 
 .time-icon {
@@ -676,7 +676,7 @@ Retrieved 2025-12-10, License - CC BY-SA 4.0
     display: block;
     height: 50px;
     margin: 5px;
-    font-size: var(--sizeklein);
+    font-size: var(-- size1);
     border: none;
     border-radius: var(--borderknop);
     box-shadow: var(--schaduw);

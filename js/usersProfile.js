@@ -26,6 +26,15 @@ onAuthStateChanged(auth, async (user) => {
   const nameEl = document.getElementById("profileUsername");
   if (nameEl) nameEl.innerText = data.username;
 
+  // niveau tonen
+  const levelIcon = document.getElementById("avatarLevelIcon");
+  if (levelIcon) {
+    // standaard niveau = 1
+    const level = data.level || 1;
+    levelIcon.src = `images/icons/niveau_${level}.png`;
+  }
+
+
   // materialen
   const materialsContainer = document.getElementById("profileMaterials");
   if (materialsContainer) {
