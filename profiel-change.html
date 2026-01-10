@@ -14,82 +14,85 @@
 
 <body>
   <div class="app-wrapper">
-        <!---------------------   app - frame  --------------------->
-        <header class="app-header fixed-top">
-            <img alt="logo" src="images/logo_bol.png" class="logo" />
-            <a href="inbox.html" class="inbox-btn">
-                <img src="images/icons/inbox.png" alt="Inbox" />
-                <span id="inboxBadge" class="badge hidden"></span>
-            </a>
-        </header>
+    <!---------------------   app - frame  --------------------->
+    <header class="app-header fixed-top">
+      <img alt="logo" src="images/logo_bol.png" class="logo" />
+      <a href="inbox.html" class="inbox-btn">
+        <img src="images/icons/inbox.png" alt="Inbox" />
+        <span id="inboxBadge" class="badge hidden"></span>
+      </a>
+    </header>
 
-        <footer class="fixed-bottom navbar">
-            <div class="d-flex justify-content-around py-2">
-                <a href="inspiration.html" class="text-center nav-item">
-                    <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
-                </a>
-                <a href="favorites.html" class="text-center nav-item">
-                    <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
-                </a>
-                
-              <a href="#" id="makeNavBtn" class="text-center nav-item">
-                    <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
-                </a>
-                
-                <div class="make-menu" id="makeMenu">
-                    <button id="newProjectBtn" class="make-pill">Nieuw</button>
-                    <button id="draftsBtn" class="make-pill secondary">Drafts</button>
-                </div>
-                
-                <a href="friends.html" class="text-center nav-item">
-                    <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
-                </a>
-                <a href="profiel.html" class="text-center nav-item">
-                    <img id="navbarAvatar" class="navbar-avatar" />
-                </a>
-            </div>
-        </footer>
+    <footer class="fixed-bottom navbar">
+      <div class="d-flex justify-content-around py-2">
+        <a href="inspiration.html" class="text-center nav-item">
+          <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
+        </a>
+        <a href="favorites.html" class="text-center nav-item">
+          <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
+        </a>
 
-    <div class="classic-outline profiel-main">
+        <a href="#" id="makeNavBtn" class="text-center nav-item">
+          <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
+        </a>
 
-      <!-- Avatar -->
-<div class="avatar-carousel-wrapper text-center">
-  <button id="prevAvatar" class="carousel-btn">&lt;</button>
-  <img id="currentAvatar" class="avatar-preview" src="images/avatar/skin/optie2.png alt="Avatar">
-  <button id="nextAvatar" class="carousel-btn">&gt;</button>
-</div>
-
-
-
-
-      <!-- Gebruikersnaam -->
-      <div class="profile-section mb-3">
-        <input class="form-control adjust-main-input" type="text" id="usernameInput"
-          placeholder="Vul je gebruikersnaam in">
-      </div>
-
-      <!-- Niveau -->
-      <div class="profile-section mb-3 text-center">
-        <div id="niveauHearts" class="d-flex justify-content-center gap-2">
-          <img src="images/icons/heart3.png" data-level="1" class="niveau-icon" width="40" height="40">
-          <img src="images/icons/heart3.png" data-level="2" class="niveau-icon" width="40" height="40">
-          <img src="images/icons/heart3.png" data-level="3" class="niveau-icon" width="40" height="40">
-          <img src="images/icons/heart3.png" data-level="4" class="niveau-icon" width="40" height="40">
-          <img src="images/icons/heart3.png" data-level="5" class="niveau-icon" width="40" height="40">
+        <div class="make-menu" id="makeMenu">
+          <button id="newProjectBtn" class="make-pill">Nieuw</button>
+          <button id="draftsBtn" class="make-pill secondary">Drafts</button>
         </div>
-      </div>
 
-      <!-- Materialen -->
-      <div class="profile-section mb-4">
-        <label class="classic-categories">Materialen</label>
-        <div id="materialenContainer" class="d-flex flex-wrap gap-2">
-          <!-- Checkboxes worden via JS geladen -->
+        <a href="friends.html" class="text-center nav-item">
+          <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
+        </a>
+        <a href="profiel.html" class="text-center nav-item">
+          <img id="navbarAvatar" class="navbar-avatar" />
+        </a>
+      </div>
+    </footer>
+
+    <main>
+      <div class="classic-outline profiel-main">
+
+        <!-- Avatar -->
+        <div class="avatar-carousel-wrapper text-center">
+          <button id="prevAvatar" class="carousel-btn">&lt;</button>
+          <img id="currentAvatar" class="avatar-preview" src="images/avatar/skin/optie2.png alt=" Avatar">
+          <button id="nextAvatar" class="carousel-btn">&gt;</button>
         </div>
-      </div>
 
-      <!-- Opslaan -->
-      <button id="saveProfile" class="classic-button">Opslaan</button>
-    </div>
+
+
+
+        <!-- Gebruikersnaam -->
+        <div class="profile-section mb-3">
+          <input class="form-control adjust-main-input" type="text" id="usernameInput"
+            placeholder="Vul je gebruikersnaam in">
+        </div>
+
+        <!-- Niveau -->
+        <div class="profile-section mb-3 text-center">
+          <div id="niveauHearts" class="d-flex justify-content-center gap-2">
+            <img src="images/icons/heart3.png" data-level="1" class="niveau-icon" width="40" height="40">
+            <img src="images/icons/heart3.png" data-level="2" class="niveau-icon" width="40" height="40">
+            <img src="images/icons/heart3.png" data-level="3" class="niveau-icon" width="40" height="40">
+            <img src="images/icons/heart3.png" data-level="4" class="niveau-icon" width="40" height="40">
+            <img src="images/icons/heart3.png" data-level="5" class="niveau-icon" width="40" height="40">
+          </div>
+        </div>
+
+        <!-- Materialen -->
+        <div class="profile-section mb-4">
+          <label class="classic-categories">Materialen</label>
+          <div id="materialenContainer" class="d-flex flex-wrap gap-2">
+            <!-- Checkboxes worden via JS geladen -->
+          </div>
+        </div>
+
+        <!-- Opslaan -->
+        <button id="saveProfile" class="classic-button">Opslaan</button>
+      </div>
+    </main>
+    
     <script type="module" src="js/firebase-init.js"></script>
     <script type="module" src="js/authentication.js"></script>
     <script type="module" src="js/edit-user.js"></script>

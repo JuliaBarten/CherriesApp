@@ -14,75 +14,76 @@
 
 <body>
   <div class="app-wrapper">
-        <!---------------------   app - frame  --------------------->
-        <header class="app-header fixed-top">
-            <img alt="logo" src="images/logo_bol.png" class="logo" />
-            <a href="inbox.html" class="inbox-btn">
-                <img src="images/icons/inbox.png" alt="Inbox" />
-                <span id="inboxBadge" class="badge hidden"></span>
-            </a>
-        </header>
+    <!---------------------   app - frame  --------------------->
+    <header class="app-header fixed-top">
+      <img alt="logo" src="images/logo_bol.png" class="logo" />
+      <a href="inbox.html" class="inbox-btn">
+        <img src="images/icons/inbox.png" alt="Inbox" />
+        <span id="inboxBadge" class="badge hidden"></span>
+      </a>
+    </header>
 
-        <footer class="fixed-bottom navbar">
-            <div class="d-flex justify-content-around py-2">
-                <a href="inspiration.html" class="text-center nav-item">
-                    <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
-                </a>
-                <a href="favorites.html" class="text-center nav-item">
-                    <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
-                </a>
-                
-              <a href="#" id="makeNavBtn" class="text-center nav-item">
-                    <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
-                </a>
-                
-                <div class="make-menu" id="makeMenu">
-                    <button id="newProjectBtn" class="make-pill">Nieuw</button>
-                    <button id="draftsBtn" class="make-pill secondary">Drafts</button>
-                </div>
-                
-                <a href="friends.html" class="text-center nav-item">
-                    <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
-                </a>
-                <a href="profiel.html" class="text-center nav-item">
-                    <img id="navbarAvatar" class="navbar-avatar" />
-                </a>
-            </div>
-        </footer>
+    <footer class="fixed-bottom navbar">
+      <div class="d-flex justify-content-around py-2">
+        <a href="inspiration.html" class="text-center nav-item">
+          <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
+        </a>
+        <a href="favorites.html" class="text-center nav-item">
+          <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
+        </a>
 
-    <main class="classic-outline profiel-main">
+        <a href="#" id="makeNavBtn" class="text-center nav-item">
+          <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
+        </a>
 
-      <!-- Avatar + niveau + naam -->
-      <div class="profile-card text-center position-relative">
-        <a href="profiel-change.html" class="adjust-btn position-absolute">
-          <img src="images/icons/edit.png" alt="Aanpassen" width="30" height="30"> </a>
-        <div class="avatar-wrapper position-relative d-inline-block">
-          <img id="profileAvatar" src="images/icons/avatar.png" alt="Avatar" class="avatar-img">
-          <input type="file" id="avatarInput" accept="image/*" style="display:none;">
-       <img id="avatarLevelIcon" src="images/icons/niveau_1.png" alt="Niveau" class="level-badge">
+        <div class="make-menu" id="makeMenu">
+          <button id="newProjectBtn" class="make-pill">Nieuw</button>
+          <button id="draftsBtn" class="make-pill secondary">Drafts</button>
         </div>
-        <h1 id="profileUsername" class="username_txt">Gebruikersnaam</h1>
-      </div>
 
-      <!-- Materialen -->
-      <div>
-        <label class="classic-categories">Materialen</label>
-        <div id="profileMaterials" class="d-flex flex-wrap gap-2">
-          <!-- Materialen worden hier geladen -->
+        <a href="friends.html" class="text-center nav-item">
+          <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
+        </a>
+        <a href="profiel.html" class="text-center nav-item">
+          <img id="navbarAvatar" class="navbar-avatar" />
+        </a>
+      </div>
+    </footer>
+
+    <main>
+      <div class="classic-outline profiel-main">
+        <!-- Avatar + niveau + naam -->
+        <div class="profile-card text-center position-relative">
+          <a href="profiel-change.html" class="adjust-btn position-absolute">
+            <img src="images/icons/edit.png" alt="Aanpassen" width="30" height="30"> </a>
+          <div class="avatar-wrapper position-relative d-inline-block">
+            <img id="profileAvatar" src="images/icons/avatar.png" alt="Avatar" class="avatar-img">
+            <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+            <img id="avatarLevelIcon" src="images/icons/niveau_1.png" alt="Niveau" class="level-badge">
+          </div>
+          <h1 id="profileUsername" class="username_txt">Gebruikersnaam</h1>
         </div>
-      </div>
 
-      <!-- Tutorials toggle -->
-      <label class="classic-categories">Makes</label>
-      <div class="toggle-buttons classic-toggle">
-        <button id="btnMy" class="classic-toggle-item active">Mijn Makes</button>
-        <button id="btnMade" class="classic-toggle-item">Gemaakte Makes</button>
-      </div>
+        <!-- Materialen -->
+        <div>
+          <label class="classic-categories">Materialen</label>
+          <div id="profileMaterials" class="d-flex flex-wrap gap-2">
+            <!-- Materialen worden hier geladen -->
+          </div>
+        </div>
 
-      <!-- Tutorials grid -->
-      <div class="masonry-grid make-wall">
-        <div id="myTutorials"></div>
-        <div id="madeTutorials" style="display:none;"></div>
+        <!-- Tutorials toggle -->
+        <label class="classic-categories">Makes</label>
+        <div class="toggle-buttons classic-toggle">
+          <button id="btnMy" class="classic-toggle-item active">Mijn Makes</button>
+          <button id="btnMade" class="classic-toggle-item">Gemaakte Makes</button>
+        </div>
+
+        <!-- Tutorials grid -->
+        <div class="masonry-grid make-wall">
+          <div id="myTutorials"></div>
+          <div id="madeTutorials" style="display:none;"></div>
+        </div>
       </div>
     </main>
 

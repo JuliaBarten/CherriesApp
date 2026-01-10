@@ -1,5 +1,5 @@
 import { auth, db, storage } from "./firebase-init.js";
-import { collection, doc, setDoc, updateDoc, serverTimestamp} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { collection, doc, setDoc, getDocs, updateDoc, serverTimestamp} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { ref, uploadBytes, getDownloadURL} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
@@ -46,6 +46,27 @@ document.querySelectorAll(".niveau-icon").forEach(icon => {
 
 updateHearts(1);
 
+/* ====================== MATERIALS ====================== */
+async function loadMaterials() {
+  const container = document.getElementById("materialenContainer");
+  const snap = await getDocs(collection(db, "Materialen"));
+
+  snap.forEach(docSnap => {
+    const div = document.createElement("div");
+    div.className = "material-blok";
+    div.textContent = docSnap.data().Materiaal;
+    div.dataset.materialId = docSnap.id;
+
+    div.onclick = () => {
+      div.classList.toggle("selected");
+      autoSaveDraft();
+    };
+
+    container.appendChild(div);
+  });
+}
+
+
 /* ====================== AUTOSAVE DRAFT ====================== */
 const autoSaveDraft = debounce(async () => {
   const user = auth.currentUser;
@@ -74,34 +95,15 @@ const autoSaveDraft = debounce(async () => {
   }
 }, 1200);
 
-/* ====================== MATERIALS ====================== */
-async function loadMaterials() {
-  const container = document.getElementById("materialenContainer");
-  const snap = await getDocs(collection(db, "Materialen"));
-
-  snap.forEach(docSnap => {
-    const div = document.createElement("div");
-    div.className = "material-blok";
-    div.textContent = docSnap.data().Materiaal;
-    div.dataset.materialId = docSnap.id;
-
-    div.onclick = () => {
-      div.classList.toggle("selected");
-      autoSaveDraft();
-    };
-
-    container.appendChild(div);
-  });
-}
-
 /* ====================== FORM SUBMIT ====================== */
 document.getElementById("tutorialForm").addEventListener("submit", async e => {
   e.preventDefault();
 
-  if (!draftId) {
-    alert("Draft ontbreekt");
-    return;
-  }
+saveDraftBtn.onclick = () => {
+  autoSaveDraft.flush?.(); // of directe save
+  alert("Draft opgeslagen");
+};
+
 
   const user = auth.currentUser;
   const title = document.getElementById("titel").value.trim();

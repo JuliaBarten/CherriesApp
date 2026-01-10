@@ -32,13 +32,13 @@
                     <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
                 </a>
 
-                <div class="modal fade" id="makeChoiceModal">
-                    <div class="modal-dialog modal-bottom">
-                        <div class="modal-content p-4">
-                            <button id="newMakeBtn" class="classic-button">Nieuw project</button>
-                            <button id="draftsBtn" class="classic-button-outline">Mijn drafts</button>
-                        </div>
-                    </div>
+                <a href="#" id="makeNavBtn" class="text-center nav-item">
+                    <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
+                </a>
+
+                <div class="make-menu" id="makeMenu">
+                    <button id="newProjectBtn" class="make-pill">Nieuw</button>
+                    <button id="draftsBtn" class="make-pill secondary">Drafts</button>
                 </div>
 
                 <a href="friends.html" class="text-center nav-item">
@@ -50,8 +50,8 @@
             </div>
         </footer>
 
-        <div class="classic-outline">
-            <main>
+        <main>
+            <div class="classic-outline">
                 <h2 class="classic-title">Mijn drafts</h2>
 
                 <div id="draftsContainer" class="masonry-grid">
@@ -61,12 +61,12 @@
                 <p id="emptyState" class="text-center mt-4" style="display:none;">
                     Je hebt nog geen drafts ✨
                 </p>
-            </main>
+            </div>
+        </main>
 
-            <script type="module" src="js/firebase-init.js"></script>
-            <script type="module" src="js/make-drafts.js"></script>
-            <script type="module" src="js/script.js"></script>
-        </div>
+        <script type="module" src="js/firebase-init.js"></script>
+        <script type="module" src="js/make-drafts.js"></script>
+        <script type="module" src="js/script.js"></script>
     </div>
 </body>
 

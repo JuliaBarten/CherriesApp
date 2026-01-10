@@ -110,12 +110,12 @@ body {
 }
 
 main {
-    /* padding-top: var(--header-height);
-    padding-bottom: var(--bottom-nav-height); */
+    padding-top: var(--header-height);
+    padding-bottom: var(--bottom-nav-height);
     margin-left: 5px;
     margin-right: 5px;
     max-width: 430px;
-        background-color: var(--achter);
+    background-color: var(--achter);
 }
 
 .app-wrapper {
@@ -245,36 +245,37 @@ footer .d-flex {
 }
 
 .make-menu {
-  position: fixed;
-  bottom: 80px;              /* net boven navbar */
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 12px;
-  z-index: 2000;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .2s ease, transform .2s ease;
+    position: fixed;
+    bottom: 80px;
+    /* net boven navbar */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
 }
 
 .make-menu.show {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateX(-50%) translateY(-6px);
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(-6px);
 }
 
 .make-pill {
-  padding: 10px 18px;
-  border-radius: 999px;
-  border: none;
-  background: var(--licht);
-  color: var(--textdonker);
-  font-weight: var(--size3);
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: none;
+    background: var(--licht);
+    color: var(--textdonker);
+    font-weight: var(--size3);
 }
 
 .make-pill.secondary {
-  background: var(--licht);
-  color: var(--textdonker);
+    background: var(--licht);
+    color: var(--textdonker);
 }
 
 
@@ -286,8 +287,6 @@ footer .d-flex {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: calc(var(--header-height) + 15px);
-    padding-bottom: var(--bottom-nav-height);
     animation: fadeIn 0.4s ease;
     background-color: var(--achter);
 }
