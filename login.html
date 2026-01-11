@@ -15,19 +15,21 @@
 
 <body>
   <div class="app-wrapper">
-    <div class="classic-outline">
+    <div class="classic-login-outline">
       <img src="images/logo_bol.png" alt="Logo" class="logobegin">
       <form id="loginForm">
         <input id="loginUsername" class="custom-input" placeholder="Gebruikersnaam" />
         <input id="loginPassword" class="custom-input" type="password" placeholder="Wachtwoord">
         <button class="classic-button-small" type="submit" id="loginBtn">Inloggen</button>
         <p id="message"></p>
+        <button class="terugbtn" type="button" onclick="window.location.href='index.html'">
+          Terug
+        </button>
     </div>
-
+  </div>
     <script type="module" src="js/firebase-init.js"></script>
     <script type="module" src="js/authentication.js"></script>
     <script type="module" src="js/script.js"></script>
-  </div>
 </body>
 
 </html>

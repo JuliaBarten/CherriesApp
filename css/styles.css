@@ -66,10 +66,10 @@
     --font: "puffin-arcade-regular", sans-serif;
 
     /* border */
-    --borderknop: 12px;
+    --borderknop: 18px;
     --borderfoto: 12px;
     --borderkop: 10px;
-    --schaduw: 0 0 8px rgba(53, 5, 29, 0.247);
+    --schaduw: 3px 3px 8px rgba(53, 5, 29, 0.342);
 
     /* margins */
     --margstandard: 8px;
@@ -156,10 +156,10 @@ header {
 }
 
 .logobegin {
-    width: 230px;
+    width: 250px;
     height: auto;
     padding-top: 30%;
-    margin-bottom: 20px;
+    margin-bottom: 10%;
     align-content: center;
 }
 
@@ -291,6 +291,17 @@ footer .d-flex {
     background-color: var(--achter);
 }
 
+.classic-login-outline {
+    position: absolute;
+    padding: 5%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeIn 0.4s ease;
+    background-color: var(--achter);
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -347,7 +358,7 @@ footer .d-flex {
     box-shadow: var(--schaduw);
     text-align: center;
     font-family: var(--font);
-    font-size: var(--size2);
+    font-size: var(--size3);
 }
 
 .custom-input {
@@ -474,7 +485,6 @@ footer .d-flex {
     display: block;
     text-align: center;
     padding: 1rem;
-    font-size: var(--size1);
     border: none;
     border-radius: var(--borderknop);
     font-family: var(--font);
@@ -483,17 +493,33 @@ footer .d-flex {
 
 .btnmeld-aan {
     background-color: var(--donker);
-    color: var(--textmid);
+    color: var(--textlicht);
     width: 80%;
     display: block;
     margin: var(--margstandard);
     padding: 1rem;
     text-align: center;
-    font-size: var(--size1);
     border: none;
     border-radius: var(--borderknop);
     font-family: var(--font);
     font-size: var(--size3);
+}
+
+.terugbtn {
+    background-color: var(--achter);
+    color: var(--mid);
+    width: 50%;
+    display: block;
+    margin: 20px;
+    padding: 1rem;
+    text-align: center;
+    font-size: var(--size2);
+    border-radius: var(--borderknop);
+    border-color: var(--mid);
+    border-style: solid;
+    border-width: 4px;
+    font-family: var(--font);
+    box-shadow: var(--schaduw);
 }
 
 .niveau-icon-choice {
