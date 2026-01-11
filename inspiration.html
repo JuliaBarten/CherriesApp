@@ -32,15 +32,15 @@
                     <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
                 </a>
 
-              <a href="#" id="makeNavBtn" class="text-center nav-item">
+                <a href="#" id="makeNavBtn" class="text-center nav-item">
                     <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
                 </a>
-                
+
                 <div class="make-menu" id="makeMenu">
                     <button id="newProjectBtn" class="make-pill">Nieuw</button>
                     <button id="draftsBtn" class="make-pill secondary">Drafts</button>
                 </div>
-                
+
                 <a href="friends.html" class="text-center nav-item">
                     <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
                 </a>
@@ -50,56 +50,56 @@
             </div>
         </footer>
 
-          <div class="filter-container">
-                <div class="d-flex flex">
-                    <button class="filterbutton" id="filterToggle">
-                        Filteren
-                    </button>
+        <div class="filter-container">
+            <div class="d-flex flex">
+                <button class="filterbutton" id="filterToggle">
+                    Filteren
+                </button>
 
-                    <select id="sortSelect" class="form-select filterbutton">
-                        <option value="new">Nieuw → oud</option>
-                        <option value="old">Oud → nieuw</option>
-                        <option value="timeAsc">Tijd ↑</option>
-                        <option value="timeDesc">Tijd ↓</option>
-                    </select>
-                </div>
-
-                <!-- UITKLAP MENU -->
-                <div class="filterdropdown" id="filterDropdown">
-                    <h6>Soort</h6>
-                    <select id="filterGarment" class="form-select mb-3">
-                        <option value="">Alles</option>
-                        <option value="broek">Broek</option>
-                        <option value="shirt">Shirt</option>
-                        <option value="rok">Rok</option>
-                        <option value="rok">overig</option>
-                    </select>
-
-                    <h6>Niveau</h6>
-                    <select id="filterLevel" class="form-select mb-3">
-                        <option value="">Alle niveaus</option>
-                        <option value="myLevelOnly">Mijn niveau</option>
-                        <option value="myLevelOrLower">Mijn niveau en lager</option>
-                    </select>
-
-                    <h6>Materialen</h6>
-                    <div class="material-toggle">
-                        <button id="materialsAll" class="material-toggle-btn active">
-                            Alle materialen
-                        </button>
-                        <button id="materialsMine" class="material-toggle-btn">
-                            Wat ik heb
-                        </button>
-                    </div>
-
-
-                    <button class="classic-button-small" id="applyFilters">
-                        Toepassen
-                    </button>
-                </div>
+                <select id="sortSelect" class="form-select filterbutton">
+                    <option value="new">Nieuw → oud</option>
+                    <option value="old">Oud → nieuw</option>
+                    <option value="timeAsc">Tijd ↑</option>
+                    <option value="timeDesc">Tijd ↓</option>
+                </select>
             </div>
+
+            <!-- UITKLAP MENU -->
+            <div class="filterdropdown" id="filterDropdown">
+                <h6>Soort</h6>
+                <select id="filterGarment" class="form-select mb-3">
+                    <option value="">Alles</option>
+                    <option value="broek">Broek</option>
+                    <option value="shirt">Shirt</option>
+                    <option value="rok">Rok</option>
+                    <option value="rok">overig</option>
+                </select>
+
+                <h6>Niveau</h6>
+                <select id="filterLevel" class="form-select mb-3">
+                    <option value="">Alle niveaus</option>
+                    <option value="myLevelOnly">Mijn niveau</option>
+                    <option value="myLevelOrLower">Mijn niveau en lager</option>
+                </select>
+
+                <h6>Materialen</h6>
+                <div class="material-toggle">
+                    <button id="materialsAll" class="material-toggle-btn active">
+                        Alle materialen
+                    </button>
+                    <button id="materialsMine" class="material-toggle-btn">
+                        Wat ik heb
+                    </button>
+                </div>
+
+
+                <button class="classic-button-small" id="applyFilters">
+                    Toepassen
+                </button>
+            </div>
+        </div>
         <main>
-        
+
             <!--kledingfoto's-->
             <div id="tutorialGrid" class="masonry-grid fotowall"></div>
 
@@ -122,9 +122,9 @@
         </div>
 
         <script type="module" src="js/firebase-init.js"></script>
-
         <script type="module" src="js/inspiratie.js"></script>
         <script type="module" src="js/script.js"></script>
+ 
     </div>
 </body>
 

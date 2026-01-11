@@ -420,6 +420,52 @@ footer .d-flex {
     margin-top: 10px;
 }
 
+/* ========================== Overlay ============================= */
+/* .popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--hoofd);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Pop-up blok */
+/* .popup-block {
+  position: relative;
+  width: 300px; 
+  max-width: 90%;
+  padding: 20px;
+  text-align: center;
+  background-color: var(--ipvwit);
+  border-radius: 10px;
+  box-shadow: var(--schaduw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+} */
+
+/*.popup-block img {
+  width: 100px; 
+  height: 100px;
+  margin-bottom: 15px;
+} */
+
+/* .popup-block button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: var(--mid);
+  border: none;
+  border-radius: 5px;
+  color: var(--textdonker);
+  font-weight: bold;
+  cursor: pointer;
+} */
+
 /* =========================  LOGIN & AANMELDEN   ========================== */
 .btnlogin {
     background-color: var(--hoofd);

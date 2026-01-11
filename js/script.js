@@ -1,8 +1,6 @@
 import { auth, db } from "./firebase-init.js";
-import { doc, getDoc } from
-  "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
-import { onAuthStateChanged } from
-  "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) return;
@@ -51,6 +49,8 @@ document.getElementById("draftsBtn")
   .addEventListener("click", () => {
     window.location.href = "make-drafts.html";
   });
+
+
 
 
 /* ==================== POP UP INCOMPLEET [PROFIEL} ==================*/

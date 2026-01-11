@@ -22,7 +22,6 @@
                 <span id="inboxBadge" class="badge hidden"></span>
             </a>
         </header>
-
         <footer class="fixed-bottom navbar">
             <div class="d-flex justify-content-around py-2">
                 <a href="inspiration.html" class="text-center nav-item">
@@ -48,20 +47,17 @@
                 </a>
             </div>
         </footer>
-
         <main>
             <form class="make-form d-flex classic-outline" id="tutorialForm">
                 <!-- Hoofdfoto preview -->
                 <div class="main-image-preview" id="mainImagePreview">
                     <span class="plus-icon">+</span>
                 </div>
-                <input type="file" id="mainImage" accept="image/*" required hidden>
-
+                <input type="file" id="mainImage" accept="image/*" hidden>
                 <!-- Titel -->
                 <div class="input-group">
                     <input class="custom-input" type="text" id="titel" placeholder="Titel" required />
                 </div>
-
                 <!-- Niveau -->
                 <div class="profile-section mb-3 text-center">
                     <div id="niveauHearts" class="d-flex justify-content-center gap-1">
@@ -72,14 +68,13 @@
                         <img src="images/icons/heart3.png" data-level="5" class="niveau-icon" width="40" height="40">
                     </div>
                 </div>
-
                 <!-- Duur -->
                 <div class="make-section d-flex">
                     <input id="duration-input" class="custom-input" type="text" pattern="[0-9]{2}:[0-9]{2}"
                         value="00:00" required />
                     <img src="images/icons/tijd_klok.png" class="time-icon" />
                 </div>
-
+                <!-- Categorie -->
                 <select id="tutorialCategory" class="custom-input" required>
                     <option value="">Selecteer categorie</option>
                     <option value="broek">Broek</option>
@@ -90,7 +85,6 @@
                     <option value="jurk">jurk</option>
                     <option value="overig">Overig</option>
                 </select>
-
                 <!-- Materialen -->
                 <div class="make-section mb-4">
                     <label class="classic-categories">Materialen</label>
@@ -98,7 +92,6 @@
                         <!-- Checkboxes worden via JS geladen -->
                     </div>
                 </div>
-
                 <!-- stappen toevoegen -->
                 <div class="modal fade" id="stepModal" tabindex="-1">
                     <div class="modal-dialog modal-dialog-centered">
@@ -112,19 +105,15 @@
                                 <div id="stepImagePreview" class="step-image-preview upload-btn mb-3">
                                     <span class="plus-icon">+</span>
                                 </div>
-
                                 <input type="file" id="stepImage" accept="image/*" hidden>
-
                                 <textarea id="stepText" class="custom-input"
                                     placeholder="Uitleg bij deze stap"></textarea>
                             </div>
-
                             <div class="modal-footer">
                                 <button class="classic-button" type="button" id="saveStepBtn">
                                     Stap opslaan
                                 </button>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -136,8 +125,6 @@
                 <!-- Upload tutorial -->
                 <button class="classic-button" type="button" id="saveDraftBtn">Opslaan als draft</button>
                 <button class="classic-button" type="submit">Plaats tutorial</button>
-
-
             </form>
         </main>
         <!-- Source - https://stackoverflow.com/a -->
