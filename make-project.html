@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Mijn project</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/standardized-styles.css" />
+    <link rel="stylesheet" href="css/specific-styles.css" />
     <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
     <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
@@ -14,7 +15,7 @@
 
 <body>
     <div class="app-wrapper">
-        <!---------------------   app - frame  --------------------->
+        <!-- ================ app - frame ================ -->
         <header class="app-header fixed-top">
             <img alt="logo" src="images/logo_bol.png" class="logo" />
             <a href="inbox.html" class="inbox-btn">
@@ -44,7 +45,7 @@
                 <a href="friends.html" class="text-center nav-item">
                     <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
                 </a>
-                <a href="profiel.html" class="text-center nav-item">
+                <a href="profile.html" class="text-center nav-item">
                     <img id="navbarAvatar" class="navbar-avatar" />
                 </a>
             </div>
@@ -53,7 +54,7 @@
         <main>
             <div class="classic-outline">
                 <h1 id="projectTitle"></h1>
-                <button id="editTutorialBtn" class="classic-button">
+                <button id="editTutorialBtn" class="btn-hoofd-1">
                     Bewerken
                 </button>
                 <div id="projectSteps"></div>
@@ -63,7 +64,7 @@
         <script type="module" src="js/firebase-init.js"></script>
         <script type="module" src="js/make-project.js"></script>
         <script type="module" src="js/script.js"></script>
- 
+
     </div>
 </body>
 

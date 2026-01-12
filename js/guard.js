@@ -12,7 +12,7 @@ const allowAnonymous = [
 
 const profileEditPages = [
   "aanpassen.html",
-  "profiel-change.html",
+  "profile-change.html",
   "avatarmaker.html"
 ];
 
@@ -32,7 +32,7 @@ onAuthStateChanged(auth, async (user) => {
     !snap.data().profileCompleted &&
     !profileEditPages.includes(currentPage)
   ) {
-    window.location.href = "profiel-change.html";
+    window.location.href = "profile-change.html";
   }
 });
 

@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Cherrie's drafts</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/standardized-styles.css" />
+    <link rel="stylesheet" href="css/specific-styles.css" />
     <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
     <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
@@ -14,7 +15,7 @@
 
 <body>
     <div class="app-wrapper">
-        <!---------------------   app - frame  --------------------->
+        <!-- ================ app - frame =============== -->
         <header class="app-header fixed-top">
             <img alt="logo" src="images/logo_bol.png" class="logo" />
             <a href="inbox.html" class="inbox-btn">
@@ -44,7 +45,7 @@
                 <a href="friends.html" class="text-center nav-item">
                     <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
                 </a>
-                <a href="profiel.html" class="text-center nav-item">
+                <a href="profile.html" class="text-center nav-item">
                     <img id="navbarAvatar" class="navbar-avatar" />
                 </a>
             </div>
@@ -55,7 +56,6 @@
                 <h2 class="classic-title">Mijn drafts</h2>
 
                 <div id="draftsContainer" class="masonry-grid">
-                    <!-- drafts via JS -->
                 </div>
 
                 <p id="emptyState" class="text-center mt-4" style="display:none;">
@@ -67,7 +67,7 @@
         <script type="module" src="js/firebase-init.js"></script>
         <script type="module" src="js/make-drafts.js"></script>
         <script type="module" src="js/script.js"></script>
- 
+
     </div>
 </body>
 

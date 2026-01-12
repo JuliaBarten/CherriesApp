@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Cherrie's - Profiel</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/standardized-styles.css" />
+  <link rel="stylesheet" href="css/specific-styles.css" />
   <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
   <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
@@ -14,7 +15,7 @@
 
 <body>
   <div class="app-wrapper">
-    <!---------------------   app - frame  --------------------->
+    <!-- ================  app - frame ================ -->
     <header class="app-header fixed-top">
       <img alt="logo" src="images/logo_bol.png" class="logo" />
       <a href="inbox.html" class="inbox-btn">
@@ -44,7 +45,7 @@
         <a href="friends.html" class="text-center nav-item">
           <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
         </a>
-        <a href="profiel.html" class="text-center nav-item">
+        <a href="profile.html" class="text-center nav-item">
           <img id="navbarAvatar" class="navbar-avatar" />
         </a>
       </div>
@@ -52,9 +53,9 @@
 
     <main>
       <div class="classic-outline profiel-main">
-        <!-- Avatar + niveau + naam -->
+        <!-- ================ Profile Card ================ -->
         <div class="profile-card text-center position-relative">
-          <a href="profiel-change.html" class="adjust-btn position-absolute">
+          <a href="profile-change.html" class="adjust-btn position-absolute">
             <img src="images/icons/edit.png" alt="Aanpassen" width="30" height="30"> </a>
           <div class="avatar-wrapper position-relative d-inline-block">
             <img id="profileAvatar" src="images/icons/avatar.png" alt="Avatar" class="avatar-img">
@@ -64,22 +65,21 @@
           <h1 id="profileUsername" class="username_txt">Gebruikersnaam</h1>
         </div>
 
-        <!-- Materialen -->
+        <!-- ================ Materialen ================ -->
         <div>
           <label class="classic-categories">Materialen</label>
           <div id="profileMaterials" class="d-flex flex-wrap gap-2">
-            <!-- Materialen worden hier geladen -->
           </div>
         </div>
 
-        <!-- Tutorials toggle -->
+        <!-- ================ Tutorials toggle ================ -->
         <label class="classic-categories">Makes</label>
         <div class="toggle-buttons classic-toggle">
           <button id="btnMy" class="classic-toggle-item active">Mijn Makes</button>
           <button id="btnMade" class="classic-toggle-item">Gemaakte Makes</button>
         </div>
 
-        <!-- Tutorials grid -->
+        <!-- ================ Tutorials grid ================ -->
         <div class="masonry-grid make-wall">
           <div id="myTutorials"></div>
           <div id="madeTutorials" style="display:none;"></div>

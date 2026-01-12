@@ -1,28 +1,58 @@
 import { auth, db } from "./firebase-init.js";
 import {
-  collection, query, where, getDocs, getDoc,
-  addDoc, updateDoc, doc, serverTimestamp
+  collection, query, where, getDocs, getDoc, doc
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { onAuthStateChanged } from
   "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 /* ================= AUTH ================= */
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, user => {
   if (!user) return;
   loadFriends();
-  loadFriendRequests();
 });
 
-/* ================= USERNAME ================= */
-async function getUsername(uid) {
+/* ================= HELPERS ================= */
+async function getUserData(uid) {
   const snap = await getDoc(doc(db, "users", uid));
-  return snap.exists() ? snap.data().username : "Onbekend";
+  return snap.exists() ? snap.data() : null;
 }
+
+function createFriendCard(user, type, uid) {
+  const div = document.createElement("div");
+  div.className = "friend-bar clickable";
+
+  div.innerHTML = `
+    <div class="friend-avatar">
+      <img src="${user.avatar || "images/avatar/default.png"}">
+      <img class="friend-level"
+           src="images/icons/niveau_${user.level || 1}.png">
+    </div>
+
+    <div class="friend-info">
+      <strong>${user.username}</strong>
+      <span class="friend-status">
+        ${type === "sharing" ? "🤝 Delende vriend" : "👤 Vriend"}
+      </span>
+    </div>
+  `;
+
+  div.addEventListener("click", () => {
+    window.location.href = `profile.html?uid=${uid}`;
+  });
+
+  return div;
+}
+
 
 /* ================= FRIENDS ================= */
 async function loadFriends() {
-  const list = document.getElementById("friendsList");
-  list.innerHTML = "";
+  const containerAll = document.getElementById("allFriends");
+  const containerSharing = document.getElementById("sharingFriends");
+
+  if (!containerAll || !containerSharing) return;
+
+  containerAll.innerHTML = "";
+  containerSharing.innerHTML = "";
 
   const q = query(
     collection(db, "friendships"),
@@ -32,84 +62,57 @@ async function loadFriends() {
   const snap = await getDocs(q);
 
   if (snap.empty) {
-    list.innerHTML = "<p>Geen vrienden</p>";
+    containerAll.innerHTML = "<p>Geen vrienden</p>";
     return;
   }
 
   for (const d of snap.docs) {
-    const f = d.data();
-    const friendId = f.users.find(id => id !== auth.currentUser.uid);
-    const username = await getUsername(friendId);
+    const friendship = d.data();
+    const friendId = friendship.users.find(
+      id => id !== auth.currentUser.uid
+    );
 
-    const div = document.createElement("div");
-    div.className = "friend-card";
-    div.innerHTML = `
-      <strong>${username}</strong><br>
-      <small>${f.type === "sharing" ? "🤝 Delende vriend" : "👤 Vriend"}</small>
-    `;
-    list.appendChild(div);
-  }
-}
+    const userSnap = await getDoc(doc(db, "users", friendId));
+    if (!userSnap.exists()) continue;
 
-/* ================= INBOX ================= */
-async function loadFriendRequests() {
-  const inbox = document.getElementById("friendRequests");
-  inbox.innerHTML = "";
+    const u = userSnap.data();
 
-  const q = query(
-    collection(db, "friendRequests"),
-    where("to", "==", auth.currentUser.uid),
-    where("status", "==", "pending")
-  );
-
-  const snap = await getDocs(q);
-
-  if (snap.empty) {
-    inbox.innerHTML = "<p>Geen verzoeken</p>";
-    return;
-  }
-
-  for (const d of snap.docs) {
-    const req = d.data();
-    const username = await getUsername(req.from);
-
-    const div = document.createElement("div");
-    div.className = "friend-card";
-    div.innerHTML = `
-      <strong>${username}</strong>
-      <p>${req.message}</p>
-      <button class="accept">Accepteren</button>
-      <button class="reject">Weigeren</button>
+    const card = document.createElement("div");
+    card.className = "friend-bar";
+    card.innerHTML = `
+      <div class="friend-avatar">
+        <img src="${u.avatar || "images/avatar/default.png"}">
+        <img class="level-icon"
+             src="images/icons/niveau_${u.level || 1}.png">
+      </div>
+      <div class="friend-info">
+        <strong>${u.username}</strong>
+        <span class="friend-status">
+          ${friendship.type === "sharing" ? "Delende vriend" : "Vriend"}
+        </span>
+      </div>
     `;
 
-    div.querySelector(".accept").onclick = () =>
-      acceptRequest(d.id, req);
+    card.onclick = () => {
+      window.location.href = `profile.html?uid=${friendId}`;
+    };
 
-    div.querySelector(".reject").onclick = () =>
-      rejectRequest(d.id);
+    containerAll.appendChild(card);
 
-    inbox.appendChild(div);
+    if (friendship.type === "sharing") {
+      containerSharing.appendChild(card.cloneNode(true));
+    }
   }
 }
 
-async function acceptRequest(id, req) {
-  await addDoc(collection(db, "friendships"), {
-    users: [req.from, req.to],
-    type: req.type,
-    createdAt: serverTimestamp()
-  });
 
-  await updateDoc(doc(db, "friendRequests", id), {
-    status: "accepted"
-  });
+/* ================= TOGGLE ================= */
+document.getElementById("btnAll")?.addEventListener("click", () => {
+  document.getElementById("allFriends").style.display = "block";
+  document.getElementById("sharingFriends").style.display = "none";
+});
 
-  loadFriends();
-  loadFriendRequests();
-}
-
-async function rejectRequest(id) {
-  await updateDoc(doc(db, "friendRequests", id), {
-    status: "rejected"
-  });
-  loadFriendRequests();
-}
+document.getElementById("btnSharing")?.addEventListener("click", () => {
+  document.getElementById("allFriends").style.display = "none";
+  document.getElementById("sharingFriends").style.display = "block";
+});

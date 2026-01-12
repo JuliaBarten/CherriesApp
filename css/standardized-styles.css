@@ -1,0 +1,514 @@
+/* ==========================  CSS VARIABLES   ========================== */
+@font-face {
+    font-family: 'Daydream';
+    src: url('fonts/daydream.otf') format('opentype');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'arcadepix';
+    src: url('fonts/arcadepix.ttf') format('truetype');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'glamourgirl';
+    src: url('fonts/glamourgirl.ttf') format('truetype');
+    font-weight: 400;
+}
+
+/* @font-face {
+    font-family: "puffin-arcade-level", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "puffin-arcade-liquid", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "puffin-arcade-nerf", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "puffin-arcade-regular", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+} */
+
+:root {
+    /* kleuren */
+    --hoofd: #f84857;
+    --licht: #F9BEBE;
+    --mid: #ff9c9c;
+    --ipvwit: #fffbfc;
+    --donker: #461f34;
+    --achter: #f7edf2;
+
+    /* tekst */
+    --textlicht: #fcd5d5;
+    --textmid: #c57878;
+    --textdonker: #920500;
+    --textplaceholder: #928989;
+    --size1: 15px;
+    --size2: 22px;
+    --size3: 30px;
+    --size4: 40px;
+    --size5: 50px;
+    --zwaartemid: 500;
+    --zwaartekop: 700;
+    --zwaartetitel: 900;
+    --font: "puffin-arcade-regular", sans-serif;
+
+    /* border */
+    --borderknop: 18px;
+    --bordertoggle: 12px;
+    --borderfoto: 12px;
+    --borderkop: 10px;
+    --schaduw: 3px 3px 8px rgba(53, 5, 29, 0.342);
+
+    /* margins */
+    --margstandard: 8px;
+    --header-height: 85px;
+    --bottom-nav-height: 95px;
+}
+
+.hidden {
+    display: none;
+}
+
+h1 {
+    size: var(--size5);
+    color: var(--textdonker);
+    font-family: var(--font);
+    text-align: center;
+}
+
+
+h2 {
+    size: var(--size5);
+    color: var(--textdonker);
+    font-family: var(--font);
+    text-align: center;
+}
+
+/* ==========================  RESET / BASIS   ========================== */
+html {
+    background-color: var(--achter);
+}
+
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    background-color: var(--achter);
+    font-family: var(--font);
+}
+
+main {
+    padding-top: var(--header-height);
+    padding-bottom: var(--bottom-nav-height);
+    margin-left: 5px;
+    margin-right: 5px;
+    max-width: 430px;
+    background-color: var(--achter);
+}
+
+.app-wrapper {
+    width: 100%;
+    max-width: 430px;
+    min-height: 100vh;
+    position: relative;
+    background-color: var(--achter);
+}
+
+/* ===================  APP FRAME (wrapper, header, footer)   ========================== */
+header {
+    display: flex;
+    background-color: var(--hoofd);
+    top: 0;
+    width: 100%;
+    padding-bottom: 3px;
+}
+
+.app-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    max-width: 430px;
+    height: var(--header-height);
+    background-color: var(--hoofd);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 0 16px;
+    z-index: 1000;
+}
+
+.logo {
+    height: 70px;
+    justify-self: center;
+    position: absolute;
+}
+
+.logobegin {
+    width: 250px;
+    height: auto;
+    padding-top: 30%;
+    margin-bottom: 10%;
+    align-content: center;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 430px;
+    height: var(--bottom-nav-height);
+    background-color: var(--hoofd);
+    display: flex;
+    justify-content: center;
+    z-index: 1000;
+}
+
+footer .d-flex {
+    width: 100%;
+    justify-content: space-around;
+}
+
+.badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    background-color: var(--licht);
+    color: var(--ipvwit);
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* =============================  NAVBAR   ========================== */
+.navbar {
+    overflow: hidden;
+    bottom: 0;
+    z-index: 1000;
+    max-width: 430px;
+    align-items: center;
+}
+
+.navbar-icon {
+    width: 70px;
+    height: auto;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-item::before {
+    content: "";
+    position: fixed;
+    margin-top: -5px;
+    margin-left: -5px;
+    width: 80px;
+    height: 80px;
+    background-color: var(--licht);
+    border-radius: 50%;
+    transform: scale(0);
+    transform-origin: center;
+    z-index: -1;
+}
+
+.nav-item.active::before {
+    transform: scale(1);
+}
+
+.navbar-avatar {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+}
+
+.inbox-btn {
+    justify-self: end;
+    position: relative;
+}
+
+.inbox-btn img {
+    height: 60px;
+}
+
+.make-menu {
+    position: fixed;
+    bottom: 80px;
+    /* net boven navbar */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.make-menu.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(-6px);
+}
+
+.make-pill {
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: none;
+    background: var(--licht);
+    color: var(--textdonker);
+    font-weight: var(--size3);
+}
+
+.make-pill.secondary {
+    background: var(--licht);
+    color: var(--textdonker);
+}
+
+
+/* =======================  OUTLINES   ========================== */
+.classic-outline {
+    position: relative;
+    padding: 5%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeIn 0.4s ease;
+    background-color: var(--achter);
+}
+
+.classic-login-outline {
+    position: absolute;
+    padding: 5%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeIn 0.4s ease;
+    background-color: var(--achter);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ======================= TITELS ======================== */
+.classic-categories {
+    width: 100%;
+    height: 40px;
+    display: block;
+    font-size: var(--size1);
+    color: var(--textdonker);
+    background-color: var(--mid);
+    border: none;
+    margin-top: var(--margstandard);
+    margin-bottom: var(--margstandard);
+    border-radius: var(--borderkop);
+    text-align: center;
+    font-family: var(--font);
+    font-size: var(--size3);
+}
+
+/* ======================= BUTTONS ======================== */
+.btn-hoofd-1 {
+    background-color: var(--hoofd);
+    color: var(--textlicht);
+    width: 100%;
+    height: 80px;
+    display: block;
+    margin: var(--margstandard);
+    border: none;
+    border-radius: var(--borderknop);
+    box-shadow: var(--schaduw);
+    font-family: var(--font);
+    font-size: var(--size3);
+    text-align: center;
+}
+
+.btn-hoofd-2 {
+    background-color: var(--hoofd);
+    color: var(--textlicht);
+    width: 80%;
+    display: block;
+    text-align: center;
+    padding: 1rem;
+    border: none;
+    border-radius: var(--borderknop);
+    font-family: var(--font);
+    font-size: var(--size3);
+}
+
+.btn-hoofd-3 {
+    background-color: var(--hoofd);
+    color: var(--textlicht);
+    width: 80%;
+    height: 80px;
+    display: block;
+    margin: var(--margstandard);
+    font-size: var(--size1);
+    border: none;
+    border-radius: var(--borderknop);
+    box-shadow: var(--schaduw);
+    text-align: center;
+    font-family: var(--font);
+}
+
+.btn-donker-2 {
+    background-color: var(--donker);
+    color: var(--textlicht);
+    width: 80%;
+    display: block;
+    margin: var(--margstandard);
+    padding: 1rem;
+    text-align: center;
+    border: none;
+    border-radius: var(--borderknop);
+    font-family: var(--font);
+    font-size: var(--size3);
+}
+
+.btn-licht-5 {
+    background-color: var(--licht);
+    color: var(--textmid);
+    width: 90%;
+    display: block;
+    margin: 4px 0 2px 6px;
+    padding: 4px 8px;
+    border: none;
+    border-radius: var(--borderknop);
+    box-shadow: var(--schaduw);
+    text-align: center;
+    font-family: var(--font);
+    font-size: var(--size2);
+}
+
+.btn-lined-2 {
+    background-color: var(--achter);
+    color: var(--mid);
+    width: 80%;
+    display: block;
+    margin: var(--margstandard);
+    padding: 1rem;
+    text-align: center;
+    font-size: var(--size3);
+    border-radius: var(--borderknop);
+    border-color: var(--mid);
+    border-style: solid;
+    border-width: 4px;
+    font-family: var(--font);
+    box-shadow: var(--schaduw);
+}
+
+.btn-lined-3 {
+    background-color: var(--achter);
+    color: var(--mid);
+    width: 50%;
+    display: block;
+    margin: 20px;
+    padding: 1rem;
+    text-align: center;
+    font-size: var(--size2);
+    border-radius: var(--borderknop);
+    border-color: var(--mid);
+    border-style: solid;
+    border-width: 4px;
+    font-family: var(--font);
+    box-shadow: var(--schaduw);
+}
+
+
+/* =================== INPUT ======================== */
+.custom-input {
+    width: 90%;
+    max-width: 400px;
+    padding: 12px;
+    margin: var(--margstandard);
+    border-radius: var(--borderknop);
+    border: 1px solid var(--licht);
+    background-color: var(--ipvwit);
+    box-shadow: var(--schaduw);
+    color: var(--textplaceholder);
+    outline: none;
+    transition: 0.3s;
+    font-family: var(--font);
+    font-size: var(--size2);
+}
+
+.adjust-main-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    margin-top: var(--margstandard);
+    border-radius: var(--borderknop);
+    border: 1px solid var(--licht);
+    background-color: var(--ipvwit);
+    box-shadow: var(--schaduw);
+    color: var(--textdonker);
+    outline: none;
+    transition: 0.3s;
+    font-family: var(--font);
+    font-size: var(--size3);
+}
+
+.custom-input:focus {
+    border-color: var(--hoofd);
+    box-shadow: var(--schaduw);
+}
+
+.custom-input::placeholder {
+    color: var(--textplaceholder);
+    font-style: italic;
+}
+
+.input-group {
+    margin-top: 10px;
+}
+
+/* =================== TOGGLE SWITCH ======================== */
+.classic-toggle {
+    background-color: var(--licht);
+    box-shadow: var(--schaduw);
+    display: grid;
+    width: 100%;
+    height: 50px;
+    grid-template-columns: 1fr 1fr;
+    border-radius: var(--bordertoggle);
+    font-family: var(--font);
+    font-size: var(--size2);
+}
+
+.classic-toggle-item {
+    color: var(--textmid);
+    background-color: var(--licht);
+    border: none;
+    font-weight: var(--zwaartemid);
+    border-radius: var(--borderknop);
+}
+
+.classic-toggle-item :active {
+    background-color: var(--mid);
+    color: var(--textdonker);
+}

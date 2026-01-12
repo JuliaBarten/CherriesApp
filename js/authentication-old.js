@@ -51,7 +51,7 @@ async function register() {
   });
 
   // 🔹 ALLEEN HIER REDIRECT
-  window.location.href = "profiel-change.html";
+  window.location.href = "profile-change.html";
 }
 
 // ================== LOGIN MET USERNAME ==================

@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Cherrie's inspiration</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/standardized-styles.css" />
+    <link rel="stylesheet" href="css/specific-styles.css" />
     <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
     <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
@@ -14,7 +15,7 @@
 
 <body>
     <div class="app-wrapper">
-        <!---------------------   app - frame  --------------------->
+        <!-- ===============  app - frame  =============== --->
         <header class="app-header fixed-top">
             <img alt="logo" src="images/logo_bol.png" class="logo" />
             <a href="inbox.html" class="inbox-btn">
@@ -44,7 +45,7 @@
                 <a href="friends.html" class="text-center nav-item">
                     <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
                 </a>
-                <a href="profiel.html" class="text-center nav-item">
+                <a href="profile.html" class="text-center nav-item">
                     <img id="navbarAvatar" class="navbar-avatar" />
                 </a>
             </div>
@@ -64,7 +65,7 @@
                 </select>
             </div>
 
-            <!-- UITKLAP MENU -->
+            <!-- ================ UITKLAP MENU ================ -->
             <div class="filterdropdown" id="filterDropdown">
                 <h6>Soort</h6>
                 <select id="filterGarment" class="form-select mb-3">
@@ -93,19 +94,19 @@
                 </div>
 
 
-                <button class="classic-button-small" id="applyFilters">
+                <button class="btn-hoofd-1-small" id="applyFilters">
                     Toepassen
                 </button>
             </div>
         </div>
         <main>
 
-            <!--kledingfoto's-->
+            <!-- ================ kledingfoto's ================ -->
             <div id="tutorialGrid" class="masonry-grid fotowall"></div>
 
         </main>
 
-        <!-- profileRequiredModal -->
+        <!-- ================ profileRequiredModal ================ -->
         <div class="modal fade" id="profileRequiredModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -115,7 +116,7 @@
                     </div>
                     <div class="modal-body">
                         <p></p>
-                        <a href="profiel-change.html" class="btn btn-primary">Profiel aanpassen</a>
+                        <a href="profile-change.html" class="btn btn-primary">Profiel aanpassen</a>
                     </div>
                 </div>
             </div>
@@ -124,7 +125,7 @@
         <script type="module" src="js/firebase-init.js"></script>
         <script type="module" src="js/inspiratie.js"></script>
         <script type="module" src="js/script.js"></script>
- 
+
     </div>
 </body>
 

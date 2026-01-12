@@ -76,7 +76,7 @@ function renderSingleTutorial(t) {
     <div class="favorite-btn">
       <img src="images/icons/${isFavorite ? "fav_aan.png" : "fav_uit.png"}" alt="Favoriet">
     </div>
-    <div class="overlay">
+    <div class="overlay-make">
       <div class="overlay-row hearts-row">
         ${renderHearts(t.level)}
       </div>

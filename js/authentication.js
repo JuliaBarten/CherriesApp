@@ -38,6 +38,7 @@ async function register() {
 
 await setDoc(doc(db, "users", cred.user.uid), {
   username,
+  username_lower: username.toLowerCase(),
   email,
   avatar: getRandomAvatar(),
   level: null,
@@ -47,7 +48,7 @@ await setDoc(doc(db, "users", cred.user.uid), {
 });
 
 
-  window.location.href = "profiel-change.html";
+  window.location.href = "profile-change.html";
 }
 
 

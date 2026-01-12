@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cherrie's - Profiel Aanpassen</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/standardized-styles.css" />
+  <link rel="stylesheet" href="css/specific-styles.css" />
   <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
   <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
@@ -14,7 +15,7 @@
 
 <body>
   <div class="app-wrapper">
-    <!---------------------   app - frame  --------------------->
+    <!-- ================ app - frame ================ -->
     <header class="app-header fixed-top">
       <img alt="logo" src="images/logo_bol.png" class="logo" />
       <a href="inbox.html" class="inbox-btn">
@@ -44,7 +45,7 @@
         <a href="friends.html" class="text-center nav-item">
           <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
         </a>
-        <a href="profiel.html" class="text-center nav-item">
+        <a href="profile.html" class="text-center nav-item">
           <img id="navbarAvatar" class="navbar-avatar" />
         </a>
       </div>
@@ -52,25 +53,25 @@
 
     <main>
       <div class="classic-outline profiel-main">
-
-        <!-- Avatar -->
+        <label class="classic-categories">Mijn profiel</label>
+        <!-- ================ Avatar Carousel ================ -->
         <div class="avatar-carousel-wrapper text-center">
           <button id="prevAvatar" class="carousel-btn">&lt;</button>
-          <img id="currentAvatar" class="avatar-preview" src="images/avatar/skin/optie2.png alt=" Avatar">
+          <img id="currentAvatar" class="avatar-preview" alt="Avatar">
           <button id="nextAvatar" class="carousel-btn">&gt;</button>
         </div>
 
 
 
 
-        <!-- Gebruikersnaam -->
+        <!-- ================ Gebruikersnaam ================ -->
         <div class="profile-section mb-3">
-          <input class="form-control adjust-main-input" type="text" id="usernameInput"
-            placeholder="Vul je gebruikersnaam in">
+          <input class="adjust-main-input" type="text" id="usernameInput" placeholder="Vul je gebruikersnaam in">
         </div>
 
-        <!-- Niveau -->
+        <!-- ================ Niveau ================ -->
         <div class="profile-section mb-3 text-center">
+          <label class="classic-categories">Skill - Niveau</label>
           <div id="niveauHearts" class="d-flex justify-content-center gap-2">
             <img src="images/icons/heart3.png" data-level="1" class="niveau-icon" width="40" height="40">
             <img src="images/icons/heart3.png" data-level="2" class="niveau-icon" width="40" height="40">
@@ -80,7 +81,7 @@
           </div>
         </div>
 
-        <!-- Materialen -->
+        <!-- ================ Materialen ================ -->
         <div class="profile-section mb-4">
           <label class="classic-categories">Materialen</label>
           <div id="materialenContainer" class="d-flex flex-wrap gap-2">
@@ -88,8 +89,8 @@
           </div>
         </div>
 
-        <!-- Opslaan -->
-        <button id="saveProfile" class="classic-button">Opslaan</button>
+        <!-- ================ Opslaan ================ -->
+        <button id="saveProfile" class="btn-hoofd-1">Opslaan</button>
       </div>
     </main>
 

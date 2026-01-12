@@ -36,7 +36,7 @@ nextBtn.addEventListener("click", () => {
   updateAvatarPreview();
 });
 
-// ------------------ Profiel laden ------------------
+// =============== Profiel laden ===============
 async function loadProfile(user) {
   const userRef = doc(db, "users", user.uid);
   const snap = await getDoc(userRef);
@@ -50,24 +50,21 @@ async function loadProfile(user) {
   // niveau
   updateHearts(data.level || 1);
 
-  // avatar
-  const avatarCarousel = document.getElementById("avatarCarousel");
-  const avatarPreview = document.getElementById("avatarPreview");
 
-  if (avatarCarousel && avatarPreview) {
-    renderAvatarPicker(avatarCarousel, (avatar) => {
-      selectedAvatar = avatar;
-      avatarPreview.src = avatar;
-    });
+  // =============== Avatar ===============
+  if (data.avatar) {
+    const index = AVATARS.findIndex(src => src === data.avatar);
 
-    // Zet huidige avatar
-    if (data.avatar) {
-      const index = AVATARS.findIndex(src => src === data.avatar);
-      if (index >= 0) selectedAvatarIndex = index;
+    if (index !== -1) {
+      selectedAvatarIndex = index;
+    } else {
+      selectedAvatarIndex = 0; // fallback
     }
-    updateAvatarPreview();
-
+  } else {
+    selectedAvatarIndex = 0; // geen avatar opgeslagen
   }
+
+  updateAvatarPreview();
 
   // materialen
   await loadMaterials(data);
@@ -75,7 +72,7 @@ async function loadProfile(user) {
 
 let selectedLevel = 1; // standaard niveau
 
-// ------------------ Sterren-niveau ------------------
+// =============== Sterren-niveau ===============
 function updateHearts(level) {
   const niveauIcons = document.querySelectorAll(".niveau-icon");
   niveauIcons.forEach(icon => {
@@ -93,7 +90,7 @@ document.querySelectorAll(".niveau-icon").forEach(icon => {
   });
 });
 
-// ------------------ Materialen laden als blokken ------------------
+// =============== Materialen laden als blokken ===============
 async function loadMaterials(userData) {
   const materialenContainer = document.getElementById("materialenContainer");
   if (!materialenContainer) {
@@ -132,7 +129,7 @@ async function loadMaterials(userData) {
 
 
 
-// ------------------ Profiel opslaan ------------------
+// =============== Profiel opslaan ===============
 async function saveProfile() {
   const user = auth.currentUser;
   if (!user) return;
@@ -154,6 +151,7 @@ async function saveProfile() {
   // Update Firestore
   await updateDoc(doc(db, "users", user.uid), {
     username,
+    username_lower: username.toLowerCase(),
     level: selectedLevel,
     materialsOwned: selectedMaterials,
     avatar: selectedAvatar,
@@ -161,11 +159,11 @@ async function saveProfile() {
   });
 
   alert("Profiel succesvol bijgewerkt!");
-  window.location.href = "profiel.html";
+  window.location.href = "profile.html";
 }
 
 
-// ------------------ Auth state ------------------
+// =============== Auth state ===============
 onAuthStateChanged(auth, async (user) => {
   if (!user) return;
 

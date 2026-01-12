@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Cherrie's - make</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/standardized-styles.css" />
+    <link rel="stylesheet" href="css/specific-styles.css" />
     <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
     <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
@@ -14,7 +15,7 @@
 
 <body>
     <div class="app-wrapper">
-        <!---------------------   app - frame  --------------------->
+        <!-- ================ app - frame ================ -->
         <header class="app-header fixed-top">
             <img alt="logo" src="images/logo_bol.png" class="logo" />
             <a href="inbox.html" class="inbox-btn">
@@ -42,23 +43,23 @@
                 <a href="friends.html" class="text-center nav-item">
                     <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
                 </a>
-                <a href="profiel.html" class="text-center nav-item">
+                <a href="profile.html" class="text-center nav-item">
                     <img id="navbarAvatar" class="navbar-avatar" />
                 </a>
             </div>
         </footer>
         <main>
             <form class="make-form d-flex classic-outline" id="tutorialForm">
-                <!-- Hoofdfoto preview -->
+                <!-- ================ Hoofdfoto preview ================ -->
                 <div class="main-image-preview" id="mainImagePreview">
                     <span class="plus-icon">+</span>
                 </div>
                 <input type="file" id="mainImage" accept="image/*" hidden>
-                <!-- Titel -->
+                <!-- ================ Titel ================ -->
                 <div class="input-group">
                     <input class="custom-input" type="text" id="titel" placeholder="Titel" required />
                 </div>
-                <!-- Niveau -->
+                <!-- ================ Niveau ================ -->
                 <div class="profile-section mb-3 text-center">
                     <div id="niveauHearts" class="d-flex justify-content-center gap-1">
                         <img src="images/icons/heart3.png" data-level="1" class="niveau-icon" width="40" height="40">
@@ -68,13 +69,13 @@
                         <img src="images/icons/heart3.png" data-level="5" class="niveau-icon" width="40" height="40">
                     </div>
                 </div>
-                <!-- Duur -->
+                <!-- ================ Duur ================ -->
                 <div class="make-section d-flex">
                     <input id="duration-input" class="custom-input" type="text" pattern="[0-9]{2}:[0-9]{2}"
                         value="00:00" required />
                     <img src="images/icons/tijd_klok.png" class="time-icon" />
                 </div>
-                <!-- Categorie -->
+                <!-- ================ Categorie ================ -->
                 <select id="tutorialCategory" class="custom-input" required>
                     <option value="">Selecteer categorie</option>
                     <option value="broek">Broek</option>
@@ -85,14 +86,14 @@
                     <option value="jurk">jurk</option>
                     <option value="overig">Overig</option>
                 </select>
-                <!-- Materialen -->
+
+                <!-- ================ Materialen ================ -->
                 <div class="make-section mb-4">
                     <label class="classic-categories">Materialen</label>
                     <div id="materialenContainer" class="d-flex flex-wrap gap-2">
-                        <!-- Checkboxes worden via JS geladen -->
                     </div>
                 </div>
-                <!-- stappen toevoegen -->
+                <!-- ================ stappen toevoegen ================ -->
                 <div class="modal fade" id="stepModal" tabindex="-1">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content classic-outline">
@@ -110,7 +111,7 @@
                                     placeholder="Uitleg bij deze stap"></textarea>
                             </div>
                             <div class="modal-footer">
-                                <button class="classic-button" type="button" id="saveStepBtn">
+                                <button class="btn-hoofd-1" type="button" id="saveStepBtn">
                                     Stap opslaan
                                 </button>
                             </div>
@@ -119,12 +120,12 @@
                 </div>
 
                 <div id="stepsOverview" class="d-flex flex-column gap-2"></div>
-                <!-- Knop voor nieuwe stap -->
-                <button class="classic-button-small mt-2" type="button" id="addStepBtn">+ Nieuwe stap</button>
+                <!-- ================ Knop voor nieuwe stap ================ -->
+                <button class="btn-hoofd-3mt-2" type="button" id="addStepBtn">+ Nieuwe stap</button>
 
-                <!-- Upload tutorial -->
-                <button class="classic-button" type="button" id="saveDraftBtn">Opslaan als draft</button>
-                <button class="classic-button" type="submit">Plaats tutorial</button>
+                <!-- ================ Upload tutorial ================ -->
+                <button class="btn-hoofd-1" type="submit">Plaats tutorial</button>
+                <button class="btn-hoofd-1" type="button" id="saveDraftBtn">Opslaan als draft</button>
             </form>
         </main>
         <!-- Source - https://stackoverflow.com/a -->

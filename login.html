@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cherrie's login</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/standardized-styles.css" />
+  <link rel="stylesheet" href="css/specific-styles.css" />
   <link rel="stylesheet" href="css/editprofile.css" />
   <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
@@ -20,16 +21,16 @@
       <form id="loginForm">
         <input id="loginUsername" class="custom-input" placeholder="Gebruikersnaam" />
         <input id="loginPassword" class="custom-input" type="password" placeholder="Wachtwoord">
-        <button class="classic-button-small" type="submit" id="loginBtn">Inloggen</button>
+        <button class="btn-hoofd-1-small" type="submit" id="loginBtn">Inloggen</button>
         <p id="message"></p>
-        <button class="terugbtn" type="button" onclick="window.location.href='index.html'">
+        <button class="btn-lined-3" type="button" onclick="window.location.href='index.html'">
           Terug
         </button>
     </div>
   </div>
-    <script type="module" src="js/firebase-init.js"></script>
-    <script type="module" src="js/authentication.js"></script>
-    <script type="module" src="js/script.js"></script>
+  <script type="module" src="js/firebase-init.js"></script>
+  <script type="module" src="js/authentication.js"></script>
+  <script type="module" src="js/script.js"></script>
 </body>
 
 </html>

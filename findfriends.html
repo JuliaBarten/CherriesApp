@@ -1,82 +1,67 @@
 <!doctype html>
-<html lang="en">
+<html lang="nl">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Cherrie's friends</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
-    <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vind vrienden</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="css/standardized-styles.css" />
+  <link rel="stylesheet" href="css/specific-styles.css" />
+  <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
+  <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
-    <div class="app-wrapper">
-        <!---------------------   app - frame  --------------------->
-        <header class="app-header fixed-top">
-            <img alt="logo" src="images/logo_bol.png" class="logo" />
-            <a href="inbox.html" class="inbox-btn">
-                <img src="images/icons/inbox.png" alt="Inbox" />
-                <span id="inboxBadge" class="badge hidden"></span>
-            </a>
-        </header>
+  <div class="app-wrapper">
+    <header class="app-header fixed-top">
+      <img alt="logo" src="images/logo_bol.png" class="logo" />
+      <a href="inbox.html" class="inbox-btn">
+        <img src="images/icons/inbox.png" alt="Inbox" />
+        <span id="inboxBadge" class="badge hidden"></span>
+      </a>
+    </header>
 
-        <footer class="fixed-bottom navbar">
-            <div class="d-flex justify-content-around py-2">
-                <a href="inspiration.html" class="text-center nav-item">
-                    <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
-                </a>
-                <a href="favorites.html" class="text-center nav-item">
-                    <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
-                </a>
+    <footer class="fixed-bottom navbar">
+      <div class="d-flex justify-content-around py-2">
+        <a href="inspiration.html" class="text-center nav-item">
+          <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
+        </a>
+        <a href="favorites.html" class="text-center nav-item">
+          <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
+        </a>
+        <a href="#" id="makeNavBtn" class="text-center nav-item">
+          <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
+        </a>
+        <div class="make-menu" id="makeMenu">
+          <button id="newProjectBtn" class="make-pill">Nieuw</button>
+          <button id="draftsBtn" class="make-pill secondary">Drafts</button>
+        </div>
+        <a href="friends.html" class="text-center nav-item">
+          <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
+        </a>
+        <a href="profile.html" class="text-center nav-item">
+          <img id="navbarAvatar" class="navbar-avatar" />
+        </a>
+      </div>
+    </footer>
 
-                <a href="#" id="makeNavBtn" class="text-center nav-item">
-                    <img src="images/icons/naaimachine.png" class="navbar-icon" alt="make">
-                </a>
+    <main>
+      <div class="classic-outline">
+        <input type="text" id="searchInput" class="custom-input" placeholder="Typ gebruikersnaam" />
+        <div id="usersList"></div>
 
-                <div class="make-menu" id="makeMenu">
-                    <button id="newProjectBtn" class="make-pill">Nieuw</button>
-                    <button id="draftsBtn" class="make-pill secondary">Drafts</button>
-                </div>
+        <button class="btn-hoofd-1" onclick="window.location.href='friends.html'">Naar mijn vrienden</button>
+      </div>
+    </main>
 
-                <a href="friends.html" class="text-center nav-item">
-                    <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
-                </a>
-                <a href="profiel.html" class="text-center nav-item">
-                    <img id="navbarAvatar" class="navbar-avatar" />
-                </a>
-            </div>
-        </footer>
-
-        <main>
-            <div class="classic-outline">
-                <!-- friends toggle -->
-                <div class="toggle-buttons classic-toggle">
-                    <button id="btnAll" class="classic-toggle-item active">Alle vrienden</button>
-                    <button id="btnSharing" class="classic-toggle-item">Delende vrienden</button>
-                </div>
-
-                <div id="allFriends"></div>
-                <div id="sharingFriends" style="display:none;"></div>
-
-                <h1>Mijn vrienden</h1>
-                <div id="friendsList"></div>
-
-                <h1>Vriendschapsverzoeken</h1>
-                <div id="friendRequests"></div>
-
-                <button class="classic-button" onclick="window.location.href='findfriends.hmtl'"> Vind meer vrienden
-                </button>
-            </div>
-        </main>
-
-        <script type="module" src="js/firebase-init.js"></script>
-        <script type="module" src="js/script.js"></script>
-        <script type="module" src="js/friends.js"></script>
- 
-    </div>
+    <script type="module" src="js/firebase-init.js"></script>
+    <script type="module" src="js/friends.js"></script>
+    <script type="module" src="js/findfriends.js"></script>
+    <script type="module" src="js/profile.js"></script>
+    <script type="module" src="js/script.js"></script>
+  </div>
 </body>
 
 </html>

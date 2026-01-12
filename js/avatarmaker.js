@@ -40,6 +40,6 @@ onAuthStateChanged(auth, async (user) => {
       avatar: selectedAvatar
     });
 
-    window.location.href = "profiel.html";
+    window.location.href = "profile.html";
   });
 });
