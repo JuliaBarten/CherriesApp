@@ -51,21 +51,17 @@
             </div>
         </footer>
 
-        <main>
-            <div class="toggle-buttons classic-toggle">
-                <button id="tabAll" class="classic-toggle-item active">Alle</button>
-                <button id="tabUnread" class="classic-toggle-item">Ongelezen</button>
+         <main>
+            <div class="classic-outline">
+                <div id="detailContainer"></div>
+                <button class="btn-hoofd-1" onclick="history.back()">Terug</button>
             </div>
+            </main>
 
-            <div>
-                <div id="listAll"></div>
-                <div id="listUnread" style="display:none;"></div>
-            </div>
+            <script type="module" src="js/firebase-init.js"></script>
+            <script type="module" src="js/inbox-detail.js"></script>
+            <script type="module" src="js/script.js"></script>
 
-        </main>
-        <script type="module" src="js/firebase-init.js"></script>
-        <script type="module" src="js/inbox.js"></script>
-        <script type="module" src="js/script.js"></script>
     </div>
 </body>
 

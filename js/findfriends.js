@@ -1,8 +1,5 @@
 import { auth, db } from "./firebase-init.js";
-import {
-  collection, getDocs, query, where,
-  addDoc, doc, serverTimestamp, getDoc
-} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { collection, getDocs, query, where, addDoc, doc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 /* ================= HELPERS ================= */
@@ -29,15 +26,15 @@ function createFriendCard({ uid, username, avatar, level, status, buttonText, on
 
       <div class="friend-actions">
         ${!existing && buttonText
-          ? `<button type="button" class="friend-btn btn-licht-5">${buttonText}</button>`
-          : ""
-        }
+      ? `<button type="button" class="friend-btn btn-licht-5">${buttonText}</button>`
+      : ""
+    }
       </div>
     </div>
   `;
 
   const goToProfile = () => {
-    window.location.href = `profiel.html?uid=${uid}`;
+    window.location.href = `profile.html?uid=${uid}`;
   };
 
   div.querySelector(".friend-avatar")?.addEventListener("click", goToProfile);
@@ -200,7 +197,7 @@ async function loadUsers(currentUid, filter = "") {
 
 /* ================= SEND REQUEST ================= */
 async function sendRequest(fromUid, toUid) {
-  await addDoc(collection(db, "friendRequests"), {
+  const reqRef = await addDoc(collection(db, "friendRequests"), {
     from: fromUid,
     to: toUid,
     type: "normal",
@@ -208,11 +205,14 @@ async function sendRequest(fromUid, toUid) {
     createdAt: serverTimestamp()
   });
 
-  // 👇 “Inbox bericht” (simpele variant)
   await addDoc(collection(db, "users", toUid, "inbox"), {
     type: "friendRequest",
     from: fromUid,
+    friendType: "normal",
+    friendRequestId: reqRef.id,
+
     createdAt: serverTimestamp(),
-    read: false
+    read: false,
+    archived: false
   });
 }

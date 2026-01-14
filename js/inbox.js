@@ -1,100 +1,127 @@
 import { auth, db } from "./firebase-init.js";
-import { collection, query, where, getDocs, getDoc, updateDoc, addDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import {
+  collection, query, where, orderBy, getDocs, getDoc, doc
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { onAuthStateChanged } from
   "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-/* ================= AUTH ================= */
+const tabAll = document.getElementById("tabAll");
+const tabUnread = document.getElementById("tabUnread");
+const listAll = document.getElementById("listAll");
+const listUnread = document.getElementById("listUnread");
+const inboxBadge = document.getElementById("inboxBadge");
+
 onAuthStateChanged(auth, (user) => {
   if (!user) return;
+  setupTabs();
   loadInbox();
 });
 
-/* ================= USERNAME ================= */
-async function getUsername(uid) {
-  const snap = await getDoc(doc(db, "users", uid));
-  return snap.exists() ? snap.data().username : "Onbekend";
+function setupTabs() {
+  tabAll?.addEventListener("click", () => {
+    tabAll.classList.add("active");
+    tabUnread.classList.remove("active");
+    listAll.style.display = "block";
+    listUnread.style.display = "none";
+  });
+
+  tabUnread?.addEventListener("click", () => {
+    tabUnread.classList.add("active");
+    tabAll.classList.remove("active");
+    listAll.style.display = "none";
+    listUnread.style.display = "block";
+  });
 }
 
-/* ================= INBOX ================= */
-async function loadInbox() {
-  clearInboxes();
+async function getUser(uid) {
+  const snap = await getDoc(doc(db, "users", uid));
+  if (!snap.exists()) return { username: "Onbekend", avatar: "images/avatar/default.png", level: 1 };
+  const u = snap.data();
+  return {
+    username: u.username || "Onbekend",
+    avatar: u.avatar || "images/avatar/default.png",
+    level: u.level || 1
+  };
+}
 
-  const q = query(
-    collection(db, "friendRequests"),
-    where("to", "==", auth.currentUser.uid)
-  );
+function typeLabel(t) {
+  if (t === "friendRequest") return "Vriendschapsverzoek";
+  if (t === "sharingRequest") return "Aanvraag: delende vriend";
+  if (t === "materialRequest") return "Materiaalaanvraag";
+  if (t === "message") return "Bericht";
+  return "Bericht";
+}
 
-  const snap = await getDocs(q);
-
-  for (const d of snap.docs) {
-    const req = d.data();
-    const fromName = await getUsername(req.from);
-
-    const card = document.createElement("div");
-    card.className = "friend-card";
-    card.innerHTML = `
-      <strong>${fromName}</strong>
-      <p>${req.message}</p>
-      ${req.status === "unread" || req.status === "pending"
-        ? `<button class="accept">Accepteren</button>
-           <button class="reject">Weigeren</button>`
-        : ""}
-    `;
-
-    if (req.status === "unread") {
-      card.onclick = () =>
-        updateDoc(doc(db, "friendRequests", d.id), {
-          status: "pending"
-        });
-    }
-
-    if (req.status === "unread") {
-      inboxUnread.appendChild(card);
-    } else if (req.status === "pending") {
-      inboxPending.appendChild(card);
-    } else {
-      inboxHandled.appendChild(card);
-    }
-
-    const acceptBtn = card.querySelector(".accept");
-    const rejectBtn = card.querySelector(".reject");
-
-    if (acceptBtn) {
-      acceptBtn.onclick = () =>
-        acceptRequest(d.id, req);
-    }
-
-    if (rejectBtn) {
-      rejectBtn.onclick = () =>
-        rejectRequest(d.id);
-    }
+function setBadge(count) {
+  if (!inboxBadge) return;
+  if (count > 0) {
+    inboxBadge.textContent = count;
+    inboxBadge.classList.remove("hidden");
+  } else {
+    inboxBadge.textContent = "";
+    inboxBadge.classList.add("hidden");
   }
 }
 
-function clearInboxes() {
-  inboxUnread.innerHTML = "";
-  inboxPending.innerHTML = "";
-  inboxHandled.innerHTML = "";
+async function loadInbox() {
+  listAll.innerHTML = "";
+  listUnread.innerHTML = "";
+
+  const uid = auth.currentUser.uid;
+
+  const allQ = query(
+    collection(db, "users", uid, "inbox"),
+    where("archived", "==", false),
+    orderBy("createdAt", "desc")
+  );
+
+  const snap = await getDocs(allQ);
+
+  let unreadCount = 0;
+
+  for (const d of snap.docs) {
+    const item = { id: d.id, ...d.data() };
+    if (item.read === false) unreadCount++;
+
+    const bar = await renderBar(item);
+    listAll.appendChild(bar);
+
+    if (item.read === false) {
+      const bar2 = await renderBar(item);
+      listUnread.appendChild(bar2);
+    }
+  }
+
+  setBadge(unreadCount);
 }
 
-/* ================= ACTIONS ================= */
-async function acceptRequest(id, req) {
-  await addDoc(collection(db, "friendships"), {
-    users: [req.from, req.to],
-    type: req.type,
-    createdAt: serverTimestamp()
+async function renderBar(item) {
+  const from = await getUser(item.from);
+
+  const div = document.createElement("div");
+  div.className = "friend-bar inbox-bar";
+
+  div.innerHTML = `
+    ${item.read === false ? `<div class="inbox-new-pill">NEW!</div>` : ""}
+
+    <div class="friend-avatar">
+      <img src="${from.avatar}" alt="avatar">
+      <img class="level-icon" src="images/icons/niveau_${from.level || 1}.png" alt="niveau">
+    </div>
+
+    <div class="friend-info">
+      <div class="friend-top">
+        <div class="friend-username">${from.username}</div>
+      </div>
+      <div class="friend-actions">
+        <div class="friend-status">${typeLabel(item.type)}</div>
+      </div>
+    </div>
+  `;
+
+  div.addEventListener("click", () => {
+    window.location.href = `inbox-detail.html?id=${encodeURIComponent(item.id)}`;
   });
 
-  await updateDoc(doc(db, "friendRequests", id), {
-    status: "accepted"
-  });
-
-  loadInbox();
-}
-
-async function rejectRequest(id) {
-  await updateDoc(doc(db, "friendRequests", id), {
-    status: "rejected"
-  });
-  loadInbox();
+  return div;
 }
