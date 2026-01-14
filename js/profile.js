@@ -17,7 +17,7 @@ onAuthStateChanged(auth, async (user) => {
 
   await loadProfile(uidToLoad);
 
-  // 👇 Alleen eigen profiel mag bewerken
+  // Alleen eigen profiel mag bewerken
   if (!isOwnProfile) {
     document.body.classList.add("viewing-other-profile");
     document.getElementById("editProfileBtn")?.remove();
@@ -25,7 +25,7 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // 👇 Alleen hier opslaan toestaan
+  // Alleen hier opslaan toestaan
   document
     .getElementById("saveProfile")
     ?.addEventListener("click", async () => {

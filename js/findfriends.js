@@ -11,49 +11,78 @@ function createFriendCard({ uid, username, avatar, level, status, buttonText, on
   div.className = "friend-bar";
   if (existing) div.classList.add("existing");
 
+  const badgeHtml = status
+    ? `<span class="friend-badge ${status === "Delende vriend" ? "sharing" : "befriend"}">${status}</span>`
+    : "";
+
   div.innerHTML = `
-    <div class="friend-avatar">
-      <img src="${avatar || 'images/avatar/default.png'}">
-      <img class="level-icon" src="images/icons/niveau_${level || 1}.png">
+    <div class="friend-avatar" role="button" tabindex="0">
+      <img src="${avatar || "images/avatar/default.png"}" alt="avatar">
+      <img class="level-icon" src="images/icons/niveau_${level || 1}.png" alt="niveau">
     </div>
+
     <div class="friend-info">
-      <strong>${username}</strong>
-      ${buttonText
-      ? `<button class="btn-licht-5">${buttonText}</button>`
-      : `<span class="friend-status">${status}</span>`}
+      <div class="friend-top">
+        <div class="friend-username">${username || "Onbekend"}</div>
+        ${existing ? badgeHtml : ""}
+      </div>
+
+      <div class="friend-actions">
+        ${!existing && buttonText
+          ? `<button type="button" class="friend-btn btn-licht-5">${buttonText}</button>`
+          : ""
+        }
+      </div>
     </div>
   `;
 
-  // Klikbaar profiel
-  div.querySelector(".friend-avatar").onclick = () => {
-    window.location.href = `profile.html?uid=${uid}`;
-  };
-  div.querySelector(".friend-info strong").onclick = () => {
-    window.location.href = `profile.html?uid=${uid}`;
+  const goToProfile = () => {
+    window.location.href = `profiel.html?uid=${uid}`;
   };
 
-  if (onClick) {
-    const btn = div.querySelector(".btn-licht-5");
-    if (btn) btn.onclick = onClick;
+  div.querySelector(".friend-avatar")?.addEventListener("click", goToProfile);
+  div.querySelector(".friend-username")?.addEventListener("click", goToProfile);
+
+  const btn = div.querySelector(".friend-btn");
+  if (btn && onClick) {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      onClick(btn);
+    });
   }
 
   return div;
 }
 
-/* ================= AUTH ================= */
+/* ================= STATE ================= */
 let friendsSet = new Set();
 
+/* ================= AUTH ================= */
 onAuthStateChanged(auth, async (user) => {
   if (!user) return;
 
   await loadFriends(user.uid);
-  await loadUserPreview(user.uid); // willekeurige 5 gebruikers
+  await loadUserPreview(user.uid);
+
+  const searchInput = document.getElementById("searchInput");
+  if (searchInput) {
+    searchInput.addEventListener("input", async (e) => {
+      const value = e.target.value.trim();
+      if (!value) {
+        // leeg → weer random preview
+        await loadUserPreview(user.uid);
+      } else {
+        await loadUsers(user.uid, value);
+      }
+    });
+  }
 });
 
 /* ================= LOAD FRIENDS ================= */
 async function loadFriends(currentUid) {
   const list = document.getElementById("friendsList");
   if (!list) return;
+
   list.innerHTML = "";
   friendsSet.clear();
 
@@ -63,6 +92,7 @@ async function loadFriends(currentUid) {
   );
 
   const snap = await getDocs(q);
+
   if (snap.empty) {
     list.innerHTML = "<p>Geen vrienden</p>";
     return;
@@ -82,7 +112,7 @@ async function loadFriends(currentUid) {
       username: u.username,
       avatar: u.avatar,
       level: u.level,
-      status: f.type === "sharing" ? "Delende vriend" : "Befriend!",
+      status: f.type === "sharing" ? "Delende vriend" : "Bevriend",
       existing: true
     });
 
@@ -94,6 +124,7 @@ async function loadFriends(currentUid) {
 async function loadUserPreview(currentUid) {
   const list = document.getElementById("usersList");
   if (!list) return;
+
   list.innerHTML = "";
 
   const snap = await getDocs(collection(db, "users"));
@@ -103,6 +134,11 @@ async function loadUserPreview(currentUid) {
 
   const previewUsers = allUsers.sort(() => 0.5 - Math.random()).slice(0, 5);
 
+  if (!previewUsers.length) {
+    list.innerHTML = "<p>Geen gebruikers gevonden.</p>";
+    return;
+  }
+
   previewUsers.forEach(u => {
     const card = createFriendCard({
       uid: u.uid,
@@ -110,39 +146,28 @@ async function loadUserPreview(currentUid) {
       avatar: u.avatar,
       level: u.level,
       buttonText: "Word vrienden",
-      onClick: async () => {
-        await addDoc(collection(db, "friendRequests"), {
-          from: currentUid,
-          to: u.uid,
-          type: "normal",
-          status: "pending",
-          createdAt: serverTimestamp()
-        });
-        const btn = card.querySelector("button");
-        btn.textContent = "Verzoek verstuurd";
-        btn.disabled = true;
+      onClick: async (btnEl) => {
+        await sendRequest(currentUid, u.uid);
+        btnEl.textContent = "Verzoek verstuurd";
+        btnEl.disabled = true;
       }
     });
+
     list.appendChild(card);
   });
 }
 
-/* ================= SEARCH ================= */
-const searchInput = document.getElementById("searchInput");
-if (searchInput) {
-  searchInput.oninput = async (e) => {
-    const user = auth.currentUser;
-    if (!user) return;
-    await loadUsers(user.uid, e.target.value);
-  };
-}
-
+/* ================= SEARCH USERS ================= */
 async function loadUsers(currentUid, filter = "") {
   const list = document.getElementById("usersList");
   if (!list) return;
+
   list.innerHTML = "";
 
   const snap = await getDocs(collection(db, "users"));
+
+  let found = 0;
+
   for (const docSnap of snap.docs) {
     if (docSnap.id === currentUid) continue;
     if (friendsSet.has(docSnap.id)) continue;
@@ -150,26 +175,44 @@ async function loadUsers(currentUid, filter = "") {
     const u = docSnap.data();
     if (!u.username?.toLowerCase().includes(filter.toLowerCase())) continue;
 
+    found++;
+
     const card = createFriendCard({
       uid: docSnap.id,
       username: u.username,
       avatar: u.avatar,
       level: u.level,
       buttonText: "Word vrienden",
-      onClick: async () => {
-        await addDoc(collection(db, "friendRequests"), {
-          from: currentUid,
-          to: docSnap.id,
-          type: "normal",
-          status: "pending",
-          createdAt: serverTimestamp()
-        });
-        const btn = card.querySelector("button");
-        btn.textContent = "Verzoek verstuurd";
-        btn.disabled = true;
+      onClick: async (btnEl) => {
+        await sendRequest(currentUid, docSnap.id);
+        btnEl.textContent = "Verzoek verstuurd";
+        btnEl.disabled = true;
       }
     });
 
     list.appendChild(card);
   }
+
+  if (!found) {
+    list.innerHTML = "<p>Geen resultaten.</p>";
+  }
+}
+
+/* ================= SEND REQUEST ================= */
+async function sendRequest(fromUid, toUid) {
+  await addDoc(collection(db, "friendRequests"), {
+    from: fromUid,
+    to: toUid,
+    type: "normal",
+    status: "pending",
+    createdAt: serverTimestamp()
+  });
+
+  // 👇 “Inbox bericht” (simpele variant)
+  await addDoc(collection(db, "users", toUid, "inbox"), {
+    type: "friendRequest",
+    from: fromUid,
+    createdAt: serverTimestamp(),
+    read: false
+  });
 }

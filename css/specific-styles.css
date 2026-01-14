@@ -586,8 +586,10 @@
 
 .friend-info .friend-status {
     font-size: 0.9em;
-    color: #333;
+    color: var(--textdonker);
 }
+
+
 
 
 /* ================= Responsive ================= 
