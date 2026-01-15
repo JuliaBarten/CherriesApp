@@ -144,10 +144,16 @@ async function loadUserPreview(currentUid) {
       level: u.level,
       buttonText: "Word vrienden",
       onClick: async (btnEl) => {
-        await sendRequest(currentUid, u.uid);
-        btnEl.textContent = "Verzoek verstuurd";
-        btnEl.disabled = true;
+        try {
+          await sendRequest(currentUid, u.uid);
+          btnEl.textContent = "Verzoek verstuurd";
+          btnEl.disabled = true;
+        } catch (e) {
+          console.error("sendRequest failed", e);
+          alert(e.message);
+        }
       }
+
     });
 
     list.appendChild(card);
@@ -181,9 +187,19 @@ async function loadUsers(currentUid, filter = "") {
       level: u.level,
       buttonText: "Word vrienden",
       onClick: async (btnEl) => {
-        await sendRequest(currentUid, docSnap.id);
-        btnEl.textContent = "Verzoek verstuurd";
         btnEl.disabled = true;
+        const oldText = btnEl.textContent;
+        btnEl.textContent = "Even…";
+
+        try {
+          await sendRequest(currentUid, u.uid);
+          btnEl.textContent = "Verzoek verstuurd";
+        } catch (e) {
+          console.error("sendRequest failed:", e);
+          alert(e.message);
+          btnEl.disabled = false;
+          btnEl.textContent = oldText;
+        }
       }
     });
 
@@ -197,22 +213,27 @@ async function loadUsers(currentUid, filter = "") {
 
 /* ================= SEND REQUEST ================= */
 async function sendRequest(fromUid, toUid) {
-  const reqRef = await addDoc(collection(db, "friendRequests"), {
-    from: fromUid,
-    to: toUid,
-    type: "normal",
-    status: "pending",
-    createdAt: serverTimestamp()
-  });
+  try {
+    const reqRef = await addDoc(collection(db, "friendRequests"), {
+      from: fromUid,
+      to: toUid,
+      type: "normal",
+      status: "pending",
+      createdAt: serverTimestamp()
+    });
 
-  await addDoc(collection(db, "users", toUid, "inbox"), {
-    type: "friendRequest",
-    from: fromUid,
-    friendType: "normal",
-    friendRequestId: reqRef.id,
-
-    createdAt: serverTimestamp(),
-    read: false,
-    archived: false
-  });
+    await addDoc(collection(db, "users", toUid, "inbox"), {
+      type: "friendRequest",
+      from: fromUid,
+      friendType: "normal",
+      friendRequestId: reqRef.id,
+      createdAt: serverTimestamp(),
+      read: false,
+      archived: false
+    });
+  } catch (e) {
+    console.error("sendRequest error:", e);
+    throw e;
+  }
 }
+

@@ -27,31 +27,31 @@ document.querySelectorAll("footer a").forEach(link => {
 /* ==================== make button pop up ==================*/
 const makeNavBtn = document.getElementById("makeNavBtn");
 const makeMenu = document.getElementById("makeMenu");
+const newProjectBtn = document.getElementById("newProjectBtn");
+const draftsBtn = document.getElementById("draftsBtn");
 
-makeNavBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  makeMenu.classList.toggle("show");
-});
-
-// Klik buiten menu → sluiten
-document.addEventListener("click", (e) => {
-  if (!makeMenu.contains(e.target) && !makeNavBtn.contains(e.target)) {
-    makeMenu.classList.remove("show");
-  }
-});
-
-document.getElementById("newProjectBtn")
-  .addEventListener("click", () => {
-    window.location.href = "make-upload.html";
+if (makeNavBtn && makeMenu) {
+  makeNavBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    makeMenu.classList.toggle("show");
   });
 
-document.getElementById("draftsBtn")
-  .addEventListener("click", () => {
-    window.location.href = "make-drafts.html";
+  // Klik buiten menu → sluiten
+  document.addEventListener("click", (e) => {
+    // extra guard: als menu net is verwijderd of click in menu zit
+    if (!makeMenu.contains(e.target) && !makeNavBtn.contains(e.target)) {
+      makeMenu.classList.remove("show");
+    }
   });
+}
 
+newProjectBtn?.addEventListener("click", () => {
+  window.location.href = "make-upload.html";
+});
 
-
+draftsBtn?.addEventListener("click", () => {
+  window.location.href = "make-drafts.html";
+});
 
 /* ==================== POP UP INCOMPLEET [PROFIEL} ==================*/
 import { requireProfile } from "./guard.js";
