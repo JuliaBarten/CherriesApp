@@ -127,8 +127,7 @@ async function loadUserPreview(currentUid) {
   const snap = await getDocs(collection(db, "users"));
   const allUsers = snap.docs
     .filter(d => d.id !== currentUid && !friendsSet.has(d.id))
-    .map(d => ({ uid: d.id, ...d.data() }));
-
+  .map(d => ({ ...d.data(), uid: d.id }));
   const previewUsers = allUsers.sort(() => 0.5 - Math.random()).slice(0, 5);
 
   if (!previewUsers.length) {
@@ -145,6 +144,8 @@ async function loadUserPreview(currentUid) {
       buttonText: "Word vrienden",
       onClick: async (btnEl) => {
         try {
+          console.log("SEND REQ TO:", u.uid, "from:", currentUid, "user obj:", u);
+
           await sendRequest(currentUid, u.uid);
           btnEl.textContent = "Verzoek verstuurd";
           btnEl.disabled = true;
@@ -213,6 +214,12 @@ async function loadUsers(currentUid, filter = "") {
 
 /* ================= SEND REQUEST ================= */
 async function sendRequest(fromUid, toUid) {
+  if (!fromUid || !toUid) {
+    console.error("sendRequest called with invalid uids:", { fromUid, toUid });
+    alert("Er ging iets mis: ontvanger onbekend. Probeer opnieuw.");
+    return;
+  }
+  
   try {
     const reqRef = await addDoc(collection(db, "friendRequests"), {
       from: fromUid,
