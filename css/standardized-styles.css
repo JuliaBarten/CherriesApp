@@ -43,18 +43,18 @@
 
 :root {
     /* kleuren */
-    --hoofd: #f84857;
-    --licht: #F9BEBE;
-    --mid: #ff9c9c;
+    --hoofd: #ef8299;
+    --licht: #f7c0cb;
+    --mid: #ea94b1;
     --ipvwit: #fffbfc;
-    --donker: #461f34;
-    --achter: #f7edf2;
+    --donker: #b01643;
+    --achter: #fbedf3;
     --popupbg: rgba(0,0,0,0.2);
 
     /* tekst */
-    --textlicht: #fcd5d5;
-    --textmid: #c57878;
-    --textdonker: #920500;
+    --textlicht: #faedf1;
+    --textmid: #b01643;
+    --textdonker: #701132;
     --textplaceholder: #928989;
     --size1: 15px;
     --size2: 22px;
@@ -495,6 +495,7 @@ footer .d-flex {
     display: grid;
     width: 100%;
     height: 50px;
+    margin-top: 10px;
     grid-template-columns: 1fr 1fr;
     border-radius: var(--bordertoggle);
     font-family: var(--font);

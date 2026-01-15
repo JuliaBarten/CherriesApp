@@ -16,6 +16,8 @@ const profileEditPages = [
   "avatarmaker.html"
 ];
 
+console.log("guard.js loaded on", currentPage);
+
 onAuthStateChanged(auth, async (user) => {
   if (allowAnonymous.includes(currentPage)) return;
 

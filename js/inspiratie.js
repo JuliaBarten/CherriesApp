@@ -1,12 +1,12 @@
 import { auth, db } from "./firebase-init.js";
-import {
-  collection,
+import {collection,
   getDocs,
   doc,
   setDoc,
   getDoc,
-  deleteDoc
-} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+  deleteDoc,
+  query,
+  where, serverTimestamp} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 /* =================== STATE =================== */
@@ -16,42 +16,43 @@ let allMaterials = [];
 let userMaterials = [];
 let materialMode = "all"; // "all" of "mine"
 let activeSort = "new";   // default: nieuwste eerst
-let isLoading = false;
 
 /* =================== HELPERS =================== */
-// Filter dropdown toggler
 const filterToggle = document.getElementById("filterToggle");
 const filterDropdown = document.getElementById("filterDropdown");
 const applyFiltersBtn = document.getElementById("applyFilters");
 
 filterToggle?.addEventListener("click", () => {
-  filterDropdown.classList.toggle("open");
+  filterDropdown?.classList.toggle("open");
 });
 
-// Sluit dropdown als je op toepassen klikt
 applyFiltersBtn?.addEventListener("click", () => {
-  filterDropdown.classList.remove("open");
+  filterDropdown?.classList.remove("open");
 });
 
-// Render hartjes
 function renderHearts(level = 0) {
   let html = "";
-  for (let i = 0; i < level; i++) {
+  for (let i = 0; i < (level || 0); i++) {
     html += `<img src="images/icons/heart1.png" class="tut-card-ic" alt="hart">`;
   }
   return html;
 }
 
-/* =================== FAVORIETEN =================== */
+function safeSeconds(ts) {
+  return ts?.seconds || 0;
+}
 
+/* =================== FAVORIETEN =================== */
 async function loadFavorites(userId) {
   const snap = await getDocs(collection(db, "users", userId, "favorites"));
   favoriteCache = snap.docs.map(d => d.id);
 }
 
 async function addFavorite(userId, tutorialId) {
-  await setDoc(doc(db, "users", userId, "favorites", tutorialId), { createdAt: new Date() });
-  favoriteCache.push(tutorialId);
+  await setDoc(doc(db, "users", userId, "favorites", tutorialId), {
+    createdAt: serverTimestamp?.() || new Date() // fallback
+  });
+  if (!favoriteCache.includes(tutorialId)) favoriteCache.push(tutorialId);
 }
 
 async function removeFavorite(userId, tutorialId) {
@@ -60,19 +61,20 @@ async function removeFavorite(userId, tutorialId) {
 }
 
 /* =================== TUTORIALS =================== */
-
-// Render één tutorialkaart
 function renderSingleTutorial(t) {
-  where("draft", "!=", true)
-
   const grid = document.getElementById("tutorialGrid");
+  if (!grid) return;
+
+  // Extra safety: inspiratiepagina toont geen drafts
+  if (t.draft === true) return;
+
   const isFavorite = favoriteCache.includes(t.id);
 
   const card = document.createElement("div");
   card.className = "tutorial-card";
 
   card.innerHTML = `
-    <img src="${t.mainImageUrl}" alt="${t.title}" class="tutorial-image">
+    <img src="${t.mainImageUrl || ""}" alt="${t.title || "tutorial"}" class="tutorial-image">
     <div class="favorite-btn">
       <img src="images/icons/${isFavorite ? "fav_aan.png" : "fav_uit.png"}" alt="Favoriet">
     </div>
@@ -81,20 +83,23 @@ function renderSingleTutorial(t) {
         ${renderHearts(t.level)}
       </div>
       <div class="overlay-row time-row">
-        <span>${t.duration}</span>
+        <span>${t.duration || ""}</span>
         <img src="images/icons/tijd_klok.png" alt="klok">
       </div>
     </div>
   `;
 
   const favIcon = card.querySelector(".favorite-btn img");
-  favIcon.addEventListener("click", async (e) => {
+  favIcon?.addEventListener("click", async (e) => {
     e.stopPropagation();
+    const uid = auth.currentUser?.uid;
+    if (!uid) return;
+
     if (favoriteCache.includes(t.id)) {
-      await removeFavorite(auth.currentUser.uid, t.id);
+      await removeFavorite(uid, t.id);
       favIcon.src = "images/icons/fav_uit.png";
     } else {
-      await addFavorite(auth.currentUser.uid, t.id);
+      await addFavorite(uid, t.id);
       favIcon.src = "images/icons/fav_aan.png";
     }
   });
@@ -106,27 +111,33 @@ function renderSingleTutorial(t) {
   grid.appendChild(card);
 }
 
-// Render alle tutorials gefilterd
 function renderTutorialsFiltered() {
   const grid = document.getElementById("tutorialGrid");
+  if (!grid) return;
   grid.innerHTML = "";
 
   if (!tutorialCache) return;
 
-  // Filter tutorials op materialen
-  let tutorialsToRender = tutorialCache.filter(t => {
-    if (materialMode === "all") return true;
-    return t.materials?.some(m => userMaterials.includes(m));
-  });
+  let tutorialsToRender = tutorialCache;
 
-  // Sorteer tutorials
+  // Filter op materialen
+  if (materialMode === "mine") {
+    tutorialsToRender = tutorialsToRender.filter(t =>
+      t.materials?.some(m => userMaterials.includes(m))
+    );
+  }
+
+  // Sorteren
   tutorialsToRender.sort((a, b) => {
     switch (activeSort) {
-      case "old": return (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0);
-      case "timeAsc": return (a.duration || 0) - (b.duration || 0);
-      case "timeDesc": return (b.duration || 0) - (a.duration || 0);
-      default: // nieuw -> oud
-        return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+      case "old":
+        return safeSeconds(a.createdAt) - safeSeconds(b.createdAt);
+      case "timeAsc":
+        return (a.duration || "").localeCompare(b.duration || "");
+      case "timeDesc":
+        return (b.duration || "").localeCompare(a.duration || "");
+      default:
+        return safeSeconds(b.createdAt) - safeSeconds(a.createdAt);
     }
   });
 
@@ -140,16 +151,22 @@ async function loadAllMaterials() {
 }
 
 async function loadUserMaterials(user) {
-  const snap = await getDoc(doc(db, "users", user.uid));
-  userMaterials = snap.data()?.materialsOwned || [];
-  if (!userMaterials.length) {
-    // toon alles
-    return tutorials;
+  console.log("AUTH UID:", user?.uid);
+
+  const userRef = doc(db, "users", user.uid);
+  console.log("USER DOC PATH:", userRef.path);
+
+  const snap = await getDoc(userRef);
+  console.log("USER DOC EXISTS:", snap.exists());
+
+  if (!snap.exists()) {
+    userMaterials = [];
+    return;
   }
 
+  userMaterials = snap.data()?.materialsOwned || [];
 }
 
-// Render filter buttons
 function setupMaterialFilters() {
   const btnAll = document.getElementById("materialsAll");
   const btnMine = document.getElementById("materialsMine");
@@ -157,20 +174,18 @@ function setupMaterialFilters() {
   btnAll?.addEventListener("click", () => {
     materialMode = "all";
     btnAll.classList.add("active");
-    btnMine.classList.remove("active");
+    btnMine?.classList.remove("active");
     renderTutorialsFiltered();
   });
 
   btnMine?.addEventListener("click", () => {
     materialMode = "mine";
     btnMine.classList.add("active");
-    btnAll.classList.remove("active");
+    btnAll?.classList.remove("active");
     renderTutorialsFiltered();
   });
 }
 
-
-// Sorteer dropdown
 const sortSelect = document.getElementById("sortSelect");
 sortSelect?.addEventListener("change", () => {
   activeSort = sortSelect.value;
@@ -181,29 +196,52 @@ sortSelect?.addEventListener("change", () => {
 onAuthStateChanged(auth, async (user) => {
   if (!user) return;
 
-  // 1️⃣ data ophalen
-  await Promise.all([
-    loadUserMaterials(user),
-    loadAllMaterials(),
-    loadFavorites(user.uid)
-  ]);
+  console.log("INIT: signed in", user.uid);
 
-  // 2️⃣ defaults
-  materialMode = "all";     // alle materialen
-  activeSort = "new";       // nieuwste eerst
-
-  // 3️⃣ UI hooks
-  setupMaterialFilters();
-
-  // 4️⃣ tutorials ophalen (1x)
-  if (!tutorialCache) {
-    const snap = await getDocs(collection(db, "tutorials"));
-    tutorialCache = snap.docs.map(docSnap => ({
-      id: docSnap.id,
-      ...docSnap.data()
-    }));
+  try {
+    console.log("INIT: loadUserMaterials...");
+    await loadUserMaterials(user);
+    console.log("INIT: loadUserMaterials OK");
+  } catch (e) {
+    console.error("INIT: loadUserMaterials FAILED", e);
+    return;
   }
 
-  // 5️⃣ render
+  try {
+    console.log("INIT: loadAllMaterials...");
+    await loadAllMaterials();
+    console.log("INIT: loadAllMaterials OK");
+  } catch (e) {
+    console.error("INIT: loadAllMaterials FAILED", e);
+    return;
+  }
+
+  try {
+    console.log("INIT: loadFavorites...");
+    await loadFavorites(user.uid);
+    console.log("INIT: loadFavorites OK");
+  } catch (e) {
+    console.error("INIT: loadFavorites FAILED", e);
+    return;
+  }
+
+  materialMode = "all";
+  activeSort = "new";
+  setupMaterialFilters();
+
+  try {
+    if (!tutorialCache) {
+      console.log("INIT: load tutorials...");
+      const q = query(collection(db, "tutorials"), where("draft", "==", false));
+      const snap = await getDocs(q);
+      tutorialCache = snap.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+      console.log("INIT: tutorials OK", tutorialCache.length);
+    }
+  } catch (e) {
+    console.error("INIT: load tutorials FAILED", e);
+    return;
+  }
+
   renderTutorialsFiltered();
 });
+
