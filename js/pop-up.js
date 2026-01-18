@@ -1,5 +1,4 @@
 
-// In make-upload.js (of een aparte helpers.js)
 window.showPopup = function({ imageSrc, text, buttonText, buttonAction }) {
   const overlay = document.createElement("div");
   overlay.className = "popup-overlay";
@@ -26,11 +25,3 @@ window.showPopup = function({ imageSrc, text, buttonText, buttonAction }) {
   overlay.appendChild(block);
   document.body.appendChild(overlay);
 };
-
-
-// showPopup({
-//   imageSrc: "images/pop-ups/size-1.png",
-//   text: "Make opgeslagen in drafts!",
-//   buttonText: "OK!",
-//   buttonAction: () => window.location.href = "inspiration.html"
-// });

@@ -1,7 +1,3 @@
-// // TODO: Add SDKs for Firebase products that you want to use
-// // https://firebase.google.com/docs/web/setup#available-libraries
-
-
 // ================== IMPORTS ==================
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
@@ -58,7 +54,6 @@ async function login() {
   const passwordInput = document.getElementById("loginPassword");
   const message = document.getElementById("message");
 
-  //  Niet op loginpagina
   if (!usernameInput || !passwordInput) {
     return;
   }

@@ -10,6 +10,7 @@ const tabUnread = document.getElementById("tabUnread");
 const listAll = document.getElementById("listAll");
 const listUnread = document.getElementById("listUnread");
 const inboxBadge = document.getElementById("inboxBadge");
+const emptyStateBox = document.getElementById("emptyStateBox");
 
 onAuthStateChanged(auth, (user) => {
   if (!user) return;
@@ -92,7 +93,10 @@ async function loadInbox() {
     }
   }
 
+  if (snap.empty) {
+    emptyStateBox.style.display = "block";
   setBadge(unreadCount);
+}
 }
 
 async function renderBar(item) {

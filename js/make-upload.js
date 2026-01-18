@@ -15,8 +15,6 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/fi
 /* ====================== STATE ====================== */
 let draftId = null;
 let selectedLevel = 1;
-
-// In-memory steps: { text, imageFile?, imagePreviewUrl?, imageUrl? }
 let stepsData = [];
 let editingStepIndex = null;
 let currentStepTempImageFile = null;
@@ -60,16 +58,12 @@ async function uploadStepImage(uid, tutorialId, index, file) {
 /* ====================== DOM ====================== */
 const tutorialForm = document.getElementById("tutorialForm");
 const saveDraftBtn = document.getElementById("saveDraftBtn");
-
 const mainImageInput = document.getElementById("mainImage");
 const mainImagePreview = document.getElementById("mainImagePreview");
-
 const titleInput = document.getElementById("titel");
 const categorySelect = document.getElementById("tutorialCategory");
 const durationInput = document.getElementById("duration-input");
-
 const materialenContainer = document.getElementById("materialenContainer");
-
 const addStepBtn = document.getElementById("addStepBtn");
 const saveStepBtn = document.getElementById("saveStepBtn");
 const stepModalEl = document.getElementById("stepModal");

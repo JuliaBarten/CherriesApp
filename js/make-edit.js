@@ -23,20 +23,16 @@ function showErr(e) {
 
 function revokeIfObjectUrl(url) {
   if (url && typeof url === "string" && url.startsWith("blob:")) {
-    try { URL.revokeObjectURL(url); } catch {}
+    try { URL.revokeObjectURL(url); } catch { }
   }
 }
 
 /* ====================== STATE ====================== */
 let selectedLevel = 1;
-
-// in-memory steps: { text, imageFile?, imagePreviewUrl?, existingUrl? }
 let stepsData = [];
 let editingStepIndex = null;
 let currentStepTempImageFile = null;
 let tutorialCache = null;
-
-// objectURL bookkeeping (om memory leaks te voorkomen)
 let currentStepPreviewUrl = null;
 let currentMainPreviewUrl = null;
 
@@ -114,8 +110,6 @@ mainImagePreview?.addEventListener("click", () => mainImageInput?.click());
 mainImageInput?.addEventListener("change", () => {
   const file = mainImageInput.files?.[0];
   if (!file || !mainImagePreview) return;
-
-  // cleanup vorige objectURL
   if (currentMainPreviewUrl) revokeIfObjectUrl(currentMainPreviewUrl);
 
   currentMainPreviewUrl = URL.createObjectURL(file);
@@ -132,8 +126,6 @@ function resetStepModal() {
   if (stepText) stepText.value = "";
   if (stepImagePreview) stepImagePreview.innerHTML = `<span class="plus-icon">+</span>`;
   editingStepIndex = null;
-
-  // cleanup objectURL van tijdelijke preview
   if (currentStepPreviewUrl) {
     revokeIfObjectUrl(currentStepPreviewUrl);
     currentStepPreviewUrl = null;
@@ -162,7 +154,6 @@ function openStepModal(editIndex = null) {
         : `<span class="plus-icon">+</span>`;
     }
   }
-
   stepModal.show();
 }
 
@@ -179,9 +170,9 @@ function renderStepsOverview() {
     row.innerHTML = `
       <div class="friend-avatar">
         ${preview
-          ? `<img src="${preview}" alt="stap">`
-          : `<img src="images/icons/make1.png" alt="stap">`
-        }
+        ? `<img src="${preview}" alt="stap">`
+        : `<img src="images/icons/make1.png" alt="stap">`
+      }
       </div>
       <div class="friend-info">
         <div class="friend-top">
@@ -204,8 +195,6 @@ stepImagePreview?.addEventListener("click", () => stepImageInput?.click());
 stepImageInput?.addEventListener("change", () => {
   const file = stepImageInput.files?.[0];
   if (!file || !stepImagePreview) return;
-
-  // cleanup vorige objectURL
   if (currentStepPreviewUrl) revokeIfObjectUrl(currentStepPreviewUrl);
 
   currentStepTempImageFile = file;
@@ -214,7 +203,6 @@ stepImageInput?.addEventListener("change", () => {
 });
 
 saveStepBtn?.addEventListener("click", () => {
-  // cleanup oude preview url bij edit + nieuwe upload
   if (editingStepIndex !== null && currentStepTempImageFile) {
     const oldUrl = stepsData[editingStepIndex]?.imagePreviewUrl;
     revokeIfObjectUrl(oldUrl);
@@ -222,10 +210,7 @@ saveStepBtn?.addEventListener("click", () => {
 
   const text = stepText?.value?.trim() || "";
   const prev = editingStepIndex !== null ? stepsData[editingStepIndex] : null;
-
   const imageFile = currentStepTempImageFile || prev?.imageFile || null;
-
-  // als er een nieuwe file is gekozen gebruiken we currentStepPreviewUrl
   const imagePreviewUrl = currentStepTempImageFile
     ? currentStepPreviewUrl
     : (prev?.imagePreviewUrl || null);
@@ -263,7 +248,6 @@ async function uploadSteps(uid, tutorialId) {
       await uploadBytes(stepRef, s.imageFile);
       const imageUrl = await getDownloadURL(stepRef);
 
-      // update in-memory zodat volgende saves goed gaan
       stepsData[i] = {
         ...s,
         imageFile: null,
@@ -276,7 +260,6 @@ async function uploadSteps(uid, tutorialId) {
       out.push({ text: s.text || "", imageUrl: s.existingUrl || null });
     }
   }
-
   return out;
 }
 
@@ -304,7 +287,6 @@ async function loadTutorial(user) {
     return;
   }
 
-  // form vullen
   if (titleInput) titleInput.value = t.title || "";
   if (durationInput) durationInput.value = t.duration || "00:00";
   if (categorySelect) categorySelect.value = t.category || "";
@@ -312,12 +294,10 @@ async function loadTutorial(user) {
   selectedLevel = t.level || 1;
   updateHearts(selectedLevel);
 
-  // main image preview in edit (geen objectURL nodig; dit is een echte url)
   if (mainImagePreview && t.mainImageUrl) {
     mainImagePreview.innerHTML = `<img src="${t.mainImageUrl}" alt="Hoofdfoto">`;
   }
 
-  // stappen laten zien (bewaar bestaande urls)
   stepsData = (t.steps || []).map(s => ({
     text: s.text || "",
     imageFile: null,

@@ -24,7 +24,7 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("saveProfile")?.remove();
     return;
   }
-
+  
   // Alleen hier opslaan toestaan
   document
     .getElementById("saveProfile")
@@ -40,29 +40,11 @@ onAuthStateChanged(auth, async (user) => {
     });
 });
 
-/* ================= LOAD PROFILE ================= */
-// async function loadProfile(uid) {
-//   const snap = await getDoc(doc(db, "users", uid));
-//   if (!snap.exists()) return;
-
-//   const data = snap.data();
-
-//   document.getElementById("profileUsername").textContent =
-//     data.username || "Gebruiker";
-
-//   document.getElementById("profileAvatar").src =
-//     data.avatar || "images/avatar/default.png";
-
-//   document.getElementById("profileLevel").src =
-//     `images/icons/niveau_${data.level || 1}.png`;
-// }
-
 async function loadProfile(uidToLoad, currentUid) {
   const snap = await getDoc(doc(db, "users", uidToLoad));
   if (!snap.exists()) return;
 
   const data = snap.data();
-
   const usernameEl = document.getElementById("profileUsername");
   const avatarEl = document.getElementById("profileAvatar");
   const levelEl = document.getElementById("profileLevel");

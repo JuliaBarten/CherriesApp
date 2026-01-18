@@ -183,7 +183,6 @@
 .filterdropdown {
     position: absolute;
     top: 60px;
-    /* net onder de filterknop */
     left: 0;
     right: 0;
     width: 100%;
@@ -192,7 +191,6 @@
     border-radius: var(--borderknop);
     box-shadow: var(--schaduw);
     display: none;
-    /* standaard verborgen */
     flex-direction: column;
     gap: 10px;
 }
@@ -320,7 +318,6 @@
 
 .favorite-image {
     flex: 0 0 25%;
-    /* 1/4 van de breedte */
     height: 100px;
     object-fit: cover;
     border-right: 1px solid var(--licht);

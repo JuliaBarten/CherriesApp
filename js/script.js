@@ -1,5 +1,5 @@
 import { auth, db } from "./firebase-init.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { doc, getDoc} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 onAuthStateChanged(auth, async (user) => {
@@ -28,11 +28,10 @@ function closeMakeMenu() {
 if (makeNavBtn && makeMenu) {
   makeNavBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    e.stopPropagation(); // ✅ voorkomt direct sluiten door document click
+    e.stopPropagation(); 
     makeMenu.classList.toggle("show");
   });
 
-  // ✅ Knoppen: stopPropagation + navigatie + menu dicht
   newProjectBtn?.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -47,7 +46,6 @@ if (makeNavBtn && makeMenu) {
     window.location.href = "make-drafts.html";
   });
 
-  // ✅ Klik buiten menu → sluiten (met closest, robuuster dan contains)
   document.addEventListener("click", (e) => {
     const clickedInsideMenu = e.target.closest("#makeMenu");
     const clickedMakeBtn = e.target.closest("#makeNavBtn");

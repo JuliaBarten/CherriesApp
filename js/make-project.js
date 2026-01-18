@@ -11,24 +11,20 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/fi
 
 const params = new URLSearchParams(window.location.search);
 const tutorialId = params.get("id");
-
 const heroEl = document.getElementById("projectHero");
 const titleEl = document.getElementById("projectTitle");
 const metaEl = document.getElementById("projectMeta");
 const materialsEl = document.getElementById("projectMaterials");
 const stepsEl = document.getElementById("projectSteps");
-
 const editBtn = document.getElementById("editTutorialBtn");
 const startBtn = document.getElementById("startTutorialBtn");
 
 if (!tutorialId) {
   console.error("Geen tutorial ID in URL");
 }
-
 function safeText(v) {
   return (v ?? "").toString();
 }
-
 
 function renderHero(t) {
   const img = t.mainImageUrl
@@ -38,7 +34,6 @@ function renderHero(t) {
   heroEl.innerHTML = img;
 }
 
-
 async function renderMaterials(tutorial) {
   const container = document.getElementById("projectMaterials");
   if (!container) return;
@@ -47,7 +42,6 @@ async function renderMaterials(tutorial) {
 
   const tutorialMaterials = tutorial.materials || [];
   if (!tutorialMaterials.length) {
-
     return;
   }
 
@@ -105,8 +99,6 @@ function renderLevelAndTime(tutorial) {
 
   const level = tutorial.level || 1;
   const duration = tutorial.duration || "";
-
-  // Niveau icoon
   const levelWrapper = document.createElement("div");
   levelWrapper.className = "d-flex align-items-center gap-2";
 
@@ -115,10 +107,8 @@ function renderLevelAndTime(tutorial) {
   levelImg.alt = `Niveau ${level}`;
   levelImg.style.width = "32px";
   levelImg.style.height = "32px";
-
   levelWrapper.appendChild(levelImg);
 
-  // Tijd
   if (duration) {
     const timeWrapper = document.createElement("div");
     timeWrapper.className = "d-flex align-items-center gap-1";
@@ -138,9 +128,7 @@ function renderLevelAndTime(tutorial) {
   container.appendChild(levelWrapper);
 }
 
-
 async function setupButtons(user, t) {
-  // edit button: alleen auteur
   if (user && user.uid === t.authorId) {
     editBtn.style.display = "block";
     editBtn.onclick = () => window.location.href = `make-edit.html?id=${tutorialId}`;
@@ -148,9 +136,7 @@ async function setupButtons(user, t) {
     editBtn.style.display = "none";
   }
 
-  // start/verdergaan
   if (!startBtn) return;
-
   if (!user) {
     startBtn.textContent = "Start";
     startBtn.onclick = () => window.location.href = `make-follow.html?id=${tutorialId}&step=0`;
@@ -159,7 +145,6 @@ async function setupButtons(user, t) {
 
   const progRef = doc(db, "users", user.uid, "progress", tutorialId);
   const progSnap = await getDoc(progRef);
-
   if (progSnap.exists() && progSnap.data()?.completed !== true) {
     const stepIndex = Number(progSnap.data()?.stepIndex ?? 0);
     startBtn.textContent = "Verdergaan";
@@ -193,10 +178,9 @@ async function loadTutorial(user) {
       return;
     }
 
-    // ✅ vanaf hier pas renderen
     renderHero(t);
     titleEl.textContent = safeText(t.title || "Make");
-    renderLevelAndTime(t);     // jouw niveau icoon + tijd
+    renderLevelAndTime(t); 
     await renderMaterials(t);
     await setupButtons(user, t);
 
@@ -210,9 +194,6 @@ async function loadTutorial(user) {
     alert("Er ging iets mis.");
   }
 }
-
-
-
 
 onAuthStateChanged(auth, async (user) => {
   if (!tutorialId) return;

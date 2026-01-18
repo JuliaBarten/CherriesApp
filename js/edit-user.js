@@ -14,7 +14,7 @@ const AVATARS = [
   "images/avatar/premade/pm_4.png",
 ];
 
-let selectedAvatarIndex = 0; // Houdt bij welke avatar geselecteerd is
+let selectedAvatarIndex = 0; 
 let selectedAvatar = AVATARS[selectedAvatarIndex];
 
 const currentAvatarImg = document.getElementById("currentAvatar");
@@ -26,7 +26,6 @@ function updateAvatarPreview() {
   selectedAvatar = AVATARS[selectedAvatarIndex];
 }
 
-// Event listeners voor pijltjes
 prevBtn.addEventListener("click", () => {
   selectedAvatarIndex = (selectedAvatarIndex - 1 + AVATARS.length) % AVATARS.length;
   updateAvatarPreview();
@@ -45,10 +44,7 @@ async function loadProfile(user) {
 
   const data = snap.data();
 
-  // gebruikersnaam
   document.getElementById("usernameInput").value = data.username || "";
-
-  // niveau
   updateHearts(data.level || 1);
 
 
@@ -59,19 +55,17 @@ async function loadProfile(user) {
     if (index !== -1) {
       selectedAvatarIndex = index;
     } else {
-      selectedAvatarIndex = 0; // fallback
+      selectedAvatarIndex = 0; 
     }
   } else {
-    selectedAvatarIndex = 0; // geen avatar opgeslagen
-  }
+    selectedAvatarIndex = 0; 
 
   updateAvatarPreview();
-
-  // materialen
   await loadMaterials(data);
 }
+}
 
-let selectedLevel = 1; // standaard niveau
+let selectedLevel = 1; 
 
 // =============== Sterren-niveau ===============
 function updateHearts(level) {
@@ -90,6 +84,7 @@ document.querySelectorAll(".niveau-icon").forEach(icon => {
     updateHearts(level);
   });
 });
+
 
 // =============== Materialen laden als blokken ===============
 async function loadMaterials(userData) {
@@ -137,8 +132,6 @@ async function saveProfile() {
 
   const username = document.getElementById("usernameInput").value.trim();
   const materialenContainer = document.getElementById("materialenContainer");
-
-  // Geselecteerde materialen ophalen
   const selectedMaterials = Array.from(materialenContainer.querySelectorAll(".material-blok.selected"))
     .map(mblok => mblok.dataset.materialId);
 

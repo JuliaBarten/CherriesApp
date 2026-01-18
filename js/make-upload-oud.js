@@ -14,8 +14,6 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/fi
 /* ====================== STATE ====================== */
 let draftId = null;
 let selectedLevel = 1;
-
-// In-memory steps: { text, imageFile, imagePreviewUrl, imageUrl? }
 let stepsData = [];
 let editingStepIndex = null;
 let currentStepTempImageFile = null;
@@ -23,7 +21,7 @@ let currentStepTempImageFile = null;
 /* ====================== HELPERS ====================== */
 function revokeIfObjectUrl(url) {
   if (url && typeof url === "string" && url.startsWith("blob:")) {
-    try { URL.revokeObjectURL(url); } catch {}
+    try { URL.revokeObjectURL(url); } catch { }
   }
 }
 
@@ -102,16 +100,12 @@ window.showPopup = function ({ imageSrc, text, buttonText, buttonAction }) {
 /* ====================== DOM ====================== */
 const tutorialForm = document.getElementById("tutorialForm");
 const saveDraftBtn = document.getElementById("saveDraftBtn");
-
 const mainImageInput = document.getElementById("mainImage");
 const mainImagePreview = document.getElementById("mainImagePreview");
-
 const titleInput = document.getElementById("titel");
 const categorySelect = document.getElementById("tutorialCategory");
 const durationInput = document.getElementById("duration-input");
-
 const materialenContainer = document.getElementById("materialenContainer");
-
 const addStepBtn = document.getElementById("addStepBtn");
 const saveStepBtn = document.getElementById("saveStepBtn");
 const stepModalEl = document.getElementById("stepModal");
@@ -179,7 +173,6 @@ function resetStepModal() {
 
 function openStepModal(editIndex = null) {
   if (!stepModal) return;
-
   editingStepIndex = editIndex;
   const stepNumber = editIndex === null ? (stepsData.length + 1) : (editIndex + 1);
   if (stepNumberPreview) stepNumberPreview.textContent = String(stepNumber);
@@ -211,9 +204,9 @@ function renderStepsOverview() {
     row.innerHTML = `
       <div class="friend-avatar">
         ${s.imagePreviewUrl
-          ? `<img src="${s.imagePreviewUrl}" alt="stap">`
-          : `<img src="images/icons/make1.png" alt="stap">`
-        }
+        ? `<img src="${s.imagePreviewUrl}" alt="stap">`
+        : `<img src="images/icons/make1.png" alt="stap">`
+      }
       </div>
       <div class="friend-info">
         <div class="friend-top">
@@ -231,9 +224,7 @@ function renderStepsOverview() {
 }
 
 addStepBtn?.addEventListener("click", () => openStepModal(null));
-
 stepImagePreview?.addEventListener("click", () => stepImageInput?.click());
-
 stepImageInput?.addEventListener("change", () => {
   const file = stepImageInput.files?.[0];
   if (!file) return;
@@ -249,10 +240,8 @@ saveStepBtn?.addEventListener("click", () => {
     const oldUrl = stepsData[editingStepIndex]?.imagePreviewUrl;
     revokeIfObjectUrl(oldUrl);
   }
-
   const text = stepText?.value?.trim() || "";
   const prev = editingStepIndex !== null ? stepsData[editingStepIndex] : null;
-
   const imageFile = currentStepTempImageFile || prev?.imageFile || null;
   const imagePreviewUrl = currentStepTempImageFile
     ? URL.createObjectURL(currentStepTempImageFile)
@@ -276,7 +265,6 @@ saveStepBtn?.addEventListener("click", () => {
 /* ====================== ENSURE DOC ====================== */
 async function ensureDraftDocExists({ title, category, duration, user }) {
   if (draftId) return draftId;
-
   const refDoc = doc(collection(db, "tutorials"));
 
   await setDoc(refDoc, {
@@ -375,7 +363,7 @@ async function saveDraft({ showFeedback = true } = {}) {
         imageSrc: "images/pop-ups/size-1.png",
         text: "Make opgeslagen in drafts!",
         buttonText: "OK!",
-        buttonAction: () => {}
+        buttonAction: () => { }
       });
     }
   } catch (e) {

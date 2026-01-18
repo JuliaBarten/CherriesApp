@@ -17,30 +17,6 @@
     font-weight: 400;
 }
 
-/* @font-face {
-    font-family: "puffin-arcade-level", sans-serif;
-    font-weight: 800;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "puffin-arcade-liquid", sans-serif;
-    font-weight: 800;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "puffin-arcade-nerf", sans-serif;
-    font-weight: 800;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "puffin-arcade-regular", sans-serif;
-    font-weight: 800;
-    font-style: normal;
-} */
-
 :root {
     /* kleuren */
     --hoofd: #ef8299;
@@ -190,14 +166,13 @@ footer .d-flex {
 
 .badge {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 5px;
+    left: -15px;
     transform: translate(50%, -50%);
-    background-color: var(--licht);
+    background-color: var(--donker);
     color: var(--ipvwit);
-    border-radius: 50%;
-    padding: 2px 6px;
-    font-size: 12px;
+    padding: 2px;
+    font-size: var(--size1);
     font-weight: bold;
 }
 
@@ -255,7 +230,6 @@ footer .d-flex {
 .make-menu {
     position: fixed;
     bottom: 80px;
-    /* net boven navbar */
     left: 50%;
     transform: translateX(-50%);
     display: flex;

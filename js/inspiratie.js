@@ -14,8 +14,8 @@ let tutorialCache = null;
 let favoriteCache = [];
 let allMaterials = [];
 let userMaterials = [];
-let materialMode = "all"; // "all" of "mine"
-let activeSort = "new";   // default: nieuwste eerst
+let materialMode = "all";
+let activeSort = "new";
 
 /* =================== HELPERS =================== */
 const filterToggle = document.getElementById("filterToggle");
@@ -50,7 +50,7 @@ async function loadFavorites(userId) {
 
 async function addFavorite(userId, tutorialId) {
   await setDoc(doc(db, "users", userId, "favorites", tutorialId), {
-    createdAt: serverTimestamp?.() || new Date() // fallback
+    createdAt: serverTimestamp?.() || new Date()
   });
   if (!favoriteCache.includes(tutorialId)) favoriteCache.push(tutorialId);
 }
@@ -64,12 +64,9 @@ async function removeFavorite(userId, tutorialId) {
 function renderSingleTutorial(t) {
   const grid = document.getElementById("tutorialGrid");
   if (!grid) return;
-
-  // Extra safety: inspiratiepagina toont geen drafts
   if (t.draft === true) return;
 
   const isFavorite = favoriteCache.includes(t.id);
-
   const card = document.createElement("div");
   card.className = "tutorial-card";
 
@@ -119,15 +116,12 @@ function renderTutorialsFiltered() {
   if (!tutorialCache) return;
 
   let tutorialsToRender = tutorialCache;
-
-  // Filter op materialen
   if (materialMode === "mine") {
     tutorialsToRender = tutorialsToRender.filter(t =>
       t.materials?.some(m => userMaterials.includes(m))
     );
   }
 
-  // Sorteren
   tutorialsToRender.sort((a, b) => {
     switch (activeSort) {
       case "old":

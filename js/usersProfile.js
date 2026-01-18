@@ -58,37 +58,37 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   const myTutorialsEl = document.getElementById("myTutorials");
-if (myTutorialsEl) {
-  myTutorialsEl.innerHTML = "";
+  if (myTutorialsEl) {
+    myTutorialsEl.innerHTML = "";
 
-  const q = query(
-    collection(db, "tutorials"),
-    where("authorId", "==", user.uid),
-    where("draft", "==", false),
-    orderBy("publishedAt", "desc")
-  );
+    const q = query(
+      collection(db, "tutorials"),
+      where("authorId", "==", user.uid),
+      where("draft", "==", false),
+      orderBy("publishedAt", "desc")
+    );
 
-  const snap = await getDocs(q);
+    const snap = await getDocs(q);
 
-  if (snap.empty) {
-    myTutorialsEl.innerHTML = `<p class="text-center mt-3" style="opacity:.8;">Nog geen gepubliceerde makes ✨</p>`;
-  } else {
-    snap.forEach(docSnap => {
-      const t = docSnap.data();
+    if (snap.empty) {
+      myTutorialsEl.innerHTML = `<p class="text-center mt-3" style="opacity:.8;">Nog geen gepubliceerde makes ✨</p>`;
+    } else {
+      snap.forEach(docSnap => {
+        const t = docSnap.data();
 
-      const card = document.createElement("div");
-      card.className = "tutorial-card";
-      card.innerHTML = `
+        const card = document.createElement("div");
+        card.className = "tutorial-card";
+        card.innerHTML = `
         <img src="${t.mainImageUrl || "images/icons/garen.png"}" class="tutorial-image" alt="${t.title || "make"}">
       `;
 
-      card.addEventListener("click", () => {
-        window.location.href = `make-project.html?id=${docSnap.id}`;
-      });
+        card.addEventListener("click", () => {
+          window.location.href = `make-project.html?id=${docSnap.id}`;
+        });
 
-      myTutorialsEl.appendChild(card);
-    });
+        myTutorialsEl.appendChild(card);
+      });
+    }
   }
-}
 
 });
