@@ -1,77 +1,127 @@
 import { auth, db } from "./firebase-init.js";
-import { collection, getDocs, doc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import {
+  collection,
+  getDocs,
+  doc,
+  deleteDoc,
+  query,
+  where,
+  documentId
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+function safeText(v) {
+  return (v ?? "").toString();
+}
+
+function chunk(arr, size) {
+  const out = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+}
+
+function levelIcon(level) {
+  const n = Math.min(5, Math.max(1, Number(level || 1)));
+  return `images/icons/niveau_${n}.png`;
+}
 
 async function loadFavorites(userId) {
   const container = document.getElementById("favoritesGrid");
+  if (!container) return;
+
   container.innerHTML = "";
-  container.classList.add("favorites-list");
+  // gebruik dezelfde wrapper vibe als je andere lijsten
+  container.className = "d-flex flex-column gap-2";
 
   const favSnap = await getDocs(collection(db, "users", userId, "favorites"));
 
   if (favSnap.empty) {
-    container.innerHTML = "<p>Je hebt nog geen favorieten</p>";
+    container.innerHTML = `<p class="text-center mt-3">Je hebt nog geen favorieten ✨</p>`;
     return;
   }
 
-  for (const fav of favSnap.docs) {
-    const tutorialId = fav.id;  // Gebruik het document-ID als tutorial-ID
-    const tutorialSnap = await getDoc(doc(db, "tutorials", tutorialId));
-    if (!tutorialSnap.exists()) continue;
+  const ids = favSnap.docs.map(d => d.id);
 
-    const t = tutorialSnap.data();
+  // tutorials in batches ophalen (Firestore "in" max 10)
+  const batches = chunk(ids, 10);
+  const tutorials = new Map();
 
-    const card = document.createElement("div");
-    card.className = "favorite-card";
+  for (const batchIds of batches) {
+    const q = query(
+      collection(db, "tutorials"),
+      where(documentId(), "in", batchIds)
+    );
+    const snap = await getDocs(q);
+    snap.forEach(d => tutorials.set(d.id, d.data()));
+  }
 
-    if (!t.mainImageUrl || !t.title) {
-      console.warn("Tutorial mist data:", t);
-    }
+  // Render in dezelfde volgorde als favorites
+  for (const tutorialId of ids) {
+    const t = tutorials.get(tutorialId);
+    if (!t) continue;
 
-    card.innerHTML = `
-      <div class="favorite-remove">
-        <img src="images/icons/fav_aan.png" alt="verwijderen">
+    const row = document.createElement("div");
+    row.className = "item-bar"; // ✅ zelfde stijl als je “balken”
+
+    const thumb = t.mainImageUrl
+      ? `<img src="${t.mainImageUrl}" alt="${safeText(t.title)}">`
+      : `<img src="images/placeholder.png" alt="Geen foto">`;
+
+    const duration = safeText(t.duration || "00:00");
+    const title = safeText(t.title || "Zonder titel");
+    const lvl = Math.min(5, Math.max(1, Number(t.level || 1)));
+
+    row.innerHTML = `
+      <div class="item-image">
+        ${thumb}
       </div>
 
-      <img src="${t.mainImageUrl}" class="favorite-image" alt="${t.title}">
+      <div class="item-info">
+        <div class="item-top">
+          <div class="friend-username">${title}</div>
+        </div>
 
-      <div class="favorite-info">
-        <div class="favorite-title">${t.title}</div>
-        <div class="favorite-meta">
-          <img src="images/icons/tijd_klok.png" alt="tijd">
-          <span>${t.duration}</span>
-          ${renderHearts(t.level)}
+        <div class="item-actions">
+          <div class="item-status d-flex align-items-center gap-2">
+            <img src="${levelIcon(lvl)}" alt="Niveau ${lvl}" style="width:40px; height:40px;">
+            <span class="d-flex align-items-center gap-1">
+              <img src="images/icons/tijd_klok.png" alt="tijd" style="width:40px; height:40px;">
+              <span>${duration}</span>
+            </span>
+          </div>
         </div>
       </div>
+
+      <button class="fav-remove-btn" type="button" aria-label="Verwijder favoriet"
+        style="background:transparent; border:none; padding:0; display:flex;">
+        <img src="images/icons/fav_aan.png" alt="verwijderen" 
+        style="width:50px; height:50px;">
+      </button>
     `;
 
-    // Klik op de hele tutorial → open make-project.html
-    card.addEventListener("click", () => {
+    // klik op rij -> open tutorial
+    row.addEventListener("click", () => {
       window.location.href = `make-project.html?id=${tutorialId}`;
     });
 
-    // Klik op verwijderknop
-    card.querySelector(".favorite-remove").addEventListener("click", async (e) => {
+    // klik op verwijderen -> niet doorklikken
+    row.querySelector(".fav-remove-btn")?.addEventListener("click", async (e) => {
+      e.preventDefault();
       e.stopPropagation();
-      await deleteDoc(doc(db, "users", userId, "favorites", fav.id));
-      card.remove();
+      await deleteDoc(doc(db, "users", userId, "favorites", tutorialId));
+      row.remove();
+
+      // lege state na verwijderen van laatste
+      if (!container.querySelector(".item-bar")) {
+        container.innerHTML = `<p class="text-center mt-3">Je hebt nog geen favorieten ✨</p>`;
+      }
     });
 
-    container.appendChild(card);
+    container.appendChild(row);
   }
 }
 
-// Auth listener
 onAuthStateChanged(auth, (user) => {
   if (!user) return;
   loadFavorites(user.uid);
 });
-
-// Render hartjes
-function renderHearts(level) {
-  let html = "";
-  for (let i = 0; i < level; i++) {
-    html += `<img src="images/icons/heart3.png" alt="hart">`;
-  }
-  return html;
-}

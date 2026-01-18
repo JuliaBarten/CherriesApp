@@ -1,5 +1,14 @@
 import { auth, db } from "./firebase-init.js";
-import { collection, getDocs, query, where, addDoc, doc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  serverTimestamp,
+  getDoc,
+  writeBatch
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 /* ================= HELPERS ================= */
@@ -214,14 +223,35 @@ async function loadUsers(currentUid, filter = "") {
 
 /* ================= SEND REQUEST ================= */
 async function sendRequest(fromUid, toUid) {
-  if (!fromUid || !toUid) {
-    console.error("sendRequest called with invalid uids:", { fromUid, toUid });
-    alert("Er ging iets mis: ontvanger onbekend. Probeer opnieuw.");
-    return;
-  }
-  
   try {
-    const reqRef = await addDoc(collection(db, "friendRequests"), {
+    if (!fromUid || !toUid) throw new Error("fromUid/toUid ontbreekt");
+    if (fromUid === toUid) throw new Error("Je kan jezelf niet toevoegen");
+
+    // check: bestaat ontvanger?
+    const toUserSnap = await getDoc(doc(db, "users", toUid));
+    if (!toUserSnap.exists()) throw new Error("Ontvanger bestaat niet (users/{uid} ontbreekt)");
+
+    // voorkom dubbele requests (optioneel maar handig):
+    // kijkt of er al een pending request is van from->to
+    const existingQ = query(
+      collection(db, "friendRequests"),
+      where("from", "==", fromUid),
+      where("to", "==", toUid),
+      where("status", "==", "pending")
+    );
+    const existingSnap = await getDocs(existingQ);
+    if (!existingSnap.empty) {
+      console.log("Er bestaat al een pending verzoek.");
+      return;
+    }
+
+    // maak IDs vooraf zodat we batch kunnen gebruiken
+    const reqRef = doc(collection(db, "friendRequests"));
+    const inboxRef = doc(collection(db, "users", toUid, "inbox"));
+
+    const batch = writeBatch(db);
+
+    batch.set(reqRef, {
       from: fromUid,
       to: toUid,
       type: "normal",
@@ -229,7 +259,7 @@ async function sendRequest(fromUid, toUid) {
       createdAt: serverTimestamp()
     });
 
-    await addDoc(collection(db, "users", toUid, "inbox"), {
+    batch.set(inboxRef, {
       type: "friendRequest",
       from: fromUid,
       friendType: "normal",
@@ -238,9 +268,18 @@ async function sendRequest(fromUid, toUid) {
       read: false,
       archived: false
     });
+
+    await batch.commit();
+
+    console.log("sendRequest OK:", reqRef.id);
   } catch (e) {
-    console.error("sendRequest error:", e);
+    console.error("sendRequest error:", {
+      code: e?.code,
+      message: e?.message,
+      full: e
+    });
     throw e;
   }
 }
+
 

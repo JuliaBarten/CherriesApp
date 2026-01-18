@@ -5,29 +5,24 @@ import {
   doc,
   setDoc,
   updateDoc,
+  getDoc,
   serverTimestamp,
   getDocs
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
+import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 /* ====================== STATE ====================== */
 let draftId = null;
 let selectedLevel = 1;
 
-// In-memory steps: { text, imageFile, imagePreviewUrl }
+// In-memory steps: { text, imageFile?, imagePreviewUrl?, imageUrl? }
 let stepsData = [];
 let editingStepIndex = null;
 let currentStepTempImageFile = null;
 
 /* ====================== HELPERS ====================== */
-function typeSafeText(v) {
-  return (v ?? "").toString();
-}
+function typeSafeText(v) { return (v ?? "").toString(); }
 function showError(err) {
   console.error(err);
   alert(typeSafeText(err?.message || err));
@@ -42,26 +37,25 @@ function getSelectedMaterials() {
     document.querySelectorAll("#materialenContainer .material-blok.selected")
   ).map(el => el.dataset.materialId);
 }
-function stepsForDraftDb() {
+function stepsForDb() {
+  // ✅ altijd urls bewaren; files nooit naar Firestore
   return stepsData.map(s => ({
     text: s.text || "",
-    imageUrl: s.imageUrl || null   // 🔑 bewaar URL als we al geupload hebben
+    imageUrl: s.imageUrl || null
   }));
 }
 
+/* ====================== STORAGE UPLOADS ====================== */
 async function uploadMainImage(uid, tutorialId, file) {
   const mainRef = ref(storage, `users/${uid}/tutorials/${tutorialId}/main.jpg`);
   await uploadBytes(mainRef, file);
   return await getDownloadURL(mainRef);
 }
-
 async function uploadStepImage(uid, tutorialId, index, file) {
   const stepRef = ref(storage, `users/${uid}/tutorials/${tutorialId}/steps/step_${index + 1}.jpg`);
   await uploadBytes(stepRef, file);
   return await getDownloadURL(stepRef);
 }
-
-
 
 /* ====================== DOM ====================== */
 const tutorialForm = document.getElementById("tutorialForm");
@@ -110,10 +104,7 @@ async function loadMaterials() {
       div.textContent = docSnap.data().Materiaal || docSnap.data().naam || docSnap.id;
       div.dataset.materialId = docSnap.id;
 
-      div.addEventListener("click", () => {
-        div.classList.toggle("selected");
-      });
-
+      div.addEventListener("click", () => div.classList.toggle("selected"));
       materialenContainer.appendChild(div);
     });
   } catch (e) {
@@ -144,7 +135,6 @@ function openStepModal(editIndex = null) {
   if (!stepModal) return;
 
   editingStepIndex = editIndex;
-
   const stepNumber = editIndex === null ? (stepsData.length + 1) : (editIndex + 1);
   stepNumberPreview.textContent = String(stepNumber);
 
@@ -154,8 +144,9 @@ function openStepModal(editIndex = null) {
     const s = stepsData[editIndex];
     currentStepTempImageFile = null;
     stepText.value = s?.text || "";
-    stepImagePreview.innerHTML = s?.imagePreviewUrl
-      ? `<img src="${s.imagePreviewUrl}" alt="stap foto">`
+    const preview = s?.imagePreviewUrl || s?.imageUrl || null;
+    stepImagePreview.innerHTML = preview
+      ? `<img src="${preview}" alt="stap foto">`
       : `<span class="plus-icon">+</span>`;
   }
 
@@ -168,10 +159,13 @@ function renderStepsOverview() {
   stepsData.forEach((s, idx) => {
     const row = document.createElement("div");
     row.className = "item-bar";
+
+    const preview = s.imagePreviewUrl || s.imageUrl || null;
+
     row.innerHTML = `
       <div class="friend-avatar">
-        ${s.imagePreviewUrl
-          ? `<img src="${s.imagePreviewUrl}" alt="stap">`
+        ${preview
+          ? `<img src="${preview}" alt="stap">`
           : `<img src="images/icons/make1.png" alt="stap">`
         }
       </div>
@@ -184,6 +178,7 @@ function renderStepsOverview() {
         </div>
       </div>
     `;
+
     row.addEventListener("click", () => openStepModal(idx));
     stepsOverview.appendChild(row);
   });
@@ -200,7 +195,7 @@ stepImageInput?.addEventListener("change", () => {
 });
 
 saveStepBtn?.addEventListener("click", () => {
-  // cleanup oude preview url bij edit + nieuwe upload
+  // cleanup oude blob preview url bij edit + nieuwe upload
   if (editingStepIndex !== null && currentStepTempImageFile) {
     const oldUrl = stepsData[editingStepIndex]?.imagePreviewUrl;
     revokeIfObjectUrl(oldUrl);
@@ -214,7 +209,10 @@ saveStepBtn?.addEventListener("click", () => {
     ? URL.createObjectURL(currentStepTempImageFile)
     : (prev?.imagePreviewUrl || null);
 
-  const stepObj = { text, imageFile, imagePreviewUrl };
+  // ✅ behoud bestaande imageUrl als er geen nieuwe file gekozen is
+  const imageUrl = prev?.imageUrl || null;
+
+  const stepObj = { text, imageFile, imagePreviewUrl, imageUrl };
 
   if (editingStepIndex === null) stepsData.push(stepObj);
   else stepsData[editingStepIndex] = stepObj;
@@ -224,7 +222,7 @@ saveStepBtn?.addEventListener("click", () => {
   resetStepModal();
 });
 
-/* ====================== DRAFT SAVE (BUTTON ONLY) ====================== */
+/* ====================== DRAFT: CREATE/UPDATE + UPLOAD FILES ====================== */
 async function ensureDraftDoc({ showFeedback = true } = {}) {
   const user = auth.currentUser;
   if (!user) throw new Error("Je moet ingelogd zijn");
@@ -234,7 +232,7 @@ async function ensureDraftDoc({ showFeedback = true } = {}) {
   const duration = durationInput.value || "00:00";
   const mainImageFile = mainImageInput.files?.[0] || null;
 
-  // 1) Zorg dat draft doc bestaat
+  // 1) maak doc als nodig
   if (!draftId) {
     const refDoc = doc(collection(db, "tutorials"));
     draftId = refDoc.id;
@@ -249,45 +247,41 @@ async function ensureDraftDoc({ showFeedback = true } = {}) {
       materials: getSelectedMaterials(),
       category,
       duration,
-      mainImageUrl: null,      // 🔑 komt zo
-      steps: []                // 🔑 komt zo
+      mainImageUrl: null,
+      steps: []
     });
   }
 
-  // 2) Upload images (alleen als aanwezig / nodig)
-  let mainImageUrl = null;
+  // 2) haal bestaande data op (urls behouden)
+  const snap = await getDoc(doc(db, "tutorials", draftId));
+  const existing = snap.exists() ? snap.data() : {};
+  let mainImageUrl = existing?.mainImageUrl || null;
 
-  // Als er al een mainImageUrl in doc staat en user kiest geen nieuwe, behouden we die.
-  // We lezen de doc 1x om bestaande urls te behouden.
-  const existingSnap = await getDoc(doc(db, "tutorials", draftId));
-  const existing = existingSnap.exists() ? existingSnap.data() : {};
-  mainImageUrl = existing?.mainImageUrl || null;
-
+  // 3) upload main als er een nieuwe gekozen is
   if (mainImageFile) {
     mainImageUrl = await uploadMainImage(user.uid, draftId, mainImageFile);
   }
 
-  // Step images uploaden indien nodig
+  // 4) upload step images als er nieuwe files zijn, anders behoud url
   for (let i = 0; i < stepsData.length; i++) {
     const s = stepsData[i];
-    // Als er een nieuwe file is gekozen (imageFile), upload hem en zet imageUrl
+
     if (s.imageFile) {
       const url = await uploadStepImage(user.uid, draftId, i, s.imageFile);
       stepsData[i] = {
         ...s,
-        imageUrl: url,
-        // optioneel: als je wil, kun je imageFile daarna weggooien (scheelt memory)
-        // imageFile: null
+        imageFile: null,        // ✅ na upload opruimen
+        imageUrl: url,          // ✅ url bewaren
+        imagePreviewUrl: url    // ✅ preview voortaan de echte url
       };
     } else {
-      // Geen nieuwe file gekozen, behoud bestaande imageUrl (als aanwezig)
-      if (!s.imageUrl && existing?.steps?.[i]?.imageUrl) {
-        stepsData[i] = { ...s, imageUrl: existing.steps[i].imageUrl };
-      }
+      // behoud bestaande url uit geheugen of uit firestore
+      const fallbackUrl = s.imageUrl || existing?.steps?.[i]?.imageUrl || null;
+      stepsData[i] = { ...s, imageUrl: fallbackUrl };
     }
   }
 
-  // 3) Update Firestore doc met alle draft data + urls
+  // 5) update doc
   await updateDoc(doc(db, "tutorials", draftId), {
     title: title || "Nieuw project",
     level: selectedLevel,
@@ -295,7 +289,7 @@ async function ensureDraftDoc({ showFeedback = true } = {}) {
     category,
     duration,
     mainImageUrl,
-    steps: stepsForDraftDb(),
+    steps: stepsForDb(),
     draft: true,
     lastEditedAt: serverTimestamp()
   });
@@ -310,45 +304,18 @@ async function ensureDraftDoc({ showFeedback = true } = {}) {
   }
 }
 
-
 saveDraftBtn?.addEventListener("click", async (e) => {
   e.preventDefault();
   e.stopPropagation();
   try {
     await ensureDraftDoc({ showFeedback: true });
-       window.location.href = `make-drafts.html`;
+    window.location.href = "make-drafts.html";
   } catch (e2) {
     showError(e2);
   }
 });
 
-
 /* ====================== PUBLISH (SUBMIT ONLY) ====================== */
-async function uploadMainImage(uid, tutorialId, file) {
-  const mainRef = ref(storage, `users/${uid}/tutorials/${tutorialId}/main.jpg`);
-  await uploadBytes(mainRef, file);
-  return await getDownloadURL(mainRef);
-}
-
-async function uploadSteps(uid, tutorialId) {
-  const out = [];
-
-  for (let i = 0; i < stepsData.length; i++) {
-    const s = stepsData[i];
-    let imageUrl = null;
-
-    if (s.imageFile) {
-      const stepRef = ref(storage, `users/${uid}/tutorials/${tutorialId}/steps/step_${i + 1}.jpg`);
-      await uploadBytes(stepRef, s.imageFile);
-      imageUrl = await getDownloadURL(stepRef);
-    }
-
-    out.push({ text: s.text || "", imageUrl });
-  }
-
-  return out;
-}
-
 tutorialForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -363,14 +330,12 @@ tutorialForm?.addEventListener("submit", async (e) => {
     if (!title) return alert("Vul een titel in.");
     if (!category) return alert("Kies een categorie.");
 
-    // 🔑 zorg dat draft doc bestaat + upload alle gekozen images
+    // ✅ zorgt dat doc bestaat + uploads gedaan + urls opgeslagen
     await ensureDraftDoc({ showFeedback: false });
 
-    // 🔑 lees alles terug (zeker weten wat er in staat)
+    // ✅ check dat mainImageUrl nu echt bestaat
     const snap = await getDoc(doc(db, "tutorials", draftId));
     const t = snap.data();
-
-    // mainImageUrl moet bestaan om te publishen
     if (!t?.mainImageUrl) return alert("Upload een hoofdfoto!");
 
     await updateDoc(doc(db, "tutorials", draftId), {
@@ -379,7 +344,8 @@ tutorialForm?.addEventListener("submit", async (e) => {
       duration,
       level: selectedLevel,
       materials: getSelectedMaterials(),
-      // steps + mainImageUrl staan al goed in doc door ensureDraftDoc
+      steps: t.steps || stepsForDb(), // zekerheid
+      mainImageUrl: t.mainImageUrl,
       draft: false,
       publishedAt: serverTimestamp(),
       lastEditedAt: serverTimestamp()
@@ -391,8 +357,7 @@ tutorialForm?.addEventListener("submit", async (e) => {
   }
 });
 
-
-/* ====================== AUTH ====================== */
+/* ====================== INIT AUTH ====================== */
 onAuthStateChanged(auth, (user) => {
   if (!user) return;
   loadMaterials();

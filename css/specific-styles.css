@@ -50,8 +50,8 @@
 }
 
 .adjust-btn {
-    top: -15px;
-    right: -15px;
+    top: 3px;
+    right: 3px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -505,6 +505,18 @@
 
 .friend-action-btn.disabled {
     background: var(--mid);
+}
+
+.friend-bar {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin: 12px 5px;
+    width: 100%;
+    border-radius: var(--borderknop);
+    background: var(--ipvwit);
+    box-shadow: var(--schaduw);
+    transition: background-color 0.2s;
 }
 
 .friend-bar.existing {

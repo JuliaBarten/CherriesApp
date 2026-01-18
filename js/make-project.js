@@ -91,10 +91,8 @@ function renderMetaSimple(t) {
       <img src="images/icons/niveau_${level}.png" alt="Niveau ${level}" style="width:50px; height:50px;">
       <div class="d-flex align-items-center gap-2">
         <img src="images/icons/tijd_klok.png" alt="Tijd" style="width:50px; height:50px;">
-        <div class="titel">
         <span>${duration}</span>
         </div
-      </div>
     </div>
   `;
 }

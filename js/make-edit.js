@@ -29,10 +29,16 @@ function revokeIfObjectUrl(url) {
 
 /* ====================== STATE ====================== */
 let selectedLevel = 1;
-let stepsData = []; // in-memory: { text, imageFile?, imagePreviewUrl? , existingUrl? }
+
+// in-memory steps: { text, imageFile?, imagePreviewUrl?, existingUrl? }
+let stepsData = [];
 let editingStepIndex = null;
 let currentStepTempImageFile = null;
-let tutorialCache = null; // huidige tutorial data
+let tutorialCache = null;
+
+// objectURL bookkeeping (om memory leaks te voorkomen)
+let currentStepPreviewUrl = null;
+let currentMainPreviewUrl = null;
 
 /* ====================== DOM ====================== */
 const form = $("editForm");
@@ -60,12 +66,14 @@ const publishBtn = $("publishBtn");
 
 /* ====================== LEVEL ====================== */
 function updateHearts(level) {
+  selectedLevel = level;
+
   document.querySelectorAll(".niveau-icon").forEach(icon => {
     const iconLevel = Number(icon.dataset.level);
     icon.src = iconLevel <= level ? "images/icons/heart3.png" : "images/icons/heart4.png";
   });
-  selectedLevel = level;
 }
+
 document.querySelectorAll(".niveau-icon").forEach(icon => {
   icon.addEventListener("click", () => updateHearts(Number(icon.dataset.level)));
 });
@@ -77,6 +85,7 @@ async function loadAllMaterials() {
 }
 
 function renderMaterials(allMaterials, selectedIds) {
+  if (!materialenContainer) return;
   materialenContainer.innerHTML = "";
 
   allMaterials.forEach(m => {
@@ -88,7 +97,6 @@ function renderMaterials(allMaterials, selectedIds) {
     div.innerText = name;
 
     if (selectedIds?.includes(m.id)) div.classList.add("selected");
-
     div.addEventListener("click", () => div.classList.toggle("selected"));
 
     materialenContainer.appendChild(div);
@@ -102,10 +110,16 @@ function getSelectedMaterials() {
 
 /* ====================== MAIN IMAGE PREVIEW ====================== */
 mainImagePreview?.addEventListener("click", () => mainImageInput?.click());
+
 mainImageInput?.addEventListener("change", () => {
   const file = mainImageInput.files?.[0];
-  if (!file) return;
-  mainImagePreview.innerHTML = `<img src="${URL.createObjectURL(file)}" alt="Hoofdfoto preview">`;
+  if (!file || !mainImagePreview) return;
+
+  // cleanup vorige objectURL
+  if (currentMainPreviewUrl) revokeIfObjectUrl(currentMainPreviewUrl);
+
+  currentMainPreviewUrl = URL.createObjectURL(file);
+  mainImagePreview.innerHTML = `<img src="${currentMainPreviewUrl}" alt="Hoofdfoto preview">`;
 });
 
 /* ====================== STEPS MODAL ====================== */
@@ -113,14 +127,21 @@ const stepModal = stepModalEl ? new bootstrap.Modal(stepModalEl) : null;
 
 function resetStepModal() {
   currentStepTempImageFile = null;
+
   if (stepImageInput) stepImageInput.value = "";
   if (stepText) stepText.value = "";
   if (stepImagePreview) stepImagePreview.innerHTML = `<span class="plus-icon">+</span>`;
   editingStepIndex = null;
+
+  // cleanup objectURL van tijdelijke preview
+  if (currentStepPreviewUrl) {
+    revokeIfObjectUrl(currentStepPreviewUrl);
+    currentStepPreviewUrl = null;
+  }
 }
 
 function openStepModal(editIndex = null) {
-  if (!stepModal) return;
+  if (!stepModal || !stepNumberPreview) return;
 
   editingStepIndex = editIndex;
   const stepNumber = editIndex === null ? (stepsData.length + 1) : (editIndex + 1);
@@ -131,18 +152,23 @@ function openStepModal(editIndex = null) {
   } else {
     const s = stepsData[editIndex];
     currentStepTempImageFile = null;
-    stepText.value = s?.text || "";
+
+    if (stepText) stepText.value = s?.text || "";
 
     const preview = s?.imagePreviewUrl || s?.existingUrl || null;
-    stepImagePreview.innerHTML = preview
-      ? `<img src="${preview}" alt="stap foto">`
-      : `<span class="plus-icon">+</span>`;
+    if (stepImagePreview) {
+      stepImagePreview.innerHTML = preview
+        ? `<img src="${preview}" alt="stap foto">`
+        : `<span class="plus-icon">+</span>`;
+    }
   }
 
   stepModal.show();
 }
 
 function renderStepsOverview() {
+  if (!stepsOverview) return;
+
   stepsOverview.innerHTML = "";
 
   stepsData.forEach((s, idx) => {
@@ -177,37 +203,45 @@ stepImagePreview?.addEventListener("click", () => stepImageInput?.click());
 
 stepImageInput?.addEventListener("change", () => {
   const file = stepImageInput.files?.[0];
-  if (!file) return;
+  if (!file || !stepImagePreview) return;
+
+  // cleanup vorige objectURL
+  if (currentStepPreviewUrl) revokeIfObjectUrl(currentStepPreviewUrl);
+
   currentStepTempImageFile = file;
-  stepImagePreview.innerHTML = `<img src="${URL.createObjectURL(file)}" alt="stap foto preview">`;
+  currentStepPreviewUrl = URL.createObjectURL(file);
+  stepImagePreview.innerHTML = `<img src="${currentStepPreviewUrl}" alt="stap foto preview">`;
 });
 
 saveStepBtn?.addEventListener("click", () => {
+  // cleanup oude preview url bij edit + nieuwe upload
   if (editingStepIndex !== null && currentStepTempImageFile) {
     const oldUrl = stepsData[editingStepIndex]?.imagePreviewUrl;
     revokeIfObjectUrl(oldUrl);
   }
 
-  const text = stepText.value.trim();
+  const text = stepText?.value?.trim() || "";
   const prev = editingStepIndex !== null ? stepsData[editingStepIndex] : null;
 
   const imageFile = currentStepTempImageFile || prev?.imageFile || null;
+
+  // als er een nieuwe file is gekozen gebruiken we currentStepPreviewUrl
   const imagePreviewUrl = currentStepTempImageFile
-    ? URL.createObjectURL(currentStepTempImageFile)
+    ? currentStepPreviewUrl
     : (prev?.imagePreviewUrl || null);
 
   const stepObj = {
     text,
     imageFile,
     imagePreviewUrl,
-    existingUrl: prev?.existingUrl || null // bewaar oude url als er geen nieuwe file is
+    existingUrl: prev?.existingUrl || null
   };
 
   if (editingStepIndex === null) stepsData.push(stepObj);
   else stepsData[editingStepIndex] = stepObj;
 
   renderStepsOverview();
-  stepModal.hide();
+  stepModal?.hide();
   resetStepModal();
 });
 
@@ -229,7 +263,7 @@ async function uploadSteps(uid, tutorialId) {
       await uploadBytes(stepRef, s.imageFile);
       const imageUrl = await getDownloadURL(stepRef);
 
-      // 🔑 update in-memory zodat volgende saves goed gaan
+      // update in-memory zodat volgende saves goed gaan
       stepsData[i] = {
         ...s,
         imageFile: null,
@@ -244,16 +278,6 @@ async function uploadSteps(uid, tutorialId) {
   }
 
   return out;
-}
-
-
-
-function stepsForDbDraftLike() {
-  // draft-achtige save: geen uploads, alleen tekst + bestaande url behouden
-  return stepsData.map(s => ({
-    text: s.text || "",
-    imageUrl: s.existingUrl || null
-  }));
 }
 
 /* ====================== LOAD TUTORIAL ====================== */
@@ -281,46 +305,42 @@ async function loadTutorial(user) {
   }
 
   // form vullen
-  titleInput.value = t.title || "";
-  durationInput.value = t.duration || "00:00";
-  categorySelect.value = t.category || "";
+  if (titleInput) titleInput.value = t.title || "";
+  if (durationInput) durationInput.value = t.duration || "00:00";
+  if (categorySelect) categorySelect.value = t.category || "";
 
   selectedLevel = t.level || 1;
   updateHearts(selectedLevel);
 
-// main image preview in edit
-const mainPreview = document.getElementById("mainImagePreview");
-if (mainPreview && t.mainImageUrl) {
-  mainPreview.innerHTML = `<img src="${t.mainImageUrl}" alt="Hoofdfoto">`;
-}
+  // main image preview in edit (geen objectURL nodig; dit is een echte url)
+  if (mainImagePreview && t.mainImageUrl) {
+    mainImagePreview.innerHTML = `<img src="${t.mainImageUrl}" alt="Hoofdfoto">`;
+  }
 
-// stappen laten zien 
-stepsData = (t.steps || []).map(s => ({
-  text: s.text || "",
-  imageFile: null,
-  imagePreviewUrl: s.imageUrl || null, 
-  existingUrl: s.imageUrl || null  
-}));
-
-renderStepsOverview();
-
-
+  // stappen laten zien (bewaar bestaande urls)
+  stepsData = (t.steps || []).map(s => ({
+    text: s.text || "",
+    imageFile: null,
+    imagePreviewUrl: s.imageUrl || null,
+    existingUrl: s.imageUrl || null
+  }));
+  renderStepsOverview();
 
   // materialen
   const allMaterials = await loadAllMaterials();
   renderMaterials(allMaterials, t.materials || []);
 
-  statusText.textContent = t.draft ? "Status: draft" : "Status: gepubliceerd";
+  if (statusText) statusText.textContent = t.draft ? "Status: draft" : "Status: gepubliceerd";
 }
 
 /* ====================== SAVE (draft or published) ====================== */
 async function saveWithoutPublishing(user) {
-  const title = titleInput.value.trim();
-  const category = categorySelect.value || "";
-  const duration = durationInput.value || "00:00";
+  const title = titleInput?.value?.trim() || "";
+  const category = categorySelect?.value || "";
+  const duration = durationInput?.value || "00:00";
 
   // 1) main image uploaden als er een nieuwe gekozen is
-  const mainFile = mainImageInput.files?.[0] || null;
+  const mainFile = mainImageInput?.files?.[0] || null;
   let mainImageUrl = tutorialCache?.mainImageUrl || null;
 
   if (mainFile) {
@@ -328,7 +348,6 @@ async function saveWithoutPublishing(user) {
   }
 
   // 2) step images uploaden als er nieuwe files gekozen zijn
-  //    + bestaande urls behouden
   const stepsForDb = await uploadSteps(user.uid, tutorialId);
 
   // 3) draft status NIET veranderen bij opslaan
@@ -355,7 +374,7 @@ async function saveWithoutPublishing(user) {
     steps: stepsForDb
   };
 
-  // 5) na upload: existingUrl in stepsData updaten (zodat UI klopt)
+  // 5) stepsData opnieuw syncen (zodat previews en existingUrl kloppen)
   stepsData = stepsForDb.map(s => ({
     text: s.text || "",
     imageFile: null,
@@ -365,18 +384,16 @@ async function saveWithoutPublishing(user) {
   renderStepsOverview();
 }
 
-
 /* ====================== PUBLISH / UPDATE ====================== */
 async function publishOrUpdate(user) {
-  const title = titleInput.value.trim();
-  const category = categorySelect.value;
-  const duration = durationInput.value;
-  const mainFile = mainImageInput.files?.[0];
+  const title = titleInput?.value?.trim() || "";
+  const category = categorySelect?.value || "";
+  const duration = durationInput?.value || "00:00";
+  const mainFile = mainImageInput?.files?.[0] || null;
 
   if (!title) return alert("Vul een titel in.");
   if (!category) return alert("Kies een categorie.");
 
-  // uploads alleen als er nieuwe files zijn
   let mainImageUrl = tutorialCache?.mainImageUrl || null;
   if (mainFile) {
     mainImageUrl = await uploadMainImage(user.uid, tutorialId, mainFile);
@@ -406,7 +423,7 @@ form?.addEventListener("submit", async (e) => {
     if (!user) return;
 
     await saveWithoutPublishing(user);
-    statusText.textContent = "Opgeslagen ✅";
+    if (statusText) statusText.textContent = "Opgeslagen ✅";
   } catch (err) {
     showErr(err);
   }
@@ -418,7 +435,7 @@ publishBtn?.addEventListener("click", async () => {
     if (!user) return;
 
     await publishOrUpdate(user);
-    statusText.textContent = "Gepubliceerd / geüpdatet ✅";
+    if (statusText) statusText.textContent = "Gepubliceerd / geüpdatet ✅";
     window.location.href = `make-project.html?id=${tutorialId}`;
   } catch (err) {
     showErr(err);
