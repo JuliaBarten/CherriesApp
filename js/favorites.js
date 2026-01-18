@@ -30,7 +30,7 @@ async function loadFavorites(userId) {
 
     card.innerHTML = `
       <div class="favorite-remove">
-        <img src="images/icons/close.png" alt="verwijderen">
+        <img src="images/icons/fav_aan.png" alt="verwijderen">
       </div>
 
       <img src="${t.mainImageUrl}" class="favorite-image" alt="${t.title}">
@@ -71,7 +71,7 @@ onAuthStateChanged(auth, (user) => {
 function renderHearts(level) {
   let html = "";
   for (let i = 0; i < level; i++) {
-    html += `<img src="images/icons/heart1.png" alt="hart">`;
+    html += `<img src="images/icons/heart3.png" alt="hart">`;
   }
   return html;
 }

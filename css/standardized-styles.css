@@ -49,7 +49,7 @@
     --ipvwit: #fffbfc;
     --donker: #b01643;
     --achter: #fbedf3;
-    --popupbg: rgba(0,0,0,0.2);
+    --popupbg: rgba(0, 0, 0, 0.2);
 
     /* tekst */
     --textlicht: #faedf1;
@@ -96,6 +96,12 @@ h2 {
     color: var(--textdonker);
     font-family: var(--font);
     text-align: center;
+}
+
+.titel {
+    size: var(--size4);
+    color: var(--textdonker);
+    font-family: var(--font);
 }
 
 /* ==========================  RESET / BASIS   ========================== */
@@ -317,11 +323,25 @@ footer .d-flex {
 }
 
 /* ======================= TITELS ======================== */
+.classic-categories-big {
+    width: 100%;
+    height: 50px;
+    display: block;
+    font-size: var(--size4);
+    color: var(--textlicht);
+    background-color: var(--mid);
+    border: none;
+    margin-top: var(--margstandard);
+    margin-bottom: var(--margstandard);
+    border-radius: var(--borderkop);
+    text-align: center;
+    font-family: var(--font);
+}
+
 .classic-categories {
     width: 100%;
     height: 40px;
     display: block;
-    font-size: var(--size1);
     color: var(--textdonker);
     background-color: var(--mid);
     border: none;
@@ -333,6 +353,33 @@ footer .d-flex {
     font-size: var(--size3);
 }
 
+.classic-categories-small {
+    width: 100%;
+    height: 30px;
+    display: block;
+    color: var(--textdonker);
+    background-color: var(--mid);
+    border: none;
+    margin-top: var(--margstandard);
+    margin-bottom: var(--margstandard);
+    border-radius: var(--borderkop);
+    text-align: center;
+    font-family: var(--font);
+    font-size: var(--size2);
+}
+
+.item-bar {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin: 12px 5px;
+    width: 100%;
+    border-radius: var(--borderknop);
+    background: var(--ipvwit);
+    box-shadow: var(--schaduw);
+    transition: background-color 0.2s;
+}
+
 /* ======================= BUTTONS ======================== */
 .btn-hoofd-1 {
     background-color: var(--hoofd);
@@ -342,6 +389,7 @@ footer .d-flex {
     display: block;
     margin: var(--margstandard);
     border: none;
+    padding: 1rem;
     border-radius: var(--borderknop);
     box-shadow: var(--schaduw);
     font-family: var(--font);
@@ -358,6 +406,7 @@ footer .d-flex {
     padding: 1rem;
     border: none;
     border-radius: var(--borderknop);
+    margin: var(--margstandard);
     font-family: var(--font);
     font-size: var(--size3);
 }

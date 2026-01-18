@@ -99,7 +99,7 @@ async function renderBar(item) {
   const from = await getUser(item.from);
 
   const div = document.createElement("div");
-  div.className = "friend-bar inbox-bar";
+  div.className = "item-bar inbox-bar";
 
   div.innerHTML = `
     ${item.read === false ? `<div class="inbox-new-pill">NEW!</div>` : ""}

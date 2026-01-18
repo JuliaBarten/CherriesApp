@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cherrie's - stappen</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="css/standardized-styles.css" />
+  <link rel="stylesheet" href="css/specific-styles.css" />
+  <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
+  <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+<div class="app-wrapper">
+  <header class="app-header fixed-top">
+    <img alt="logo" src="images/logo_bol.png" class="logo" />
+    <a href="inbox.html" class="inbox-btn">
+      <img src="images/icons/inbox.png" alt="Inbox" />
+      <span id="inboxBadge" class="badge hidden"></span>
+    </a>
+  </header>
+
+  <main>
+    <div class="classic-outline">
+      <h2 id="followTitle"></h2>
+
+      <div id="stepMeta" class="mb-2"></div>
+
+      <div id="stepImageWrap" class="step-image-preview mb-3"></div>
+      <div id="stepTextWrap"></div>
+
+      <div class="d-flex gap-2 mt-3">
+        <button id="prevBtn" class="btn-hoofd-3" type="button">Vorige</button>
+        <button id="nextBtn" class="btn-hoofd-1" type="button">Volgende</button>
+      </div>
+
+      <button id="pauseBtn" class="btn-lined-3 mt-3" type="button">Pauzeer</button>
+    </div>
+  </main>
+
+  <script type="module" src="js/firebase-init.js"></script>
+  <script type="module" src="js/make-follow.js"></script>
+  <script type="module" src="js/script.js"></script>
+</div>
+</body>
+</html>

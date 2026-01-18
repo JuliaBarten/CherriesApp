@@ -36,11 +36,11 @@ onAuthStateChanged(auth, async (user) => {
     const t = docSnap.data();
 
     const card = document.createElement("div");
-    card.className = "tutorial-card";
+    card.className = "item-bar";
 
     card.innerHTML = `
       <div class="tutorial-thumb">
-        <img src="${t.mainImageUrl || 'images/placeholder.png'}">
+        <img src="${t.mainImageUrl || 'images/icons/garen.png'}">
       </div>
       <div class="tutorial-info">
         <h4>${t.title || "Naamloos project"}</h4>

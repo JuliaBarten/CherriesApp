@@ -45,9 +45,23 @@ function getSelectedMaterials() {
 function stepsForDraftDb() {
   return stepsData.map(s => ({
     text: s.text || "",
-    imageUrl: null
+    imageUrl: s.imageUrl || null   // 🔑 bewaar URL als we al geupload hebben
   }));
 }
+
+async function uploadMainImage(uid, tutorialId, file) {
+  const mainRef = ref(storage, `users/${uid}/tutorials/${tutorialId}/main.jpg`);
+  await uploadBytes(mainRef, file);
+  return await getDownloadURL(mainRef);
+}
+
+async function uploadStepImage(uid, tutorialId, index, file) {
+  const stepRef = ref(storage, `users/${uid}/tutorials/${tutorialId}/steps/step_${index + 1}.jpg`);
+  await uploadBytes(stepRef, file);
+  return await getDownloadURL(stepRef);
+}
+
+
 
 /* ====================== DOM ====================== */
 const tutorialForm = document.getElementById("tutorialForm");
@@ -153,12 +167,12 @@ function renderStepsOverview() {
 
   stepsData.forEach((s, idx) => {
     const row = document.createElement("div");
-    row.className = "friend-bar";
+    row.className = "item-bar";
     row.innerHTML = `
       <div class="friend-avatar">
         ${s.imagePreviewUrl
           ? `<img src="${s.imagePreviewUrl}" alt="stap">`
-          : `<img src="images/icons/naaimachine.png" alt="stap">`
+          : `<img src="images/icons/make1.png" alt="stap">`
         }
       </div>
       <div class="friend-info">
@@ -218,8 +232,9 @@ async function ensureDraftDoc({ showFeedback = true } = {}) {
   const title = titleInput.value.trim();
   const category = categorySelect.value || "";
   const duration = durationInput.value || "00:00";
+  const mainImageFile = mainImageInput.files?.[0] || null;
 
-  // Maak draft doc als die nog niet bestaat
+  // 1) Zorg dat draft doc bestaat
   if (!draftId) {
     const refDoc = doc(collection(db, "tutorials"));
     draftId = refDoc.id;
@@ -234,19 +249,56 @@ async function ensureDraftDoc({ showFeedback = true } = {}) {
       materials: getSelectedMaterials(),
       category,
       duration,
-      steps: stepsForDraftDb()
-    });
-  } else {
-    await updateDoc(doc(db, "tutorials", draftId), {
-      title,
-      level: selectedLevel,
-      materials: getSelectedMaterials(),
-      category,
-      duration,
-      steps: stepsForDraftDb(),
-      lastEditedAt: serverTimestamp()
+      mainImageUrl: null,      // 🔑 komt zo
+      steps: []                // 🔑 komt zo
     });
   }
+
+  // 2) Upload images (alleen als aanwezig / nodig)
+  let mainImageUrl = null;
+
+  // Als er al een mainImageUrl in doc staat en user kiest geen nieuwe, behouden we die.
+  // We lezen de doc 1x om bestaande urls te behouden.
+  const existingSnap = await getDoc(doc(db, "tutorials", draftId));
+  const existing = existingSnap.exists() ? existingSnap.data() : {};
+  mainImageUrl = existing?.mainImageUrl || null;
+
+  if (mainImageFile) {
+    mainImageUrl = await uploadMainImage(user.uid, draftId, mainImageFile);
+  }
+
+  // Step images uploaden indien nodig
+  for (let i = 0; i < stepsData.length; i++) {
+    const s = stepsData[i];
+    // Als er een nieuwe file is gekozen (imageFile), upload hem en zet imageUrl
+    if (s.imageFile) {
+      const url = await uploadStepImage(user.uid, draftId, i, s.imageFile);
+      stepsData[i] = {
+        ...s,
+        imageUrl: url,
+        // optioneel: als je wil, kun je imageFile daarna weggooien (scheelt memory)
+        // imageFile: null
+      };
+    } else {
+      // Geen nieuwe file gekozen, behoud bestaande imageUrl (als aanwezig)
+      if (!s.imageUrl && existing?.steps?.[i]?.imageUrl) {
+        stepsData[i] = { ...s, imageUrl: existing.steps[i].imageUrl };
+      }
+    }
+  }
+
+  // 3) Update Firestore doc met alle draft data + urls
+  await updateDoc(doc(db, "tutorials", draftId), {
+    title: title || "Nieuw project",
+    level: selectedLevel,
+    materials: getSelectedMaterials(),
+    category,
+    duration,
+    mainImageUrl,
+    steps: stepsForDraftDb(),
+    draft: true,
+    lastEditedAt: serverTimestamp()
+  });
 
   if (showFeedback && window.showPopup) {
     window.showPopup({
@@ -258,13 +310,18 @@ async function ensureDraftDoc({ showFeedback = true } = {}) {
   }
 }
 
-saveDraftBtn?.addEventListener("click", async () => {
+
+saveDraftBtn?.addEventListener("click", async (e) => {
+  e.preventDefault();
+  e.stopPropagation();
   try {
     await ensureDraftDoc({ showFeedback: true });
-  } catch (e) {
-    showError(e);
+       window.location.href = `make-drafts.html`;
+  } catch (e2) {
+    showError(e2);
   }
 });
+
 
 /* ====================== PUBLISH (SUBMIT ONLY) ====================== */
 async function uploadMainImage(uid, tutorialId, file) {
@@ -302,17 +359,19 @@ tutorialForm?.addEventListener("submit", async (e) => {
     const title = titleInput.value.trim();
     const category = categorySelect.value;
     const duration = durationInput.value;
-    const mainImageFile = mainImageInput.files?.[0];
 
     if (!title) return alert("Vul een titel in.");
     if (!category) return alert("Kies een categorie.");
-    if (!mainImageFile) return alert("Upload een hoofdfoto!");
 
-    // Zorg dat draft doc bestaat (maar geen popup)
+    // 🔑 zorg dat draft doc bestaat + upload alle gekozen images
     await ensureDraftDoc({ showFeedback: false });
 
-    const mainImageUrl = await uploadMainImage(user.uid, draftId, mainImageFile);
-    const stepsForDb = await uploadSteps(user.uid, draftId);
+    // 🔑 lees alles terug (zeker weten wat er in staat)
+    const snap = await getDoc(doc(db, "tutorials", draftId));
+    const t = snap.data();
+
+    // mainImageUrl moet bestaan om te publishen
+    if (!t?.mainImageUrl) return alert("Upload een hoofdfoto!");
 
     await updateDoc(doc(db, "tutorials", draftId), {
       title,
@@ -320,18 +379,18 @@ tutorialForm?.addEventListener("submit", async (e) => {
       duration,
       level: selectedLevel,
       materials: getSelectedMaterials(),
-      mainImageUrl,
-      steps: stepsForDb,
+      // steps + mainImageUrl staan al goed in doc door ensureDraftDoc
       draft: false,
       publishedAt: serverTimestamp(),
       lastEditedAt: serverTimestamp()
     });
 
     window.location.href = `make-project.html?id=${draftId}`;
-  } catch (e2) {
-    showError(e2);
+  } catch (err) {
+    showError(err);
   }
 });
+
 
 /* ====================== AUTH ====================== */
 onAuthStateChanged(auth, (user) => {

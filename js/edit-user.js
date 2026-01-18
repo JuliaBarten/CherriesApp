@@ -5,12 +5,13 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/fi
 import { renderAvatarPicker } from "./avatar-utils.js";
 
 const AVATARS = [
-  "images/avatar/premade/pm_1.png",
   "images/avatar/premade/pm_2.png",
   "images/avatar/premade/pm_3.png",
-  "images/avatar/premade/pm_4.png",
   "images/avatar/premade/pm_5.png",
-  "images/avatar/premade/pm_6.png"
+  "images/avatar/premade/pm_1.png",
+  "images/avatar/premade/pm_6.png",
+  "images/avatar/premade/pm_7.png",
+  "images/avatar/premade/pm_4.png",
 ];
 
 let selectedAvatarIndex = 0; // Houdt bij welke avatar geselecteerd is

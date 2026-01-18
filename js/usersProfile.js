@@ -1,5 +1,5 @@
 import { auth, db } from "./firebase-init.js";
-import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { doc, getDoc, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 onAuthStateChanged(auth, async (user) => {
@@ -56,4 +56,39 @@ onAuthStateChanged(auth, async (user) => {
       materialsContainer.appendChild(div);
     });
   }
+
+  const myTutorialsEl = document.getElementById("myTutorials");
+if (myTutorialsEl) {
+  myTutorialsEl.innerHTML = "";
+
+  const q = query(
+    collection(db, "tutorials"),
+    where("authorId", "==", user.uid),
+    where("draft", "==", false),
+    orderBy("publishedAt", "desc")
+  );
+
+  const snap = await getDocs(q);
+
+  if (snap.empty) {
+    myTutorialsEl.innerHTML = `<p class="text-center mt-3" style="opacity:.8;">Nog geen gepubliceerde makes ✨</p>`;
+  } else {
+    snap.forEach(docSnap => {
+      const t = docSnap.data();
+
+      const card = document.createElement("div");
+      card.className = "tutorial-card";
+      card.innerHTML = `
+        <img src="${t.mainImageUrl || "images/icons/garen.png"}" class="tutorial-image" alt="${t.title || "make"}">
+      `;
+
+      card.addEventListener("click", () => {
+        window.location.href = `make-project.html?id=${docSnap.id}`;
+      });
+
+      myTutorialsEl.appendChild(card);
+    });
+  }
+}
+
 });

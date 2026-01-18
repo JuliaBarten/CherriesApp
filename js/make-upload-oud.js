@@ -206,13 +206,13 @@ function renderStepsOverview() {
 
   stepsData.forEach((s, idx) => {
     const row = document.createElement("div");
-    row.className = "friend-bar";
+    row.className = "item-bar";
 
     row.innerHTML = `
       <div class="friend-avatar">
         ${s.imagePreviewUrl
           ? `<img src="${s.imagePreviewUrl}" alt="stap">`
-          : `<img src="images/icons/naaimachine.png" alt="stap">`
+          : `<img src="images/icons/make1.png" alt="stap">`
         }
       </div>
       <div class="friend-info">

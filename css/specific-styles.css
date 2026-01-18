@@ -157,8 +157,8 @@
     position: relative;
     width: 100%;
     max-width: 430px;
-    margin: var(--header-height) auto 10px auto;
-    /* onder header */
+    margin-top: var(--header-height);
+    margin-bottom: 10px;
     padding: 6px;
     background: var(--achter);
     backdrop-filter: blur(18px);
@@ -225,7 +225,8 @@
 
 .fotowall {
     position: relative;
-    padding: 5px;
+    margin-left: 12px;
+    margin-right: 12px;
     padding-bottom: var(--bottom-nav-height);
 }
 
@@ -308,12 +309,13 @@
 .favorite-card {
     display: flex;
     align-items: center;
-    background-color: var(--ipvwit);
+    padding: 10px;
+    margin: 12px 5px;
+    width: 100%;
     border-radius: var(--borderknop);
+    background: var(--ipvwit);
     box-shadow: var(--schaduw);
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.2s;
+    transition: background-color 0.2s;
 }
 
 .favorite-image {
@@ -505,27 +507,16 @@
     background: var(--mid);
 }
 
-.friend-bar {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    margin: 12px 5px;
-    width: 100%;
-    border-radius: var(--borderknop);
-    background: var(--ipvwit);
-    box-shadow: var(--schaduw);
-    transition: background-color 0.2s;
-}
-
 .friend-bar.existing {
     background: var(--licht);
 }
 
 .friend-bar.existing .btn-licht-5 {
-  display: none;
+    display: none;
 }
+
 .friend-bar.existing .friend-status {
-  display: inline;
+    display: inline;
 }
 
 .friend-avatar {
@@ -557,7 +548,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-       font-family: var(--font);
+    font-family: var(--font);
 }
 
 .friend-info strong {
@@ -591,80 +582,81 @@
 
 /* ========================= INBOX PAGINA ========================== */
 .inbox-item {
-  position: relative;
-  border-radius: 14px;
-  padding: 0;
-  margin: 10px 0;
-  overflow: hidden;
+    position: relative;
+    border-radius: 14px;
+    padding: 0;
+    margin: 10px 0;
+    overflow: hidden;
 }
 
 .inbox-bar {
-  position: relative; /* nodig voor NEW pill */
+    position: relative;
+    /* nodig voor NEW pill */
 }
 
 .inbox-new-pill {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 0.8em;
-  background: var(--hoofd);
-  color: var(--textdonker);
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.8em;
+    background: var(--hoofd);
+    color: var(--textdonker);
 }
 
 
 .inbox-avatar {
-  width: 25%;
-  max-width: 64px;
-  aspect-ratio: 1 / 1;
-  border-radius: 14px;
-  overflow: hidden;
-  flex: 0 0 auto;
+    width: 25%;
+    max-width: 64px;
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+    overflow: hidden;
+    flex: 0 0 auto;
 }
 
 .inbox-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .inbox-meta {
-  flex: 1;
+    flex: 1;
 }
 
 .inbox-username {
-  font-weight: 700;
+    font-weight: 700;
 }
 
 .inbox-type {
-  opacity: 0.7;
-  font-size: 0.95em;
+    opacity: 0.7;
+    font-size: 0.95em;
 }
 
 .inbox-detail {
-  display: none;
-  background: var(--ipvwit);
-  padding: 14px;
-  border-top: 1px solid rgba(0,0,0,0.06);
+    display: none;
+    background: var(--ipvwit);
+    padding: 14px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .inbox-item.open .inbox-detail {
-  display: block;
+    display: block;
 }
 
 .inbox-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 12px;
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
 }
 
 .inbox-actions button {
-  flex: 1;
+    flex: 1;
 }
 
 .inbox-other {
-  margin-top: 10px;
-  text-align: center;
+    margin-top: 10px;
+    text-align: center;
 }

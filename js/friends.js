@@ -19,7 +19,7 @@ async function getUserData(uid) {
 
 function createFriendCard(user, type, uid) {
   const div = document.createElement("div");
-  div.className = "friend-bar clickable";
+  div.className = "item-bar clickable";
 
   div.innerHTML = `
     <div class="friend-avatar">
@@ -78,7 +78,7 @@ async function loadFriends() {
     const u = userSnap.data();
 
     const card = document.createElement("div");
-    card.className = "friend-bar";
+    card.className = "item-bar";
     card.innerHTML = `
       <div class="friend-avatar">
         <img src="${u.avatar || "images/avatar/default.png"}">

@@ -15,43 +15,47 @@ onAuthStateChanged(auth, async (user) => {
     navbarAvatar.src = avatar;
   }
 });
-
-// menu active state
-const current = window.location.pathname.split("/").pop();
-document.querySelectorAll("footer a").forEach(link => {
-  if (link.getAttribute("href") === current) {
-    link.classList.add("active");
-  }
-});
-
 /* ==================== make button pop up ==================*/
 const makeNavBtn = document.getElementById("makeNavBtn");
 const makeMenu = document.getElementById("makeMenu");
 const newProjectBtn = document.getElementById("newProjectBtn");
 const draftsBtn = document.getElementById("draftsBtn");
 
+function closeMakeMenu() {
+  makeMenu?.classList.remove("show");
+}
+
 if (makeNavBtn && makeMenu) {
   makeNavBtn.addEventListener("click", (e) => {
     e.preventDefault();
+    e.stopPropagation(); // ✅ voorkomt direct sluiten door document click
     makeMenu.classList.toggle("show");
   });
 
-  // Klik buiten menu → sluiten
+  // ✅ Knoppen: stopPropagation + navigatie + menu dicht
+  newProjectBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    closeMakeMenu();
+    window.location.href = "make-upload.html";
+  });
+
+  draftsBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    closeMakeMenu();
+    window.location.href = "make-drafts.html";
+  });
+
+  // ✅ Klik buiten menu → sluiten (met closest, robuuster dan contains)
   document.addEventListener("click", (e) => {
-    // extra guard: als menu net is verwijderd of click in menu zit
-    if (!makeMenu.contains(e.target) && !makeNavBtn.contains(e.target)) {
-      makeMenu.classList.remove("show");
+    const clickedInsideMenu = e.target.closest("#makeMenu");
+    const clickedMakeBtn = e.target.closest("#makeNavBtn");
+    if (!clickedInsideMenu && !clickedMakeBtn) {
+      closeMakeMenu();
     }
   });
 }
-
-newProjectBtn?.addEventListener("click", () => {
-  window.location.href = "make-upload.html";
-});
-
-draftsBtn?.addEventListener("click", () => {
-  window.location.href = "make-drafts.html";
-});
 
 /* ==================== POP UP INCOMPLEET [PROFIEL} ==================*/
 import { requireProfile } from "./guard.js";

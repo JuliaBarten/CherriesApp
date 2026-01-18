@@ -5,7 +5,7 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/fi
 /* ================= HELPERS ================= */
 function createFriendCard({ uid, username, avatar, level, status, buttonText, onClick, existing }) {
   const div = document.createElement("div");
-  div.className = "friend-bar";
+  div.className = "item-bar";
   if (existing) div.classList.add("existing");
 
   const badgeHtml = status

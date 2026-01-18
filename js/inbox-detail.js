@@ -70,7 +70,7 @@ function renderDetail(currentUid, item, from) {
   const msg = prescribedMessage(from.username, item);
 
   container.innerHTML = `
-    <div class="friend-bar existing">
+    <div class="item-bar existing">
       <div class="friend-avatar">
         <img src="${from.avatar}" alt="avatar">
         <img class="level-icon" src="images/icons/niveau_${from.level || 1}.png" alt="niveau">

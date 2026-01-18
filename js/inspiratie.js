@@ -33,7 +33,7 @@ applyFiltersBtn?.addEventListener("click", () => {
 function renderHearts(level = 0) {
   let html = "";
   for (let i = 0; i < (level || 0); i++) {
-    html += `<img src="images/icons/heart1.png" class="tut-card-ic" alt="hart">`;
+    html += `<img src="images/icons/heart3.png" class="tut-card-ic" alt="hart">`;
   }
   return html;
 }
