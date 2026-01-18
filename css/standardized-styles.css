@@ -109,6 +109,20 @@ main {
     position: relative;
     background-color: var(--achter);
 }
+.app-wrapper {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Beter dan 100vh op mobiel */
+:root {
+  --app-height: 100vh;
+}
+
+.app-wrapper {
+  min-height: var(--app-height);
+}
+
 
 /* ===================  APP FRAME (wrapper, header, footer)   ========================== */
 header {
@@ -132,6 +146,7 @@ header {
     padding: 0 16px;
     z-index: 1000;
 }
+
 
 .logo {
     height: 70px;

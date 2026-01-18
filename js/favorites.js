@@ -36,7 +36,9 @@ async function loadFavorites(userId) {
   const favSnap = await getDocs(collection(db, "users", userId, "favorites"));
 
   if (favSnap.empty) {
-    container.innerHTML = `<p class="text-center mt-3">Je hebt nog geen favorieten ✨</p>`;
+    container.innerHTML = `<p id="emptyStateFav" class="text-center mt-4" style="display:none;">
+                    Je hebt geen favorieten <img src="images/icons/heart.png" style="width:24px; height:24px;">
+                </p>`;
     return;
   }
 
@@ -113,7 +115,9 @@ async function loadFavorites(userId) {
 
       // lege state na verwijderen van laatste
       if (!container.querySelector(".item-bar")) {
-        container.innerHTML = `<p class="text-center mt-3">Je hebt nog geen favorieten ✨</p>`;
+        container.innerHTML = `<p id="emptyStateFav" class="text-center mt-4" style="display:none;">
+                    Je hebt geen favorieten <img src="images/icons/heart.png" style="width:24px; height:24px;">
+                </p>`;
       }
     });
 

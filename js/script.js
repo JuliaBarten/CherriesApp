@@ -15,6 +15,14 @@ onAuthStateChanged(auth, async (user) => {
     navbarAvatar.src = avatar;
   }
 });
+
+function setAppHeight() {
+  document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+}
+window.addEventListener('resize', setAppHeight);
+setAppHeight();
+
+
 /* ==================== make button pop up ==================*/
 const makeNavBtn = document.getElementById("makeNavBtn");
 const makeMenu = document.getElementById("makeMenu");
