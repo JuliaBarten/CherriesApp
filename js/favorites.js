@@ -67,14 +67,14 @@ async function loadFavorites(userId) {
 
     const thumb = t.mainImageUrl
       ? `<img src="${t.mainImageUrl}" alt="${safeText(t.title)}">`
-      : `<img src="images/placeholder.png" alt="Geen foto">`;
+      : `<img src="images/icons/naaimachine.png" alt="Geen foto">`;
 
     const duration = safeText(t.duration || "00:00");
     const title = safeText(t.title || "Zonder titel");
     const lvl = Math.min(5, Math.max(1, Number(t.level || 1)));
 
     row.innerHTML = `
-      <div class="item-image">
+      <div class="tutorial-thumb">
         ${thumb}
       </div>
 
@@ -84,9 +84,9 @@ async function loadFavorites(userId) {
         </div>
 
         <div class="item-actions">
-          <div class="item-status d-flex align-items-center gap-2">
+          <div class="item-status d-flex align-items-center">
             <img src="${levelIcon(lvl)}" alt="Niveau ${lvl}" style="width:40px; height:40px;">
-            <span class="d-flex align-items-center gap-1">
+            <span class="d-flex align-items-center">
               <img src="images/icons/tijd_klok.png" alt="tijd" style="width:40px; height:40px;">
               <span>${duration}</span>
             </span>
@@ -97,7 +97,7 @@ async function loadFavorites(userId) {
       <button class="fav-remove-btn" type="button" aria-label="Verwijder favoriet"
         style="background:transparent; border:none; padding:0; display:flex;">
         <img src="images/icons/fav_aan.png" alt="verwijderen" 
-        style="width:50px; height:50px;">
+        class="del-icon">
       </button>
     `;
 

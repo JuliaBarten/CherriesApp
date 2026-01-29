@@ -81,7 +81,7 @@ async function loadFriends() {
     card.className = "item-bar";
     card.innerHTML = `
       <div class="friend-avatar">
-        <img src="${u.avatar || "images/avatar/default.png"}">
+        <img src="${u.avatar || "images/icons/heart.png"}">
         <img class="level-icon"
              src="images/icons/niveau_${u.level || 1}.png">
       </div>

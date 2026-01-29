@@ -154,16 +154,15 @@
 /* =========================  INSPIRATIE PAGINA  ========================== */
 /* Filtercontainer */
 .filter-container {
-    position: relative;
+    position: fixed;
     width: 100%;
     max-width: 430px;
     margin-top: var(--header-height);
-    margin-bottom: 10px;
-    padding: 6px;
+    padding-bottom: 6px;
+    padding-top: 8px;
     background: var(--achter);
-    backdrop-filter: blur(18px);
+    backdrop-filter: blur(50px);
     z-index: 900;
-    font-family: var(--font);
 }
 
 /* Filterknop */
@@ -175,24 +174,27 @@
     border-radius: var(--borderknop);
     box-shadow: var(--schaduw);
     color: var(--textlicht);
-    margin: 0 4px 0 0;
+    margin: 4px;
     cursor: pointer;
+    font-size: var(--size2);
+    font-family: var(--font);
 }
 
 /* Dropdown menu */
 .filterdropdown {
     position: absolute;
-    top: 60px;
-    left: 0;
-    right: 0;
-    width: 100%;
+    width: 80%;
+    margin-top: 2%;
+    padding-left: 10px;
+    padding-bottom: 10px;
     background: var(--achter);
-    padding: 10px;
     border-radius: var(--borderknop);
     box-shadow: var(--schaduw);
     display: none;
     flex-direction: column;
-    gap: 10px;
+    color: var(--textdonker);
+    font-size: var(--size3);
+    font-family: var(--font);
 }
 
 /* Open staat */
@@ -202,12 +204,15 @@
 
 /* Material toggle knoppen */
 .material-toggle-btn {
+    background-color: var(--licht);
+    color: var(--ipvwit);
     flex: 1;
-    padding: 6px;
-    margin-right: 4px;
+    padding: var(--margstandard);
     border-radius: var(--borderknop);
     border: none;
     cursor: pointer;
+    font-size: var(--size2);
+    font-family: var(--font);
 }
 
 .material-toggle-btn.active {
@@ -222,6 +227,7 @@
 }
 
 .fotowall {
+    padding-top: var(--fotowall-height);
     position: relative;
     margin-left: 12px;
     margin-right: 12px;
@@ -387,6 +393,12 @@
 }
 
 /* ==============================  MAKEN  ============================= */
+#draftsContainer {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
 .main-image-preview {
     width: 250px;
     height: 250px;
@@ -495,7 +507,7 @@
     border: none;
     border-radius: 999px;
     padding: 6px 14px;
-    font-size: 14px;
+    font-size: var(--size3);
     background: var(--mid);
     color: var(--textdonker);
 }

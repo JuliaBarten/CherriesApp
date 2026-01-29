@@ -9,7 +9,7 @@ import {
 import { onAuthStateChanged } from
   "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-const container = document.getElementById("draftsContainer");
+const draftBox = document.getElementById("draftsContainer");
 const emptyState = document.getElementById("emptyState");
 
 onAuthStateChanged(auth, async (user) => {
@@ -37,14 +37,13 @@ onAuthStateChanged(auth, async (user) => {
 
     const card = document.createElement("div");
     card.className = "item-bar";
-
     card.innerHTML = `
       <div class="tutorial-thumb">
         <img src="${t.mainImageUrl || 'images/icons/garen.png'}">
       </div>
-      <div class="tutorial-info">
-        <h4>${t.title || "Naamloos project"}</h4>
-        <small>Laatst bewerkt</small>
+      <div class="item-info">
+        <h1>${t.title || "Naamloos project"}</h1>
+        <h5>Laatste bewerking: ${t.lastEditedAt ? new Date(t.lastEditedAt.seconds * 1000).toLocaleDateString() : 'Onbekend'}</h5>
       </div>
     `;
 
@@ -52,6 +51,6 @@ onAuthStateChanged(auth, async (user) => {
       window.location.href = `make-edit.html?id=${docSnap.id}`;
     });
 
-    container.appendChild(card);
+    draftBox.appendChild(card);
   });
 });

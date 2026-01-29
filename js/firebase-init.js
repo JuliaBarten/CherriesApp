@@ -27,4 +27,5 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
+console.log("Firebase project:", auth.app.options.projectId);
 

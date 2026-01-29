@@ -11,11 +11,9 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <link rel="stylesheet" href="css/standardized-styles.css" />
-    <link rel="stylesheet" href="css/specific-styles.css" />
-    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
-    <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+      <link rel="stylesheet" href="css/standardized-styles.css" />
+  <link rel="stylesheet" href="css/specific-styles.css" />
+  <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
 </head>
 
 <body>
@@ -100,30 +98,31 @@
                     </div>
                 </div>
                 <!-- ================ stappen toevoegen ================ -->
-                <div class="modal fade" id="stepModal" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content classic-outline">
-                            <div class="modal-header">
-                                <h2>Stap <span id="stepNumberPreview"></span></h2>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
+  <!-- Vanilla Modal -->
+<div id="stepModal" class="vmodal-overlay hidden" aria-hidden="true">
+  <div class="vmodal" role="dialog" aria-modal="true" aria-labelledby="stepModalTitle">
+    <div class="vmodal-header">
+      <h3 id="stepModalTitle" class="vmodal-title">Stap <span id="stepNumberPreview">1</span></h3>
+      <button type="button" class="vmodal-close" data-vmodal-close aria-label="Sluiten">×</button>
+    </div>
 
-                            <div class="modal-body">
-                                <div id="stepImagePreview" class="step-image-preview upload-btn mb-3">
-                                    <span class="plus-icon">+</span>
-                                </div>
-                                <input type="file" id="stepImage" accept="image/*" hidden>
-                                <textarea id="stepText" class="custom-input"
-                                    placeholder="Uitleg bij deze stap"></textarea>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn-hoofd-1" type="button" id="saveStepBtn">
-                                    Stap opslaan
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="vmodal-body">
+      <!-- JOUW BESTAANDE CONTENT -->
+      <div class="mb-2">
+        <div id="stepImagePreview" class="step-image-preview"><span class="plus-icon">+</span></div>
+        <input id="stepImage" type="file" accept="image/*" class="hidden" />
+      </div>
+
+      <textarea id="stepText" class="custom-input" placeholder="Beschrijving van deze stap..."></textarea>
+    </div>
+
+    <div class="vmodal-footer">
+      <button type="button" class="btn-licht-5" data-vmodal-close>Annuleren</button>
+      <button type="button" id="saveStepBtn" class="btn-hoofd-2">Opslaan</button>
+    </div>
+  </div>
+</div>
+
 
                 <div id="stepsOverview" class="d-flex flex-column gap-2"></div>
                 <!-- ================ Knop voor nieuwe stap ================ -->

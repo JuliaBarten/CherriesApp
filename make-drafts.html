@@ -13,9 +13,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <link rel="stylesheet" href="css/standardized-styles.css" />
     <link rel="stylesheet" href="css/specific-styles.css" />
-    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
-    <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -59,22 +57,18 @@
         <main>
             <div class="classic-outline">
                 <h2 class="classic-categories-big">Mijn drafts</h2>
-
-                <div id="draftsContainer" class="d-flex flex-column gap-2">
-                </div>
+                <div id="draftsContainer"></div>
 
                 <p id="emptyState" class="text-center mt-4" style="display:none;">
                     Je hebt nog geen drafts <img src="images/icons/heart.png" style="width:24px; height:24px;">
                 </p>
             </div>
         </main>
-
-        <script type="module" src="js/firebase-init.js"></script>
+    </div>
+      <script type="module" src="js/firebase-init.js"></script>
         <script type="module" src="js/make-drafts.js"></script>
         <script type="module" src="js/inbox-badge.js"></script>
-    <script type="module" src="js/script.js"></script>
-
-    </div>
+         <script type="module" src="js/script.js"></script>
 </body>
 
 </html>

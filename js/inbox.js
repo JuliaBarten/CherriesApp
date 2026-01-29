@@ -11,12 +11,55 @@ const listAll = document.getElementById("listAll");
 const listUnread = document.getElementById("listUnread");
 const inboxBadge = document.getElementById("inboxBadge");
 const emptyStateBox = document.getElementById("emptyStateBox");
+const hasInboxUI = !!(listAll && listUnread && tabAll && tabUnread);
+
+async function loadInbox() {
+  if (!hasInboxUI) return;
+
+  listAll.innerHTML = "";
+  listUnread.innerHTML = "";
+  inboxBadge.textContent = "";
+
+  const uid = auth.currentUser.uid;
+
+  const allQ = query(
+    collection(db, "users", uid, "inbox"),
+    where("archived", "==", false),
+    orderBy("createdAt", "desc")
+  );
+
+  const snap = await getDocs(allQ);
+  let unreadCount = 0;
+
+  for (const d of snap.docs) {
+    const item = { id: d.id, ...d.data() };
+    if (item.read === false) unreadCount++;
+
+    const bar = await renderBar(item);
+    listAll.appendChild(bar);
+
+    if (item.read === false) {
+      const bar2 = await renderBar(item);
+      listUnread.appendChild(bar2);
+    }
+  }
+
+  if (emptyStateBox) {
+    emptyStateBox.style.display = snap.empty ? "block" : "none";
+  }
+  setBadge(unreadCount);
+
+}
 
 onAuthStateChanged(auth, (user) => {
+  // ✅ Deze file is alleen bedoeld voor inbox.html (lijst + tabs)
+  if (!hasInboxUI) return;
+
   if (!user) return;
   setupTabs();
   loadInbox();
 });
+
 
 function setupTabs() {
   tabAll?.addEventListener("click", () => {
@@ -53,6 +96,7 @@ function typeLabel(t) {
   return "Bericht";
 }
 
+
 function setBadge(count) {
   if (!inboxBadge) return;
   if (count > 0) {
@@ -64,40 +108,6 @@ function setBadge(count) {
   }
 }
 
-async function loadInbox() {
-  listAll.innerHTML = "";
-  listUnread.innerHTML = "";
-
-  const uid = auth.currentUser.uid;
-
-  const allQ = query(
-    collection(db, "users", uid, "inbox"),
-    where("archived", "==", false),
-    orderBy("createdAt", "desc")
-  );
-
-  const snap = await getDocs(allQ);
-
-  let unreadCount = 0;
-
-  for (const d of snap.docs) {
-    const item = { id: d.id, ...d.data() };
-    if (item.read === false) unreadCount++;
-
-    const bar = await renderBar(item);
-    listAll.appendChild(bar);
-
-    if (item.read === false) {
-      const bar2 = await renderBar(item);
-      listUnread.appendChild(bar2);
-    }
-  }
-
-  if (snap.empty) {
-    emptyStateBox.style.display = "block";
-  setBadge(unreadCount);
-}
-}
 
 async function renderBar(item) {
   const from = await getUser(item.from);

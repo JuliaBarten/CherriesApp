@@ -20,8 +20,13 @@ const editBtn = document.getElementById("editTutorialBtn");
 const startBtn = document.getElementById("startTutorialBtn");
 
 if (!tutorialId) {
-  console.error("Geen tutorial ID in URL");
+  alert("Geen tutorial ID in URL.");
+  window.location.href = "inspiration.html";
+  throw new Error("Missing tutorialId");
 }
+console.log("tutorialId =", tutorialId);
+
+
 function safeText(v) {
   return (v ?? "").toString();
 }
@@ -43,34 +48,44 @@ async function renderMaterials(tutorial) {
   const tutorialMaterials = tutorial.materials || [];
   if (!tutorialMaterials.length) {
     return;
+  } try {
+    // Titel
+    const title = document.createElement("div");
+    title.classList.add("mb-2");
+    container.appendChild(title);
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "d-flex flex-wrap gap-2";
+
+    // Alle materialen ophalen
+    const materialenSnapshot = await getDocs(collection(db, "Materialen"));
+
+    materialenSnapshot.forEach(docSnap => {
+      if (!tutorialMaterials.includes(docSnap.id)) return;
+
+      const m = docSnap.data();
+      const materialName = m.Materiaal || m.naam || "Onbekend";
+
+      const div = document.createElement("div");
+      div.className = "material-blok selected"; // altijd selected
+      div.innerText = materialName;
+
+      wrapper.appendChild(div);
+    });
+
+    container.appendChild(wrapper);
+  } catch (e) {
+    console.error("Materialen read denied:", e?.code, e?.message);
+    // fallback: toon de ids i.p.v. namen, of toon niets
+    tutorialMaterials.forEach(id => {
+      const div = document.createElement("div");
+      div.className = "material-blok selected";
+      div.innerText = id; // fallback
+      container.appendChild(div);
+    });
   }
-
-  // Titel
-  const title = document.createElement("div");
-  title.classList.add("mb-2");
-  container.appendChild(title);
-
-  const wrapper = document.createElement("div");
-  wrapper.className = "d-flex flex-wrap gap-2";
-
-  // Alle materialen ophalen
-  const materialenSnapshot = await getDocs(collection(db, "Materialen"));
-
-  materialenSnapshot.forEach(docSnap => {
-    if (!tutorialMaterials.includes(docSnap.id)) return;
-
-    const m = docSnap.data();
-    const materialName = m.Materiaal || m.naam || "Onbekend";
-
-    const div = document.createElement("div");
-    div.className = "material-blok selected"; // altijd selected
-    div.innerText = materialName;
-
-    wrapper.appendChild(div);
-  });
-
-  container.appendChild(wrapper);
 }
+
 function renderMetaSimple(t) {
   // we gebruiken je bestaande container #projectMeta
   const container = metaEl;
@@ -86,7 +101,7 @@ function renderMetaSimple(t) {
       <div class="d-flex align-items-center gap-2">
         <img src="images/icons/tijd_klok.png" alt="Tijd" style="width:50px; height:50px;">
         <span>${duration}</span>
-        </div
+        </div>
     </div>
   `;
 }
@@ -143,8 +158,22 @@ async function setupButtons(user, t) {
     return;
   }
 
+  const progressPath = `users/${user.uid}/progress/${tutorialId}`;
+  console.log("progress ref path:", progressPath);
+
   const progRef = doc(db, "users", user.uid, "progress", tutorialId);
-  const progSnap = await getDoc(progRef);
+
+  let progSnap = null;
+  try {
+    progSnap = await getDoc(progRef);
+  } catch (e) {
+    console.error("progress getDoc FAILED:", e?.code, e?.message, progressPath);
+    throw e;
+  }
+
+
+
+  // const progSnap = await getDoc(progRef);
   if (progSnap.exists() && progSnap.data()?.completed !== true) {
     const stepIndex = Number(progSnap.data()?.stepIndex ?? 0);
     startBtn.textContent = "Verdergaan";
@@ -171,6 +200,8 @@ async function loadTutorial(user) {
 
     const t = snap.data();
     const isOwner = user && user.uid === t.authorId;
+    console.log("tutorial loaded:", { id: tutorialId, draft: t.draft, authorId: t.authorId });
+
 
     if (t.draft === true && !isOwner) {
       alert("Deze make is nog een draft en is niet zichtbaar voor anderen.");
@@ -180,19 +211,45 @@ async function loadTutorial(user) {
 
     renderHero(t);
     titleEl.textContent = safeText(t.title || "Make");
-    renderLevelAndTime(t); 
-    await renderMaterials(t);
-    await setupButtons(user, t);
+    renderLevelAndTime(t);
+
+    console.log("auth user:", user ? { uid: user.uid, email: user.email } : null);
+
+    // 1) MATERIALEN
+    try {
+      await renderMaterials(t);
+      console.log("renderMaterials OK");
+    } catch (e) {
+      console.error("renderMaterials FAILED:", e?.code, e?.message);
+    }
+
+    // 2) PROGRESS / BUTTONS
+    try {
+      await setupButtons(user, t);
+      console.log("setupButtons OK");
+    } catch (e) {
+      console.error("setupButtons FAILED:", e?.code, e?.message);
+      // ❗niet throwen:
+      // zet gewoon startknop op "Start" zonder progress
+      startBtn.textContent = "Start";
+      startBtn.onclick = () => window.location.href = `make-follow.html?id=${tutorialId}&step=0`;
+    }
+
 
   } catch (e) {
+    console.error("loadTutorial error:", e?.code, e?.message, { tutorialId });
+
     if (e?.code === "permission-denied") {
-      alert("Je hebt geen toegang tot deze make (waarschijnlijk een draft).");
+      // alert("Geen toegang tot deze make. (Permission denied)");
+      // // eventueel: toon tutorialId zodat jij kan checken
+      // // alert(`Permission denied. id=${tutorialId}`);
       window.location.href = "inspiration.html";
       return;
     }
-    console.error(e);
+
     alert("Er ging iets mis.");
   }
+
 }
 
 onAuthStateChanged(auth, async (user) => {
