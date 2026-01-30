@@ -65,18 +65,6 @@ if (makeNavBtn && makeMenu) {
 
 /* ==================== POP UP INCOMPLEET [PROFIEL} ==================*/
 import { requireProfile } from "./guard.js";
-// FILTER BUTTON
-const applyFiltersBtn = document.getElementById("applyFilters");
-if (applyFiltersBtn) {
-  applyFiltersBtn.addEventListener("click", async () => {
-    const check = await requireProfile(["materialsOwned"]);
-    if (!check.ok) {
-      showProfileModal("Vul eerst je materialen in om te filteren");
-      return;
-    }
-    applyFilters();
-  });
-}
 
 // FUNCTIE VOOR POP-UP
 function showProfileModal(message) {

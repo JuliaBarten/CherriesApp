@@ -10,10 +10,10 @@
 ">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-      <link rel="stylesheet" href="css/standardized-styles.css" />
-  <link rel="stylesheet" href="css/specific-styles.css" />
-  <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="stylesheet" href="css/standardized-styles.css" />
+    <link rel="stylesheet" href="css/specific-styles.css" />
+    <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
 </head>
 
 <body>
@@ -71,17 +71,17 @@
             <!-- ================ UITKLAP MENU ================ -->
             <div class="filterdropdown" id="filterDropdown">
                 <h4>Soort</h4>
-                <select id="filterGarment" class="form-select">
+                <select id="categorySelect" class="form-select">
                     <option class="optie" value="">Alles</option>
                     <option class="optie" value="broek">Broek</option>
                     <option class="optie" value="shirt">Shirt</option>
                     <option class="optie" value="rok">Rok</option>
-                    <option class="optie" value="rok">overig</option>
+                    <option class="optie" value="overig">overig</option>
                 </select>
 
                 <h4>Niveau</h4>
-                <select id="filterLevel" class="form-select">
-                    <option  class="optie" value="">Alle niveaus</option>
+                <select id="levelSelect" class="form-select">
+                    <option class="optie" value="">Alle niveaus</option>
                     <option value="myLevelOnly">Mijn niveau</option>
                     <option value="myLevelOrLower">Mijn niveau en lager</option>
                 </select>
@@ -103,30 +103,13 @@
             </div>
         </div>
 
-            <!-- ================ kledingfoto's ================ -->
-            <div id="tutorialGrid" class="masonry-grid fotowall"></div>
-
-
-        <!-- ================ profileRequiredModal ================ -->
-        <div class="modal fade" id="profileRequiredModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Profiel incompleet</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p></p>
-                        <a href="profile-change.html" class="btn btn-primary">Profiel aanpassen</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- ================ kledingfoto's ================ -->
+        <div id="tutorialGrid" class="masonry-grid fotowall"></div>
 
         <script type="module" src="js/firebase-init.js"></script>
         <script type="module" src="js/inspiratie.js"></script>
         <script type="module" src="js/inbox-badge.js"></script>
-    <script type="module" src="js/script.js"></script>
+        <script type="module" src="js/script.js"></script>
 
     </div>
 </body>

@@ -10,10 +10,10 @@
 ">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-      <link rel="stylesheet" href="css/standardized-styles.css" />
-  <link rel="stylesheet" href="css/specific-styles.css" />
-  <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="stylesheet" href="css/standardized-styles.css" />
+    <link rel="stylesheet" href="css/specific-styles.css" />
+    <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
 </head>
 
 <body>
@@ -64,7 +64,7 @@
                 </div>
                 <!-- ================ Niveau ================ -->
                 <div class="profile-section mb-3 text-center">
-                       <label class="classic-categories">Skill - Niveau</label>
+                    <label class="classic-categories">Skill - Niveau</label>
                     <div id="niveauHearts" class="d-flex justify-content-center gap-1">
                         <img src="images/icons/heart3.png" data-level="1" class="niveau-icon" width="40" height="40">
                         <img src="images/icons/heart3.png" data-level="2" class="niveau-icon" width="40" height="40">
@@ -97,31 +97,38 @@
                     <div id="materialenContainer" class="d-flex flex-wrap gap-2">
                     </div>
                 </div>
+
+                </form>
                 <!-- ================ stappen toevoegen ================ -->
-  <!-- Vanilla Modal -->
-<div id="stepModal" class="vmodal-overlay hidden" aria-hidden="true">
-  <div class="vmodal" role="dialog" aria-modal="true" aria-labelledby="stepModalTitle">
-    <div class="vmodal-header">
-      <h3 id="stepModalTitle" class="vmodal-title">Stap <span id="stepNumberPreview">1</span></h3>
-      <button type="button" class="vmodal-close" data-vmodal-close aria-label="Sluiten">×</button>
-    </div>
+                <!-- Add Step Modal -->
+                <div id="addStepModal" class="modal-overlay hidden" aria-hidden="true">
+                    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="addStepTitle">
+                        <div class="modal-header">
+                            <h2 id="openAddStepModal" class="modal-title">Stap toevoegen</h2>
+                            <button type="button" class="modal-close" id="closeAddStepModal">✕</button>
+                        </div>
 
-    <div class="vmodal-body">
-      <!-- JOUW BESTAANDE CONTENT -->
-      <div class="mb-2">
-        <div id="stepImagePreview" class="step-image-preview"><span class="plus-icon">+</span></div>
-        <input id="stepImage" type="file" accept="image/*" class="hidden" />
-      </div>
+                        <div class="modal-body">
+                            <!-- Jouw bestaande formulier/inputs voor stap toevoegen -->
+                            <label class="classic-categories">Titel</label>
+                            <input id="stepTitleInput" class="adjust-main-input" type="text"
+                                placeholder="Bijv. Zoom in op de scheur">
 
-      <textarea id="stepText" class="custom-input" placeholder="Beschrijving van deze stap..."></textarea>
-    </div>
+                            <label class="classic-categories" style="margin-top:12px;">Beschrijving</label>
+                            <textarea id="stepDescInput" class="adjust-main-input" rows="4"
+                                placeholder="Leg uit wat je doet..."></textarea>
 
-    <div class="vmodal-footer">
-      <button type="button" class="btn-licht-5" data-vmodal-close>Annuleren</button>
-      <button type="button" id="saveStepBtn" class="btn-hoofd-2">Opslaan</button>
-    </div>
-  </div>
-</div>
+                            <label class="classic-categories" style="margin-top:12px;">Foto</label>
+                            <input id="stepPhotoInput" type="file" accept="image/*">
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn-hoofd-1 secondary" id="cancelAddStep">Annuleren</button>
+                            <button type="button" class="btn-hoofd-1" id="confirmAddStep">Toevoegen</button>
+                        </div>
+                    </div>
+                </div>
+
 
 
                 <div id="stepsOverview" class="d-flex flex-column gap-2"></div>
@@ -131,13 +138,12 @@
                 <!-- ================ Upload tutorial ================ -->
                 <button class="btn-hoofd-1" type="submit">Plaats tutorial</button>
                 <button class="btn-hoofd-1" type="button" id="saveDraftBtn">Opslaan als draft</button>
-            </form>
         </main>
         <!-- Source - https://stackoverflow.com/a -->
         <script type="module" src="js/firebase-init.js"></script>
         <script type="module" src="js/make-upload.js"></script>
         <script type="module" src="js/inbox-badge.js"></script>
-    <script type="module" src="js/script.js"></script>
+        <script type="module" src="js/script.js"></script>
     </div>
 </body>
 

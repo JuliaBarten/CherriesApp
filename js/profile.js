@@ -24,7 +24,7 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("saveProfile")?.remove();
     return;
   }
-  
+
   // Alleen hier opslaan toestaan
   document
     .getElementById("saveProfile")
@@ -47,7 +47,8 @@ async function loadProfile(uidToLoad, currentUid) {
   const data = snap.data();
   const usernameEl = document.getElementById("profileUsername");
   const avatarEl = document.getElementById("profileAvatar");
-  const levelEl = document.getElementById("profileLevel");
+  const levelEl = document.getElementById("avatarLevelIcon");
+
 
   if (usernameEl) usernameEl.textContent = data.username;
   if (avatarEl) avatarEl.src = data.avatar || "images/avatar/default.png";

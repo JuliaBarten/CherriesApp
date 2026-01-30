@@ -23,7 +23,7 @@ function showErr(e) {
 
 function revokeIfObjectUrl(url) {
   if (url && typeof url === "string" && url.startsWith("blob:")) {
-    try { URL.revokeObjectURL(url); } catch { }
+    try { URL.revokeObjectURL(url); } catch {}
   }
 }
 
@@ -60,16 +60,29 @@ const stepsOverview = $("stepsOverview");
 
 const publishBtn = $("publishBtn");
 
+console.log("DOM check:", {
+  tutorialId,
+  form: !!form,
+  titleInput: !!titleInput,
+  durationInput: !!durationInput,
+  categorySelect: !!categorySelect,
+  mainImageInput: !!mainImageInput,
+  mainImagePreview: !!mainImagePreview,
+  materialenContainer: !!materialenContainer,
+  stepsOverview: !!stepsOverview,
+  publishBtn: !!publishBtn,
+  stepModalEl: !!stepModalEl,
+  bootstrapModalAvailable: !!window.bootstrap?.Modal
+});
+
 /* ====================== LEVEL ====================== */
 function updateHearts(level) {
   selectedLevel = level;
-
   document.querySelectorAll(".niveau-icon").forEach(icon => {
     const iconLevel = Number(icon.dataset.level);
     icon.src = iconLevel <= level ? "images/icons/heart3.png" : "images/icons/heart4.png";
   });
 }
-
 document.querySelectorAll(".niveau-icon").forEach(icon => {
   icon.addEventListener("click", () => updateHearts(Number(icon.dataset.level)));
 });
@@ -80,7 +93,7 @@ async function loadAllMaterials() {
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
-function renderMaterials(allMaterials, selectedIds) {
+function renderMaterials(allMaterials, selectedIds = []) {
   if (!materialenContainer) return;
   materialenContainer.innerHTML = "";
 
@@ -92,11 +105,17 @@ function renderMaterials(allMaterials, selectedIds) {
     div.dataset.materialId = m.id;
     div.innerText = name;
 
-    if (selectedIds?.includes(m.id)) div.classList.add("selected");
+    if (selectedIds.includes(m.id)) div.classList.add("selected");
     div.addEventListener("click", () => div.classList.toggle("selected"));
 
     materialenContainer.appendChild(div);
   });
+}
+
+function renderMaterialsFallback(selectedIds = []) {
+  // fallback: toon alleen IDs als "Materialen" collectie niet leesbaar is
+  const fallback = selectedIds.map(id => ({ id, Materiaal: id }));
+  renderMaterials(fallback, selectedIds);
 }
 
 function getSelectedMaterials() {
@@ -105,19 +124,31 @@ function getSelectedMaterials() {
 }
 
 /* ====================== MAIN IMAGE PREVIEW ====================== */
+function renderMainPreview(urlOrNull) {
+  if (!mainImagePreview) return;
+  if (urlOrNull) {
+    mainImagePreview.innerHTML = `<img src="${urlOrNull}" alt="Hoofdfoto">`;
+  } else {
+    mainImagePreview.innerHTML = `<span class="plus-icon">+</span>`;
+  }
+}
+
 mainImagePreview?.addEventListener("click", () => mainImageInput?.click());
 
 mainImageInput?.addEventListener("change", () => {
   const file = mainImageInput.files?.[0];
-  if (!file || !mainImagePreview) return;
-  if (currentMainPreviewUrl) revokeIfObjectUrl(currentMainPreviewUrl);
+  if (!file) return;
 
+  if (currentMainPreviewUrl) revokeIfObjectUrl(currentMainPreviewUrl);
   currentMainPreviewUrl = URL.createObjectURL(file);
-  mainImagePreview.innerHTML = `<img src="${currentMainPreviewUrl}" alt="Hoofdfoto preview">`;
+  renderMainPreview(currentMainPreviewUrl);
 });
 
 /* ====================== STEPS MODAL ====================== */
-const stepModal = stepModalEl ? new bootstrap.Modal(stepModalEl) : null;
+// ✅ maak bootstrap modal veilig; geen crash als bootstrap ontbreekt
+const stepModal = (stepModalEl && window.bootstrap?.Modal)
+  ? new bootstrap.Modal(stepModalEl)
+  : null;
 
 function resetStepModal() {
   currentStepTempImageFile = null;
@@ -126,6 +157,7 @@ function resetStepModal() {
   if (stepText) stepText.value = "";
   if (stepImagePreview) stepImagePreview.innerHTML = `<span class="plus-icon">+</span>`;
   editingStepIndex = null;
+
   if (currentStepPreviewUrl) {
     revokeIfObjectUrl(currentStepPreviewUrl);
     currentStepPreviewUrl = null;
@@ -133,7 +165,23 @@ function resetStepModal() {
 }
 
 function openStepModal(editIndex = null) {
-  if (!stepModal || !stepNumberPreview) return;
+  // Fallback: als je geen bootstrap modal hebt, bewerk alleen tekst via prompt
+  if (!stepModal) {
+    const idx = editIndex ?? stepsData.length;
+    const prevText = stepsData[idx]?.text || "";
+    const newText = window.prompt("Bewerk stap tekst:", prevText);
+    if (newText === null) return;
+
+    if (idx === stepsData.length) {
+      stepsData.push({ text: newText, imageFile: null, imagePreviewUrl: null, existingUrl: null });
+    } else {
+      stepsData[idx].text = newText;
+    }
+    renderStepsOverview();
+    return;
+  }
+
+  if (!stepNumberPreview) return;
 
   editingStepIndex = editIndex;
   const stepNumber = editIndex === null ? (stepsData.length + 1) : (editIndex + 1);
@@ -154,6 +202,7 @@ function openStepModal(editIndex = null) {
         : `<span class="plus-icon">+</span>`;
     }
   }
+
   stepModal.show();
 }
 
@@ -161,31 +210,29 @@ function renderStepsOverview() {
   if (!stepsOverview) return;
 
   stepsOverview.innerHTML = "";
-
   stepsData.forEach((s, idx) => {
-    const row = document.createElement("div");
-    row.className = "item-bar";
+    const stepBar= document.createElement("div");
+    stepBar.className = "item-bar";
+
     const preview = s.imagePreviewUrl || s.existingUrl || null;
 
-    row.innerHTML = `
-      <div class="friend-avatar">
+    stepBar.innerHTML = `
+      <div class="tutorial-thumb">
         ${preview
-        ? `<img src="${preview}" alt="stap">`
-        : `<img src="images/icons/make1.png" alt="stap">`
-      }
+          ? `<img src="${preview}" alt="stap">`
+          : `<img src="images/icons/make1.png" alt="stap">`
+        }
       </div>
-      <div class="friend-info">
+      <div class="item-info">
         <div class="friend-top">
           <div class="friend-username">Stap ${idx + 1}</div>
         </div>
-        <div class="friend-actions">
           <div class="friend-status">${safeText(s.text).slice(0, 40)}${safeText(s.text).length > 40 ? "…" : ""}</div>
-        </div>
       </div>
     `;
 
-    row.addEventListener("click", () => openStepModal(idx));
-    stepsOverview.appendChild(row);
+    stepBar.addEventListener("click", () => openStepModal(idx));
+    stepsOverview.appendChild(stepBar);
   });
 }
 
@@ -195,25 +242,19 @@ stepImagePreview?.addEventListener("click", () => stepImageInput?.click());
 stepImageInput?.addEventListener("change", () => {
   const file = stepImageInput.files?.[0];
   if (!file || !stepImagePreview) return;
-  if (currentStepPreviewUrl) revokeIfObjectUrl(currentStepPreviewUrl);
 
+  if (currentStepPreviewUrl) revokeIfObjectUrl(currentStepPreviewUrl);
   currentStepTempImageFile = file;
   currentStepPreviewUrl = URL.createObjectURL(file);
   stepImagePreview.innerHTML = `<img src="${currentStepPreviewUrl}" alt="stap foto preview">`;
 });
 
 saveStepBtn?.addEventListener("click", () => {
-  if (editingStepIndex !== null && currentStepTempImageFile) {
-    const oldUrl = stepsData[editingStepIndex]?.imagePreviewUrl;
-    revokeIfObjectUrl(oldUrl);
-  }
-
   const text = stepText?.value?.trim() || "";
   const prev = editingStepIndex !== null ? stepsData[editingStepIndex] : null;
+
   const imageFile = currentStepTempImageFile || prev?.imageFile || null;
-  const imagePreviewUrl = currentStepTempImageFile
-    ? currentStepPreviewUrl
-    : (prev?.imagePreviewUrl || null);
+  const imagePreviewUrl = currentStepTempImageFile ? currentStepPreviewUrl : (prev?.imagePreviewUrl || null);
 
   const stepObj = {
     text,
@@ -287,17 +328,33 @@ async function loadTutorial(user) {
     return;
   }
 
+  console.log("EDIT load tutorial:", {
+    id: tutorialId,
+    title: t.title,
+    duration: t.duration,
+    category: t.category,
+    level: t.level,
+    materialsCount: (t.materials || []).length,
+    hasMainImageUrl: !!t.mainImageUrl,
+    stepsCount: (t.steps || []).length
+  });
+
+  // velden invullen
   if (titleInput) titleInput.value = t.title || "";
   if (durationInput) durationInput.value = t.duration || "00:00";
   if (categorySelect) categorySelect.value = t.category || "";
 
+  // check: is duration echt gezet?
+  console.log("duration input now:", durationInput?.value);
+
+  // level
   selectedLevel = t.level || 1;
   updateHearts(selectedLevel);
 
-  if (mainImagePreview && t.mainImageUrl) {
-    mainImagePreview.innerHTML = `<img src="${t.mainImageUrl}" alt="Hoofdfoto">`;
-  }
+  // main preview altijd iets tonen
+  renderMainPreview(t.mainImageUrl || null);
 
+  // steps
   stepsData = (t.steps || []).map(s => ({
     text: s.text || "",
     imageFile: null,
@@ -306,9 +363,15 @@ async function loadTutorial(user) {
   }));
   renderStepsOverview();
 
-  // materialen
-  const allMaterials = await loadAllMaterials();
-  renderMaterials(allMaterials, t.materials || []);
+  // materialen (met fallback)
+  try {
+    const allMaterials = await loadAllMaterials();
+    renderMaterials(allMaterials, t.materials || []);
+    console.log("materials rendered OK");
+  } catch (e) {
+    console.error("loadAllMaterials FAILED:", e?.code, e?.message);
+    renderMaterialsFallback(t.materials || []);
+  }
 
   if (statusText) statusText.textContent = t.draft ? "Status: draft" : "Status: gepubliceerd";
 }
@@ -319,7 +382,6 @@ async function saveWithoutPublishing(user) {
   const category = categorySelect?.value || "";
   const duration = durationInput?.value || "00:00";
 
-  // 1) main image uploaden als er een nieuwe gekozen is
   const mainFile = mainImageInput?.files?.[0] || null;
   let mainImageUrl = tutorialCache?.mainImageUrl || null;
 
@@ -327,10 +389,8 @@ async function saveWithoutPublishing(user) {
     mainImageUrl = await uploadMainImage(user.uid, tutorialId, mainFile);
   }
 
-  // 2) step images uploaden als er nieuwe files gekozen zijn
   const stepsForDb = await uploadSteps(user.uid, tutorialId);
 
-  // 3) draft status NIET veranderen bij opslaan
   await updateDoc(doc(db, "tutorials", tutorialId), {
     title,
     category,
@@ -342,7 +402,6 @@ async function saveWithoutPublishing(user) {
     lastEditedAt: serverTimestamp()
   });
 
-  // 4) cache bijwerken zodat publish/update later klopt
   tutorialCache = {
     ...(tutorialCache || {}),
     title,
@@ -354,7 +413,6 @@ async function saveWithoutPublishing(user) {
     steps: stepsForDb
   };
 
-  // 5) stepsData opnieuw syncen (zodat previews en existingUrl kloppen)
   stepsData = stepsForDb.map(s => ({
     text: s.text || "",
     imageFile: null,

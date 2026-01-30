@@ -92,3 +92,22 @@ onAuthStateChanged(auth, async (user) => {
   }
 
 });
+
+const btnMy = document.getElementById("btnMy");
+const btnMade = document.getElementById("btnMade");
+const my = document.getElementById("myTutorials");
+const made = document.getElementById("madeTutorials");
+
+btnMy?.addEventListener("click", () => {
+  btnMy.classList.add("active");
+  btnMade.classList.remove("active");
+  my.style.display = "block";
+  made.style.display = "none";
+});
+
+btnMade?.addEventListener("click", () => {
+  btnMade.classList.add("active");
+  btnMy.classList.remove("active");
+  my.style.display = "none";
+  made.style.display = "block";
+});

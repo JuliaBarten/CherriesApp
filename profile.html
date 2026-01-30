@@ -27,7 +27,7 @@
     </header>
 
     <footer class="fixed-bottom navbar">
-      <div class="d-flex justify-content-around py-2">
+      <div class="justify-content-around py-2">
         <a href="inspiration.html" class="text-center nav-item">
           <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
         </a>
@@ -56,15 +56,15 @@
     <main>
       <div class="classic-outline profiel-main">
         <!-- ================ Profile Card ================ -->
-        <div class="profile-card text-center position-relative">
-          <a id="editProfileBtn" href="profile-change.html" class="adjust-btn position-absolute">
-            <img src="images/icons/edit.png" alt="Aanpassen" width="30" height="30"> </a>
+        <div class="profile-card text-center">
+          <a id="editProfileBtn" href="profile-change.html" class="adjust-btn">
+            <img src="images/icons/edit.png" alt="Aanpassen"></a>
           <div class="avatar-wrapper position-relative d-inline-block">
             <img id="profileAvatar" src="images/icons/avatar.png" alt="Avatar" class="avatar-img">
             <input type="file" id="avatarInput" accept="image/*" style="display:none;">
             <img id="avatarLevelIcon" src="images/icons/niveau_1.png" alt="Niveau" class="level-badge">
           </div>
-          <h1 id="profileUsername" class="username_txt">Gebruikersnaam</h1>
+          <h1 id="profileUsername" class="username-txt">Gebruikersnaam</h1>
         </div>
 
         <!-- ================ Materialen ================ -->
@@ -90,9 +90,7 @@
     </main>
 
     <script type="module" src="js/firebase-init.js"></script>
-    <script type="module" src="js/usersProfile.js"></script>
     <script type="module" src="js/profile-page.js"></script>
-    <script type="module" src="js/profile.js"></script>
     <script type="module" src="js/inbox-badge.js"></script>
     <script type="module" src="js/script.js"></script>
 

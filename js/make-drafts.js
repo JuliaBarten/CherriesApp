@@ -42,9 +42,13 @@ onAuthStateChanged(auth, async (user) => {
         <img src="${t.mainImageUrl || 'images/icons/garen.png'}">
       </div>
       <div class="item-info">
-        <h1>${t.title || "Naamloos project"}</h1>
-        <h5>Laatste bewerking: ${t.lastEditedAt ? new Date(t.lastEditedAt.seconds * 1000).toLocaleDateString() : 'Onbekend'}</h5>
-      </div>
+       <strong>${t.title || "Naamloos project"}</strong>
+    <span class="friend-status" >Laatste bewerkt:
+      ${t.lastEditedAt ? new Date(t.lastEditedAt.seconds * 1000).toLocaleDateString("nl-NL", {
+        day: "2-digit", month: "2-digit"
+      }) : "Onbekend"}
+    </span>
+       </div>
     `;
 
     card.addEventListener("click", () => {

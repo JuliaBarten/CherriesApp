@@ -10,10 +10,10 @@
 ">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-      <link rel="stylesheet" href="css/standardized-styles.css" />
-  <link rel="stylesheet" href="css/specific-styles.css" />
-  <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="stylesheet" href="css/standardized-styles.css" />
+    <link rel="stylesheet" href="css/specific-styles.css" />
+    <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
 </head>
 
 <body>
@@ -55,102 +55,103 @@
         </footer>
 
         <main>
-                <form class="make-form d-flex classic-outline" id="editForm" novalidate>
-                    <!-- Hoofdfoto -->
-                    <div class="main-image-preview" id="mainImagePreview">
-                        <span class="plus-icon">+</span>
-                    </div>
-                    <input type="file" id="mainImage" accept="image/*" hidden>
+            <form class="make-form classic-outline" id="editForm" novalidate>
+                <!-- Hoofdfoto -->
+                <div class="main-image-preview" id="mainImagePreview">
+                    <span class="plus-icon">+</span>
+                </div>
+                <input type="file" id="mainImage" accept="image/*" hidden>
 
-                    <!-- Titel -->
-                    <div class="input-group">
-                        <input class="custom-input" type="text" id="titel" placeholder="Titel" required />
-                    </div>
+                <!-- Titel -->
+                <div class="input-group">
+                    <input class="custom-input" type="text" id="titel" placeholder="Titel" required />
+                </div>
 
-                    <!-- Niveau -->
-                    <div class="profile-section mb-3 text-center">
-                        <label class="classic-categories">Skill - Niveau</label>
-                        <div id="niveauHearts" class="d-flex justify-content-center gap-1">
-                            <img src="images/icons/heart3.png" data-level="1" class="niveau-icon" width="40"
-                                height="40">
-                            <img src="images/icons/heart3.png" data-level="2" class="niveau-icon" width="40"
-                                height="40">
-                            <img src="images/icons/heart3.png" data-level="3" class="niveau-icon" width="40"
-                                height="40">
-                            <img src="images/icons/heart3.png" data-level="4" class="niveau-icon" width="40"
-                                height="40">
-                            <img src="images/icons/heart3.png" data-level="5" class="niveau-icon" width="40"
-                                height="40">
+                <!-- Niveau -->
+                <div class="profile-section mb-3 text-center">
+                    <label class="classic-categories">Skill - Niveau</label>
+                    <div id="niveauHearts" class="d-flex justify-content-center gap-1">
+                        <img src="images/icons/heart3.png" data-level="1" class="niveau-icon" width="40" height="40">
+                        <img src="images/icons/heart3.png" data-level="2" class="niveau-icon" width="40" height="40">
+                        <img src="images/icons/heart3.png" data-level="3" class="niveau-icon" width="40" height="40">
+                        <img src="images/icons/heart3.png" data-level="4" class="niveau-icon" width="40" height="40">
+                        <img src="images/icons/heart3.png" data-level="5" class="niveau-icon" width="40" height="40">
+                    </div>
+                </div>
+
+                <!-- Duur -->
+                <div class="make-section d-flex">
+                    <input id="duration-input" class="custom-input" type="text" pattern="[0-9]{2}:[0-9]{2}"
+                        value="00:00" required />
+                    <img src="images/icons/tijd_klok.png" class="time-icon" />
+                </div>
+
+                <!-- Categorie -->
+                <select id="tutorialCategory" class="custom-input" required>
+                    <option value="">Selecteer categorie</option>
+                    <option value="broek">Broek</option>
+                    <option value="legging">Legging</option>
+                    <option value="trui/vest">Trui/Vest</option>
+                    <option value="shirt">Shirt</option>
+                    <option value="rok">Rok</option>
+                    <option value="jurk">Jurk</option>
+                    <option value="overig">Overig</option>
+                </select>
+
+                <!-- Materialen -->
+                <div class="make-section mb-4">
+                    <label class="classic-categories">Materialen</label>
+                    <div id="materialenContainer" class="d-flex flex-wrap gap-2"></div>
+                </div>
+
+               <!----------------stappen modal ------------>
+                <!-- Add Step Modal -->
+                <div id="addStepModal" class="modal-overlay hidden" aria-hidden="true">
+                    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="addStepTitle">
+                        <div class="modal-header">
+                            <h2 id="openAddStepModal" class="modal-title">Stap toevoegen</h2>
+                            <button type="button" class="modal-close" id="closeAddStepModal">✕</button>
+                        </div>
+
+                        <div class="modal-body">
+                            <!-- Jouw bestaande formulier/inputs voor stap toevoegen -->
+                            <label class="classic-categories">Titel</label>
+                            <input id="stepTitleInput" class="adjust-main-input" type="text"
+                                placeholder="Bijv. Zoom in op de scheur">
+
+                            <label class="classic-categories" style="margin-top:12px;">Beschrijving</label>
+                            <textarea id="stepDescInput" class="adjust-main-input" rows="4"
+                                placeholder="Leg uit wat je doet..."></textarea>
+
+                            <label class="classic-categories" style="margin-top:12px;">Foto</label>
+                            <input id="stepPhotoInput" type="file" accept="image/*">
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn-hoofd-1 secondary" id="cancelAddStep">Annuleren</button>
+                            <button type="button" class="btn-hoofd-1" id="confirmAddStep">Toevoegen</button>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Duur -->
-                    <div class="make-section d-flex">
-                        <input id="duration-input" class="custom-input" type="text" pattern="[0-9]{2}:[0-9]{2}"
-                            value="00:00" required />
-                        <img src="images/icons/tijd_klok.png" class="time-icon" />
-                    </div>
 
-                    <!-- Categorie -->
-                    <select id="tutorialCategory" class="custom-input" required>
-                        <option value="">Selecteer categorie</option>
-                        <option value="broek">Broek</option>
-                        <option value="legging">Legging</option>
-                        <option value="trui/vest">Trui/Vest</option>
-                        <option value="shirt">Shirt</option>
-                        <option value="rok">Rok</option>
-                        <option value="jurk">Jurk</option>
-                        <option value="overig">Overig</option>
-                    </select>
+                <div id="stepsOverview" class="d-flex flex-column gap-2"></div>
+                <button class="btn-hoofd-2" type="button" id="addStepBtn">+ Nieuwe stap</button>
 
-                    <!-- Materialen -->
-                    <div class="make-section mb-4">
-                        <label class="classic-categories">Materialen</label>
-                        <div id="materialenContainer" class="d-flex flex-wrap gap-2"></div>
-                    </div>
+                <!-- Actions -->
+                <div class="d-flex">
+                    <button class="btn-hoofd-1" type="submit" id="saveBtn">Opslaan</button>
+                    <button class="btn-hoofd-1" type="button" id="publishBtn">Publiceer</button>
+                </div>
 
-                    <!-- Stappen modal -->
-                    <div class="modal fade" id="stepModal" tabindex="-1">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content classic-outline">
-                                <div class="modal-header">
-                                    <h2>Stap <span id="stepNumberPreview"></span></h2>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-
-                                <div class="modal-body">
-                                    <div id="stepImagePreview" class="step-image-preview upload-btn mb-3">
-                                        <span class="plus-icon">+</span>
-                                    </div>
-                                    <input type="file" id="stepImage" accept="image/*" hidden>
-                                    <textarea id="stepText" class="custom-input"
-                                        placeholder="Uitleg bij deze stap"></textarea>
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button class="btn-hoofd-1" type="button" id="saveStepBtn">Stap opslaan</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="stepsOverview" class="d-flex flex-column gap-2"></div>
-                    <button class="btn-hoofd-2" type="button" id="addStepBtn">+ Nieuwe stap</button>
-
-                    <!-- Actions -->
-                    <div class="d-flex">
-                        <button class="btn-hoofd-1" type="submit" id="saveBtn">Opslaan</button>
-                        <button class="btn-hoofd-1" type="button" id="publishBtn">Publiceer</button>
-                    </div>
-
-                    <small id="statusText" class="titel"></small>
-                </form>
+                <small id="statusText" class="titel"></small>
+            </form>
         </main>
 
         <script type="module" src="js/firebase-init.js"></script>
         <script type="module" src="js/make-edit.js"></script>
         <script type="module" src="js/inbox-badge.js"></script>
-    <script type="module" src="js/script.js"></script>
+        <script type="module" src="js/script.js"></script>
 
     </div>
 </body>

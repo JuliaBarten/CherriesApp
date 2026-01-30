@@ -33,7 +33,7 @@ function safeText(v) {
 
 function renderHero(t) {
   const img = t.mainImageUrl
-    ? `<img src="${t.mainImageUrl}" alt="${safeText(t.title)}" style="width:100%; border-radius: var(--borderknop); box-shadow: var(--schaduw);">`
+    ? `<img src="${t.mainImageUrl}" alt="${safeText(t.title)}" style="width:100%;">`
     : `<div class="step-image-placeholder">Geen hoofdfoto</div>`;
 
   heroEl.innerHTML = img;
@@ -87,7 +87,6 @@ async function renderMaterials(tutorial) {
 }
 
 function renderMetaSimple(t) {
-  // we gebruiken je bestaande container #projectMeta
   const container = metaEl;
   if (!container) return;
 
@@ -100,7 +99,7 @@ function renderMetaSimple(t) {
       <img src="images/icons/niveau_${level}.png" alt="Niveau ${level}" style="width:50px; height:50px;">
       <div class="d-flex align-items-center gap-2">
         <img src="images/icons/tijd_klok.png" alt="Tijd" style="width:50px; height:50px;">
-        <span>${duration}</span>
+        <h4>${duration}</h4> 
         </div>
     </div>
   `;
@@ -120,8 +119,8 @@ function renderLevelAndTime(tutorial) {
   const levelImg = document.createElement("img");
   levelImg.src = `images/icons/niveau_${level}.png`;
   levelImg.alt = `Niveau ${level}`;
-  levelImg.style.width = "32px";
-  levelImg.style.height = "32px";
+  levelImg.style.width = "60px";
+  levelImg.style.height = "60px";
   levelWrapper.appendChild(levelImg);
 
   if (duration) {
@@ -131,7 +130,8 @@ function renderLevelAndTime(tutorial) {
     const timeIcon = document.createElement("img");
     timeIcon.src = "images/icons/tijd_klok.png";
     timeIcon.alt = "Tijd";
-    timeIcon.style.width = "18px";
+    timeIcon.style.width = "60px";
+    timeIcon.style.height = "60px";
 
     const timeText = document.createElement("span");
     timeText.textContent = duration;
@@ -142,6 +142,7 @@ function renderLevelAndTime(tutorial) {
 
   container.appendChild(levelWrapper);
 }
+
 
 async function setupButtons(user, t) {
   if (user && user.uid === t.authorId) {
@@ -202,12 +203,21 @@ async function loadTutorial(user) {
     const isOwner = user && user.uid === t.authorId;
     console.log("tutorial loaded:", { id: tutorialId, draft: t.draft, authorId: t.authorId });
 
+    const authorEl = document.getElementById("projectAuthor");
+    if (authorEl) {
+      const authorSnap = await getDoc(doc(db, "users", t.authorId));
+    if (authorSnap.exists()) {
+      const authorData = authorSnap.data();
+    }
+  }
+
 
     if (t.draft === true && !isOwner) {
       alert("Deze make is nog een draft en is niet zichtbaar voor anderen.");
       window.location.href = "inspiration.html";
       return;
     }
+console.log("duration from firestore:", t.duration);
 
     renderHero(t);
     titleEl.textContent = safeText(t.title || "Make");

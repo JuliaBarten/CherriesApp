@@ -30,8 +30,7 @@ async function loadFavorites(userId) {
   if (!container) return;
 
   container.innerHTML = "";
-  // gebruik dezelfde wrapper vibe als je andere lijsten
-  container.className = "d-flex flex-column gap-2";
+  container.className = "favorites-list";
 
   const favSnap = await getDocs(collection(db, "users", userId, "favorites"));
 
@@ -62,8 +61,8 @@ async function loadFavorites(userId) {
     const t = tutorials.get(tutorialId);
     if (!t) continue;
 
-    const row = document.createElement("div");
-    row.className = "item-bar"; // ✅ zelfde stijl als je “balken”
+    const fav = document.createElement("div");
+    fav.className = "item-bar";
 
     const thumb = t.mainImageUrl
       ? `<img src="${t.mainImageUrl}" alt="${safeText(t.title)}">`
@@ -73,7 +72,7 @@ async function loadFavorites(userId) {
     const title = safeText(t.title || "Zonder titel");
     const lvl = Math.min(5, Math.max(1, Number(t.level || 1)));
 
-    row.innerHTML = `
+    fav.innerHTML = `
       <div class="tutorial-thumb">
         ${thumb}
       </div>
@@ -102,16 +101,16 @@ async function loadFavorites(userId) {
     `;
 
     // klik op rij -> open tutorial
-    row.addEventListener("click", () => {
+    fav.addEventListener("click", () => {
       window.location.href = `make-project.html?id=${tutorialId}`;
     });
 
     // klik op verwijderen -> niet doorklikken
-    row.querySelector(".fav-remove-btn")?.addEventListener("click", async (e) => {
+    fav.querySelector(".fav-remove-btn")?.addEventListener("click", async (e) => {
       e.preventDefault();
       e.stopPropagation();
       await deleteDoc(doc(db, "users", userId, "favorites", tutorialId));
-      row.remove();
+      fav.remove();
 
       // lege state na verwijderen van laatste
       if (!container.querySelector(".item-bar")) {
@@ -121,7 +120,7 @@ async function loadFavorites(userId) {
       }
     });
 
-    container.appendChild(row);
+    container.appendChild(fav);
   }
 }
 

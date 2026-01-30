@@ -1,103 +1,113 @@
 import { auth, db } from "./firebase-init.js";
-import {collection,
+import {
+  collection,
   getDocs,
   doc,
   setDoc,
   getDoc,
   deleteDoc,
   query,
-  where, serverTimestamp} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+  where,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 /* =================== STATE =================== */
 let tutorialCache = null;
 let favoriteCache = [];
-let allMaterials = [];
 let userMaterials = [];
 let materialMode = "all";
 let activeSort = "new";
+let activeCategory = ""; // "" = alles
+let activeLevel = "";    // "" = alle niveaus
+let myLevel = 0;
 
-/* =================== HELPERS =================== */
+/* =================== UI =================== */
 const filterToggle = document.getElementById("filterToggle");
 const filterDropdown = document.getElementById("filterDropdown");
 const applyFiltersBtn = document.getElementById("applyFilters");
+const sortSelect = document.getElementById("sortSelect");
 
 filterToggle?.addEventListener("click", () => {
   filterDropdown?.classList.toggle("open");
 });
 
 applyFiltersBtn?.addEventListener("click", () => {
+  readUiFilters();
+  renderTutorialsFiltered();
   filterDropdown?.classList.remove("open");
 });
 
+sortSelect?.addEventListener("change", () => {
+  activeSort = sortSelect.value;
+  renderTutorialsFiltered();
+});
+
+/* =================== HELPERS =================== */
+function safeSeconds(ts) {
+  return ts?.seconds || 0;
+}
+
 function renderHearts(level = 0) {
   let html = "";
-  for (let i = 0; i < (level || 0); i++) {
+  for (let i = 0; i < level; i++) {
     html += `<img src="images/icons/heart3.png" class="tut-card-ic" alt="hart">`;
   }
   return html;
 }
 
-function safeSeconds(ts) {
-  return ts?.seconds || 0;
-}
-
 /* =================== FAVORIETEN =================== */
-async function loadFavorites(userId) {
-  const snap = await getDocs(collection(db, "users", userId, "favorites"));
+async function loadFavorites(uid) {
+  const snap = await getDocs(collection(db, "users", uid, "favorites"));
   favoriteCache = snap.docs.map(d => d.id);
 }
 
-async function addFavorite(userId, tutorialId) {
-  await setDoc(doc(db, "users", userId, "favorites", tutorialId), {
-    createdAt: serverTimestamp?.() || new Date()
+async function addFavorite(uid, tutorialId) {
+  await setDoc(doc(db, "users", uid, "favorites", tutorialId), {
+    createdAt: serverTimestamp()
   });
   if (!favoriteCache.includes(tutorialId)) favoriteCache.push(tutorialId);
 }
 
-async function removeFavorite(userId, tutorialId) {
-  await deleteDoc(doc(db, "users", userId, "favorites", tutorialId));
+async function removeFavorite(uid, tutorialId) {
+  await deleteDoc(doc(db, "users", uid, "favorites", tutorialId));
   favoriteCache = favoriteCache.filter(id => id !== tutorialId);
 }
 
-/* =================== TUTORIALS =================== */
+/* =================== RENDER =================== */
 function renderSingleTutorial(t) {
   const grid = document.getElementById("tutorialGrid");
-  if (!grid) return;
-  if (t.draft === true) return;
+  if (!grid || t.draft) return;
 
   const isFavorite = favoriteCache.includes(t.id);
   const card = document.createElement("div");
   card.className = "tutorial-card";
 
   card.innerHTML = `
-    <img src="${t.mainImageUrl || ""}" alt="${t.title || "tutorial"}" class="tutorial-image">
+    <img src="${t.mainImageUrl || ""}" class="tutorial-image">
     <div class="favorite-btn">
-      <img src="images/icons/${isFavorite ? "fav_aan.png" : "fav_uit.png"}" alt="Favoriet">
+      <img src="images/icons/${isFavorite ? "fav_aan.png" : "fav_uit.png"}">
     </div>
     <div class="overlay-make">
-      <div class="overlay-row hearts-row">
-        ${renderHearts(t.level)}
-      </div>
+      <div class="overlay-row hearts-row">${renderHearts(t.level)}</div>
       <div class="overlay-row time-row">
         <span>${t.duration || ""}</span>
-        <img src="images/icons/tijd_klok.png" alt="klok">
+        <img src="images/icons/tijd_klok.png">
       </div>
     </div>
   `;
 
-  const favIcon = card.querySelector(".favorite-btn img");
-  favIcon?.addEventListener("click", async (e) => {
+  card.querySelector(".favorite-btn img")?.addEventListener("click", async (e) => {
     e.stopPropagation();
     const uid = auth.currentUser?.uid;
     if (!uid) return;
 
-    if (favoriteCache.includes(t.id)) {
+    if (isFavorite) {
       await removeFavorite(uid, t.id);
-      favIcon.src = "images/icons/fav_uit.png";
+      e.target.src = "images/icons/fav_uit.png";
     } else {
       await addFavorite(uid, t.id);
-      favIcon.src = "images/icons/fav_aan.png";
+      e.target.src = "images/icons/fav_aan.png";
     }
   });
 
@@ -108,59 +118,51 @@ function renderSingleTutorial(t) {
   grid.appendChild(card);
 }
 
+/* =================== FILTER LOGICA =================== */
+function readUiFilters() {
+  activeCategory = document.getElementById("categorySelect")?.value || "";
+  activeLevel = document.getElementById("levelSelect")?.value || "";
+}
+
 function renderTutorialsFiltered() {
   const grid = document.getElementById("tutorialGrid");
-  if (!grid) return;
+  if (!grid || !tutorialCache) return;
   grid.innerHTML = "";
 
-  if (!tutorialCache) return;
+  let list = [...tutorialCache];
 
-  let tutorialsToRender = tutorialCache;
+  // materialen
   if (materialMode === "mine") {
-    tutorialsToRender = tutorialsToRender.filter(t =>
-      t.materials?.some(m => userMaterials.includes(m))
-    );
+    list = list.filter(t => t.materials?.some(m => userMaterials.includes(m)));
   }
 
-  tutorialsToRender.sort((a, b) => {
+  // categorie
+  if (activeCategory) {
+    list = list.filter(t => t.category === activeCategory);
+  }
+
+  // niveau
+  if (activeLevel === "myLevelOnly" && myLevel > 0) {
+    list = list.filter(t => Number(t.level) === myLevel);
+  }
+  if (activeLevel === "myLevelOrLower" && myLevel > 0) {
+    list = list.filter(t => Number(t.level) <= myLevel);
+  }
+
+  // sorteren
+  list.sort((a, b) => {
     switch (activeSort) {
-      case "old":
-        return safeSeconds(a.createdAt) - safeSeconds(b.createdAt);
-      case "timeAsc":
-        return (a.duration || "").localeCompare(b.duration || "");
-      case "timeDesc":
-        return (b.duration || "").localeCompare(a.duration || "");
-      default:
-        return safeSeconds(b.createdAt) - safeSeconds(a.createdAt);
+      case "old": return safeSeconds(a.createdAt) - safeSeconds(b.createdAt);
+      case "timeAsc": return (a.duration || "").localeCompare(b.duration || "");
+      case "timeDesc": return (b.duration || "").localeCompare(a.duration || "");
+      default: return safeSeconds(b.createdAt) - safeSeconds(a.createdAt);
     }
   });
 
-  tutorialsToRender.forEach(renderSingleTutorial);
+  list.forEach(renderSingleTutorial);
 }
 
-/* =================== MATERIALEN =================== */
-async function loadAllMaterials() {
-  const snap = await getDocs(collection(db, "Materialen"));
-  allMaterials = snap.docs.map(docSnap => docSnap.data().Materiaal || docSnap.data().naam || docSnap.id);
-}
-
-async function loadUserMaterials(user) {
-  console.log("AUTH UID:", user?.uid);
-
-  const userRef = doc(db, "users", user.uid);
-  console.log("USER DOC PATH:", userRef.path);
-
-  const snap = await getDoc(userRef);
-  console.log("USER DOC EXISTS:", snap.exists());
-
-  if (!snap.exists()) {
-    userMaterials = [];
-    return;
-  }
-
-  userMaterials = snap.data()?.materialsOwned || [];
-}
-
+/* =================== MATERIAL FILTER =================== */
 function setupMaterialFilters() {
   const btnAll = document.getElementById("materialsAll");
   const btnMine = document.getElementById("materialsMine");
@@ -180,62 +182,23 @@ function setupMaterialFilters() {
   });
 }
 
-const sortSelect = document.getElementById("sortSelect");
-sortSelect?.addEventListener("change", () => {
-  activeSort = sortSelect.value;
-  renderTutorialsFiltered();
-});
-
-/* =================== INIT AUTH =================== */
+/* =================== INIT =================== */
 onAuthStateChanged(auth, async (user) => {
   if (!user) return;
 
-  console.log("INIT: signed in", user.uid);
-
-  try {
-    console.log("INIT: loadUserMaterials...");
-    await loadUserMaterials(user);
-    console.log("INIT: loadUserMaterials OK");
-  } catch (e) {
-    console.error("INIT: loadUserMaterials FAILED", e);
-    return;
+  const userSnap = await getDoc(doc(db, "users", user.uid));
+  if (userSnap.exists()) {
+    userMaterials = userSnap.data()?.materialsOwned || [];
+    myLevel = Number(userSnap.data()?.level || 0);
   }
 
-  try {
-    console.log("INIT: loadAllMaterials...");
-    await loadAllMaterials();
-    console.log("INIT: loadAllMaterials OK");
-  } catch (e) {
-    console.error("INIT: loadAllMaterials FAILED", e);
-    return;
-  }
-
-  try {
-    console.log("INIT: loadFavorites...");
-    await loadFavorites(user.uid);
-    console.log("INIT: loadFavorites OK");
-  } catch (e) {
-    console.error("INIT: loadFavorites FAILED", e);
-    return;
-  }
-
-  materialMode = "all";
-  activeSort = "new";
+  await loadFavorites(user.uid);
   setupMaterialFilters();
 
-  try {
-    if (!tutorialCache) {
-      console.log("INIT: load tutorials...");
-      const q = query(collection(db, "tutorials"), where("draft", "==", false));
-      const snap = await getDocs(q);
-      tutorialCache = snap.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
-      console.log("INIT: tutorials OK", tutorialCache.length);
-    }
-  } catch (e) {
-    console.error("INIT: load tutorials FAILED", e);
-    return;
-  }
+  const snap = await getDocs(
+    query(collection(db, "tutorials"), where("draft", "==", false))
+  );
 
+  tutorialCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   renderTutorialsFiltered();
 });
-

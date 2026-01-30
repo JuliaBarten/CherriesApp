@@ -161,6 +161,7 @@ button {
     --font: "puffin-arcade-regular", sans-serif;
 
     /* border */
+    --bordercard: 25px;
     --borderknop: 18px;
     --bordertoggle: 12px;
     --borderfoto: 12px;
@@ -194,13 +195,17 @@ h2 {
     text-align: center;
 }
 
+h3 {
+    font-size: var(--size4);
+    color: var(--textdonker);
+    font-family: var(--font);
+}
+
 h4 {
     font-size: var(--size3);
     color: var(--textmid);
     font-family: var(--font);
     display: inline;
-    margin-top: 10px;
-    margin-bottom: 10px;
 }
 
 h5 {
@@ -341,6 +346,7 @@ footer {
 
 .nav-item {
     position: relative;
+    margin: 5px;
 }
 
 .nav-item::before {
@@ -463,9 +469,11 @@ footer {
 
 .classic-categories {
     width: 100%;
-    height: 40px;
+    height: auto;
     display: block;
-    color: var(--textdonker);
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: var(--textlicht);
     background-color: var(--mid);
     border: none;
     margin-top: var(--margstandard);
@@ -563,6 +571,7 @@ body.modal-open {
     padding: 10px;
     margin: 10px;
     width: 90%;
+    height: 85px;
     border-radius: var(--borderknop);
     background: var(--ipvwit);
     box-shadow: var(--schaduw);
@@ -616,22 +625,11 @@ body.modal-open {
 
 .item-info {
     flex: 1;
-    padding-left: 25px;
-    display: inline;
+    padding-left: 15px;
+    display: flex;
     flex-direction: column;
     justify-content: center;
-}
-
-.item-info .item-btn {
-    padding: 5px 10px;
-    font-size: var(--size2);
-    border: none;
-    border-radius: 6px;
-    background-color: var(--hoofd);
-    color: var(--textlicht);
-    cursor: pointer;
-    width: fit-content;
-    transition: background-color 0.2s;
+    font-family: var(--font);
 }
 
 .del-icon {
@@ -792,9 +790,6 @@ body.modal-open {
     font-style: italic;
 }
 
-.input-group {
-    margin-top: 10px;
-}
 
 .form-select {
     width: 90%;

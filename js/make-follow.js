@@ -3,6 +3,7 @@ import {
     doc,
     getDoc,
     setDoc,
+    updateDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
@@ -20,6 +21,30 @@ const pauseBtn = document.getElementById("pauseBtn");
 
 let tutorial = null;
 let uid = null;
+
+
+
+async function markStarted(tutorialId) {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  await setDoc(
+    doc(db, "users", user.uid, "madeMakes", tutorialId),
+    { tutorialId, status: "in_progress", startedAt: serverTimestamp() },
+    { merge: true }
+  );
+}
+
+
+async function markCompleted(tutorialId) {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  await updateDoc(
+    doc(db, "users", user.uid, "madeMakes", tutorialId),
+    { status: "completed", completedAt: serverTimestamp() }
+  );
+}
 
 function clamp(n, min, max) {
     return Math.max(min, Math.min(max, n));

@@ -16,7 +16,8 @@ onAuthStateChanged(auth, async (user) => {
   const isOwnProfile = uidToLoad === user.uid;
 
   // 3) Laad profieldata voor uidToLoad
-  await loadProfile(uidToLoad);
+await loadProfile(uidToLoad, user.uid);
+
 
   // 4) Verberg edit-knop als je iemand anders bekijkt
   if (!isOwnProfile) {

@@ -116,70 +116,63 @@ mainImageInput?.addEventListener("change", () => {
 });
 
 /* ====================== STEPS (MODAL) ====================== */
-// ✅ bootstrap eruit: vanilla modal
-const stepModal = stepModalEl ? createModal(stepModalEl) : null;
+const modal = document.getElementById("addStepModal");
+const openBtn = document.getElementById("addStepBtn");
+const closeBtn = document.getElementById("closeAddStepModal");
+const cancelBtn = document.getElementById("cancelAddStep");
 
-function resetStepModal() {
-  currentStepTempImageFile = null;
-  if (stepImageInput) stepImageInput.value = "";
-  if (stepText) stepText.value = "";
-  if (stepImagePreview) stepImagePreview.innerHTML = `<span class="plus-icon">+</span>`;
-  editingStepIndex = null;
+function openModal() {
+  modal.classList.remove("hidden");
+  document.body.classList.add("modal-open");
+  modal.setAttribute("aria-hidden", "false");
 }
 
-function openStepModal(editIndex = null) {
-  if (!stepModal) return;
-
-  editingStepIndex = editIndex;
-  const stepNumber = editIndex === null ? (stepsData.length + 1) : (editIndex + 1);
-  if (stepNumberPreview) stepNumberPreview.textContent = String(stepNumber);
-
-  if (editIndex === null) {
-    resetStepModal();
-  } else {
-    const s = stepsData[editIndex];
-    currentStepTempImageFile = null;
-    if (stepText) stepText.value = s?.text || "";
-    const preview = s?.imagePreviewUrl || s?.imageUrl || null;
-    if (stepImagePreview) {
-      stepImagePreview.innerHTML = preview
-        ? `<img src="${preview}" alt="stap foto">`
-        : `<span class="plus-icon">+</span>`;
-    }
-  }
-
-  stepModal.open(); // ✅ show -> open
+function closeModal() {
+  modal.classList.add("hidden");
+  document.body.classList.remove("modal-open");
+  modal.setAttribute("aria-hidden", "true");
 }
+
+openBtn?.addEventListener("click", openModal);
+closeBtn?.addEventListener("click", closeModal);
+cancelBtn?.addEventListener("click", closeModal);
+
+modal?.addEventListener("click", (e) => {
+  if (e.target === modal) closeModal();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !modal.classList.contains("hidden")) closeModal();
+});
+
 
 function renderStepsOverview() {
   if (!stepsOverview) return;
   stepsOverview.innerHTML = "";
 
   stepsData.forEach((s, idx) => {
-    const row = document.createElement("div");
-    row.className = "item-bar";
+    const stepBar = document.createElement("div");
+    stepBar.className = "item-bar";
 
     const preview = s.imagePreviewUrl || s.imageUrl || null;
 
-    row.innerHTML = `
-      <div class="friend-avatar">
+    stepBar.innerHTML = `
+      <div class="tutorial-thumb">
         ${preview
           ? `<img src="${preview}" alt="stap">`
           : `<img src="images/icons/make1.png" alt="stap">`
         }
       </div>
-      <div class="friend-info">
+      <div class="item-info">
         <div class="friend-top">
           <div class="friend-username">Stap ${idx + 1}</div>
         </div>
-        <div class="friend-actions">
           <div class="friend-status">${typeSafeText(s.text).slice(0, 40)}${typeSafeText(s.text).length > 40 ? "…" : ""}</div>
-        </div>
       </div>
     `;
 
-    row.addEventListener("click", () => openStepModal(idx));
-    stepsOverview.appendChild(row);
+    stepBar.addEventListener("click", () => openStepModal(idx));
+    stepsOverview.appendChild(stepBar);
   });
 }
 
