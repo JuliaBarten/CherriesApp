@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cherrie's - Profiel</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="stylesheet" href="css/standardized-styles.css" />
+    <link rel="stylesheet" href="css/specific-styles.css" />
+    <link rel="stylesheet" href="https://use.typekit.net/shi0omh.css">
+</head>
+
+<body>
+    <div class="app-wrapper">
+        <!-- ================  app - frame ================ -->
+        <header class="app-header fixed-top">
+            <img alt="logo" src="images/logo_bol.png" class="logo" />
+            <a href="inbox.html" class="inbox-btn">
+                <img src="images/icons/inbox.png" alt="Inbox" />
+                <span id="inboxBadge" class="badge hidden"></span>
+            </a>
+        </header>
+
+        <footer class="fixed-bottom navbar">
+            <div class="justify-content-around py-2">
+                <a href="inspiration.html" class="text-center nav-item">
+                    <img src="images/icons/garen.png" class="navbar-icon" alt="inspiratie">
+                </a>
+                <a href="favorites.html" class="text-center nav-item">
+                    <img src="images/icons/fav_aan.png" class="navbar-icon" alt="favorieten">
+                </a>
+
+                <a href="#" id="makeNavBtn" class="text-center nav-item">
+                    <img src="images/icons/make1.png" class="navbar-icon" alt="make">
+                </a>
+
+                <div class="make-menu" id="makeMenu">
+                    <button id="newProjectBtn" class="make-pill">Nieuw</button>
+                    <button id="draftsBtn" class="make-pill secondary">Drafts</button>
+                </div>
+
+                <a href="friends.html" class="text-center nav-item">
+                    <img src="images/icons/friends.png" class="navbar-icon" alt="friends">
+                </a>
+                <a href="profile.html" class="text-center nav-item">
+                    <img id="navbarAvatar" class="navbar-avatar" />
+                </a>
+            </div>
+        </footer>
+
+
+
+
+
+
+
+
+
+        <script type="module" src="js/firebase-init.js"></script>
+        <script type="module" src="js/profile-page.js"></script>
+        <script type="module" src="js/message.js"></script>
+        <script type="module" src="js/inbox-badge.js"></script>
+        <script type="module" src="js/script.js"></script>
+
+    </div>
+</body>
+
+</html>

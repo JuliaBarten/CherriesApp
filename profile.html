@@ -65,13 +65,23 @@
             <img id="avatarLevelIcon" src="images/icons/niveau_1.png" alt="Niveau" class="level-badge">
           </div>
           <h1 id="profileUsername" class="username-txt">Gebruikersnaam</h1>
+
+          <!-- in andermans profielkaart -->
+          <div class="profile-card-actions">
+            <button id="friendBtn" class="btn-hoofd-3">Wordt vrienden</button>
+
+            <button id="messageIconBtn" class="icon-btn"><img src="images/icons/message.png" alt=""></button>
+          </div>
         </div>
+
+
 
         <!-- ================ Materialen ================ -->
         <div>
           <label class="classic-categories">Materialen</label>
           <div id="profileMaterials" class="d-flex flex-wrap gap-2">
           </div>
+          <button id="askMaterialsBtn" class="btn-hoofd-1">Vraag materialen</button>
         </div>
 
         <!-- ================ Tutorials toggle ================ -->
@@ -91,7 +101,9 @@
 
     <script type="module" src="js/firebase-init.js"></script>
     <script type="module" src="js/profile-page.js"></script>
+    <script type="module" src="js/profile-actions.js"></script>
     <script type="module" src="js/inbox-badge.js"></script>
+    <script type="module" src="js/message.js"></script>
     <script type="module" src="js/script.js"></script>
 
   </div>
